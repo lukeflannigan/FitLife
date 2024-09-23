@@ -29,7 +29,7 @@ We believe that maintaining a healthy lifestyle should be accessible and straigh
 
 ## General Info
 
-<img src="./img/fitlife_banner.png" alt="FitLife Banner" style="width: 100%; max-width: 800px; height: auto;">
+![FitLife Image](./img/fitlife_readme_image.png)
 
 ### What's Missing
 We would benefit from:
