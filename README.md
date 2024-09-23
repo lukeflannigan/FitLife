@@ -1,89 +1,91 @@
-# Project Name
-> Outline a brief description of your project.
-> Live demo [_here_](https://www.example.com). <!-- If you have the project hosted somewhere, include the link here. -->
+# FitLife: Healthy Life, Happy Life
+
+> **FitLife is a comprehensive iOS app for gym tracking and nutrition management.**
 
 ## Table of Contents
-* [General Info](#general-information)
-* [Technologies Used](#technologies-used)
-* [Features](#features)
-* [Screenshots](#screenshots)
-* [Setup](#setup)
-* [Usage](#usage)
-* [Project Status](#project-status)
-* [Room for Improvement](#room-for-improvement)
-* [Acknowledgements](#acknowledgements)
-* [Contact](#contact)
-<!-- * [License](#license) -->
+- [Description](#description)
+- [General Info](#general-info)
+- [Technologies Used](#technologies-used)
+- [Features](#features)
 
+## Description
 
-## General Information
-- Provide general information about your project here.
-- What problem does it (intend to) solve?
-- What is the purpose of your project?
-- Why did you undertake it?
-<!-- You don't have to answer all the questions - just the ones relevant to your project. -->
+### Who We're Working With
+Our team consists of:
+- **[Jonas Tuttle](mailto:jonastuttle@txstate.edu)**
+- **[Thomas Mendoza](mailto:tmendoza@txstate.edu)**
+- **[Sam Arshad](mailto:jsb211@txstate.edu)**
+- **[Luke Flannigan](mailto:nym15@txstate.edu)**
+- **[Gabriel Ciaburri](mailto:aff38@txstate.edu)**
 
+### What We're Creating
+We are developing **FitLife: Healthy Life, Happy Life**, an iOS app designed to help users track their gym workouts and nutrition. FitLife aims to be an all-in-one fitness companion that simplifies achieving health and fitness goals by providing tools for logging exercises, tracking nutritional intake, setting goals, and monitoring progress.
+
+### Who We're Doing It For
+Our target audience includes fitness enthusiasts, gym-goers, and anyone interested in improving their health and wellness. FitLife is designed to support both beginners starting their fitness journey and experienced athletes aiming to optimize their regimen.
+
+### Why We're Doing This
+We believe that maintaining a healthy lifestyle should be accessible and straightforward. By creating FitLife, we hope to empower users to take control of their fitness journeys, make informed decisions, and achieve their personal health goals. Our mission is to have a positive impact on users' lives by promoting wellness and providing a supportive platform for their fitness endeavors.
+
+## General Info
+
+<img src="./img/fitlife_banner.png" alt="FitLife Banner" style="width: 100%; max-width: 800px; height: auto;">
+
+### What's Missing
+We would benefit from:
+- **User Feedback**: Early adopters willing to test the app and provide valuable feedback.
+- **Additional Expertise**: Specialists in AI and machine learning for future feature integrations.
+- **Funding**: Financial support to enhance development and expand functionalities.
 
 ## Technologies Used
-- Tech 1 - version 1.0
-- Tech 2 - version 2.0
-- Tech 3 - version 3.0
-
+- **[Swift](https://developer.apple.com/swift/)** - Programming language for iOS development.
+- **[SwiftUI](https://developer.apple.com/xcode/swiftui/)** - A modern framework for building user interfaces across all Apple platforms.
+- **[Xcode](https://developer.apple.com/xcode/)** - An integrated development environment (IDE) for macOS containing a suite of software development tools.
+- **[Firebase](https://firebase.google.com/)** - A platform developed by Google for creating mobile and web applications, providing backend services like authentication and data storage.
+- **[Firestore](https://firebase.google.com/products/firestore)** - A scalable NoSQL cloud database to store and sync data for client- and server-side development.
+- **[Figma](https://www.figma.com/)** - A collaborative interface design tool used for creating UI designs and prototypes.
+- **[Jira](https://www.atlassian.com/software/jira)** - A project management tool for tracking tasks, bugs, and sprints.
+- **[Bitbucket](https://bitbucket.org/)** - A Git-based source code repository hosting service for collaboration.
 
 ## Features
-List the ready features here:
-- Awesome feature 1
-- Awesome feature 2
-- Awesome feature 3
 
+### Initial Features for the First Sprint (MVP)
 
-## Screenshots
-![Example screenshot](./img/screenshot.png)
-<!-- If you have screenshots you'd like to share, include them here. -->
+For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) that includes the following features:
 
+#### 1. Account Creation and Login
 
-## Setup
-What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
+- **Description**: Users can create an account and log in securely to store their data and access it across devices.
+- **Who Uses It**: All users of the app.
+- **Corresponding User Story**:  
+  As a new user, I would like to create an account and log in so that my data is securely stored and accessible across devices.
 
-Proceed to describe how to install / setup one's local environment / get started with the project.
+#### 2. Workout Logging
 
+- **Description**: Enables users to log their workouts by adding exercises with sets, reps, and weights, allowing them to track their fitness progress over time.
+- **Who Uses It**: Users who want to track their workout routines and monitor their progress.
+- **Corresponding User Story**:  
+  As a user, I would like to log my workouts by adding exercises with sets and reps so that I can track my fitness progress over time.
 
-## Usage
-How does one go about using it?
-Provide various use cases and code examples here.
+#### 3. Nutrition Logging
 
-`write-your-code-here`
+- **Description**: Allows users to log their food intake by adding food items with nutritional data, helping them to track daily nutrition and calorie intake.
+- **Who Uses It**: Users looking to monitor their nutritional intake and manage their diet.
+- **Corresponding User Story**:  
+  As a user, I would like to log my food intake by adding food items with nutritional data so that I can track my daily nutrition and calorie intake.
 
+#### 4. View Daily Summaries
 
-## Project Status
-Project is: _in progress_ / _complete_ / _no longer being worked on_. If you are no longer working on it, provide reasons why.
+- **Description**: Provides users with daily summaries of their workouts and nutrition, including total calories consumed and burned, and visual representations of macro distributions.
+- **Who Uses It**: Users who want to easily assess their daily fitness and dietary activities.
+- **Corresponding User Story**:  
+  As a user, I would like to view summaries of my daily workouts and nutrition so that I can easily assess my daily fitness and dietary activities.
 
+#### 5. Basic Goal Setting
 
-## Room for Improvement
-Include areas you believe need improvement / could be improved. Also add TODOs for future development.
+- **Description**: Allows users to set basic fitness goals, such as daily calorie intake and weekly workout frequency, and track their progress towards these goals.
+- **Who Uses It**: Users aiming to achieve specific health objectives and stay motivated.
+- **Corresponding User Story**:  
+  As a user, I would like to set basic fitness goals (e.g., daily calorie intake, workout frequency) so that I have targets to motivate my fitness journey.
 
-Room for improvement:
-- Improvement to be done 1
-- Improvement to be done 2
-
-To do:
-- Feature to be added 1
-- Feature to be added 2
-
-
-## Acknowledgements
-Give credit here.
-- This project was inspired by...
-- This project was based on [this tutorial](https://www.example.com).
-- Many thanks to...
-
-
-## Contact
-Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!
-
-
-<!-- Optional -->
-<!-- ## License -->
-<!-- This project is open source and available under the [... License](). -->
-
-<!-- You don't have to include all sections - just the one's relevant to your project -->
+--- 
