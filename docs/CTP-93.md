@@ -1,4 +1,4 @@
-### PROJ-123 9/26/24
+### 9/26/24
 - Created team Gmail for Firebase project & Apple Developer account
 - Distributed credentails to all team members through secure file transfer (MSG ID: EHid2zmU0VHct4Ljs8tXbk)
 - Initialized & configured Firebase project (https://console.firebase.google.com/u/2/project/fitlife-txst/overview)
