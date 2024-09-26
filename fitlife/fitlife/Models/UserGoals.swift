@@ -18,7 +18,7 @@ class UserGoals {
     var weeklyGoal: WeeklyGoal
     var baseGoals: [BaseGoal]
     
-    init(name: String, startingWeight: Double = 0, currentWeight: Double = 0, goalWeight: Double = 0, weeklyGoal: WeeklyGoal, activityLevel: ActivityLevel, baseGoals: [BaseGoal]) {
+    init(name: String = "", startingWeight: Double = 0, currentWeight: Double = 0, goalWeight: Double = 0, weeklyGoal: WeeklyGoal = .maintainWeight, activityLevel: ActivityLevel = .sedentary, baseGoals: [BaseGoal] = []) {
             self.name = name
             self.startingWeight = startingWeight
             self.currentWeight = currentWeight
