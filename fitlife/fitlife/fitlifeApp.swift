@@ -6,12 +6,23 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct fitlifeApp: App {
+    let modelContainer: ModelContainer
+    init() {
+        do {
+            modelContainer = try ModelContainer(for: UserGoals.self)
+        } catch {
+            fatalError("Could not initialize ModelContainer")
+        }
+    }
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            WelcomeView()
+                .modelContainer(modelContainer)
         }
     }
 }
