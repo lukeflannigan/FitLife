@@ -1,0 +1,5 @@
+These images represent the opening page, login, and sign in forms to establish the foundational user interactions for the app. They were created in Figma.
+
+Opening Page: First screen after the splashscreen that users see when they open the app.
+
+Login and Sign-In Pages: These screens will allow the user to either create a new account or sign into an existing one, providing secure access to their data.
