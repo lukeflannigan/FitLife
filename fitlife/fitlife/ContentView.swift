@@ -10,12 +10,21 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
-            Image(systemName: "globe")
+            Image(systemName: "dumbbell")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Text("Welcome to FitLife!")
+                .padding()
+            
+            NavigationLink(destination: WorkoutInputView()){
+                    Text("Log a Workout")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(10)
+            }
         }
-        .padding()
     }
 }
 
