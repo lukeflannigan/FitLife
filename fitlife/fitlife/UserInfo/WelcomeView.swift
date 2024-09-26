@@ -22,7 +22,7 @@ struct WelcomeView: View {
                     TextField("Name", text: $userGoals.name)
                         .padding()
                         .background(Color(.systemGray6))  // Optional background for clarity
-                        .cornerRadius(10)
+                        .cornerRadius(12)
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
@@ -30,14 +30,14 @@ struct WelcomeView: View {
                 Button(action: {
 //                    modelContext.save()
                 }) {
-                    Text("Continue")
+                    Text("Next")
                         .font(.headline)
                         .bold()
                         .frame(maxWidth: .infinity)  // Full width
                         .padding()  // Add padding to make it more tappable
                         .foregroundColor(Color.white)  // White text
                         .background(Color.black)  // Black background
-                        .cornerRadius(10)  // Rounded corners
+                        .cornerRadius(12)  // Rounded corners
                 }
                 .frame(height: 50)  // Ensure the button has a consistent height
                 .padding(.horizontal)  // Add padding around the button for spacing
