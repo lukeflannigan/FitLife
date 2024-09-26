@@ -1,8 +1,6 @@
+// OpeningView.swift
 //
-//  OpeningView.swift
-//  fitlife
-//
-//  Created by Luke Flannigan on 9/26/24.
+// Created by Luke Flannigan on 9/26/24.
 //
 import SwiftUI
 
@@ -17,7 +15,7 @@ struct OpeningView: View {
             )
             .edgesIgnoringSafeArea(.all)
             
-            VStack {
+            VStack(spacing: 2) {
                 Spacer()
                 
                 // "FitLife" Title
@@ -40,7 +38,7 @@ struct OpeningView: View {
                     // Will put action for button later.
                 }) {
                     Text("Get Started")
-                        .font(.custom("Poppins-Regular", size: 16))
+                        .font(.custom("Poppins-Bold", size: 16))
                         .foregroundColor(.black)
                         .frame(width: 300, height: 48)
                         .background(Color.white)
