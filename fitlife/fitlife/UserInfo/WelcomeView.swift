@@ -14,13 +14,36 @@ struct WelcomeView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
+            VStack(alignment: .center) {
                 Text("What's your name?")
                     .font(.title2)
                     .bold()
-                TextField("Name", text: $userGoals.name)
+                HStack {
+                    TextField("Name", text: $userGoals.name)
+                        .padding()
+                        .background(Color(.systemGray6))  // Optional background for clarity
+                        .cornerRadius(10)
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
                 Spacer()
+                Button(action: {
+//                    modelContext.save()
+                }) {
+                    Text("Continue")
+                        .font(.headline)
+                        .bold()
+                        .frame(maxWidth: .infinity)  // Full width
+                        .padding()  // Add padding to make it more tappable
+                        .foregroundColor(Color.white)  // White text
+                        .background(Color.black)  // Black background
+                        .cornerRadius(10)  // Rounded corners
+                }
+                .frame(height: 50)  // Ensure the button has a consistent height
+                .padding(.horizontal)  // Add padding around the button for spacing
             }
+            .padding()
+
             .navigationTitle("Welcome")
             .navigationBarTitleDisplayMode(.inline)
 //            .toolbar {
@@ -32,6 +55,6 @@ struct WelcomeView: View {
     }
 }
 
-//#Preview {
-//    WelcomeView(userGoals: .init(name: "gabe", startingWeight: 160, currentWeight: 160, goalWeight: 180, weeklyGoal: WeeklyGoal(rawValue: "loseWeightSlow") ?? <#default value#>, activityLevel: ActivityLevel(rawValue: "active") ?? <#default value#>, baseGoals: []))
-//}
+#Preview {
+    WelcomeView(userGoals: UserGoals())
+}
