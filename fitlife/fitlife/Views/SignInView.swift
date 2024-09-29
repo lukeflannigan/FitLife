@@ -4,6 +4,7 @@
 import SwiftUI
 
 struct SignInView: View {
+    // Will want to transition to viewmodel eventually 
     @State private var email = ""
     @State private var password = ""
     @Environment(\.presentationMode) var presentationMode
@@ -14,30 +15,65 @@ struct SignInView: View {
             
             ScrollView {
                 VStack(spacing: 30) {
-                    Text("Welcome Back")
-                        .font(.system(size: 32, weight: .bold))
-                        .foregroundColor(.white)
-                    
-                    CustomTextField(text: $email, placeholder: "Email", imageName: "envelope")
-                    CustomTextField(text: $password, placeholder: "Password", imageName: "lock", isSecure: true)
-                    
-                    Button("Sign In") {
-                        // Sign in functionality to be implemented
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.white)
-                    .foregroundColor(.black)
-                    .cornerRadius(12)
-                    
-                    NavigationLink("Don't have an account? Sign Up", destination: SignUpView())
-                        .foregroundColor(.white)
+                    headerSection
+                    formSection
+                    forgotPasswordButton
+                    signInButton
+                    signUpSection
                 }
                 .padding(.horizontal, 30)
+                .padding(.top, 50)
             }
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: backButton)
+    }
+    
+    private var headerSection: some View {
+        VStack(spacing: 10) {
+            Text("Welcome Back")
+                .font(.system(size: 32, weight: .bold))
+            Text("Sign in to continue")
+                .font(.system(size: 16))
+                .foregroundColor(.white.opacity(0.7))
+        }
+        .foregroundColor(.white)
+    }
+    
+    private var formSection: some View {
+        VStack(spacing: 20) {
+            CustomTextField(text: $email, placeholder: "Email", imageName: "envelope")
+            CustomTextField(text: $password, placeholder: "Password", imageName: "lock", isSecure: true)
+        }
+    }
+    
+    private var forgotPasswordButton: some View {
+        Button("Forgot Password?") {
+            // Eventually will need to handle forgot passsword function
+        }
+        .font(.system(size: 14))
+        .foregroundColor(.white)
+    }
+    
+    private var signInButton: some View {
+        Button(action: signIn) {
+            Text("Sign In")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.black)
+                .frame(maxWidth: .infinity)
+                .frame(height: 56)
+                .background(Color.white)
+                .cornerRadius(12)
+        }
+    }
+    
+    private var signUpSection: some View {
+        HStack {
+            Text("Don't have an account?")
+            NavigationLink("Sign Up", destination: SignUpView())
+        }
+        .font(.system(size: 14))
+        .foregroundColor(.white)
     }
     
     private var backButton: some View {
@@ -47,38 +83,16 @@ struct SignInView: View {
                 .imageScale(.large)
         }
     }
-}
-
-struct CustomTextField: View {
-    @Binding var text: String
-    let placeholder: String
-    let imageName: String
-    var isSecure: Bool = false
     
-    var body: some View {
-        HStack {
-            Image(systemName: imageName)
-                .foregroundColor(.white)
-            if isSecure {
-                SecureField(placeholder, text: $text)
-            } else {
-                TextField(placeholder, text: $text)
-            }
-        }
-        .padding()
-        .background(Color.white.opacity(0.2))
-        .cornerRadius(12)
-        .foregroundColor(.white)
+    private func signIn() {
+        print("Sign in with email: \(email)")
     }
 }
 
-struct GradientBackground: View {
-    var body: some View {
-        LinearGradient(
-            gradient: Gradient(colors: [Color("GradientStart"), Color("GradientEnd")]),
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-        .edgesIgnoringSafeArea(.all)
+struct SignInView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            SignInView()
+        }
     }
 }
