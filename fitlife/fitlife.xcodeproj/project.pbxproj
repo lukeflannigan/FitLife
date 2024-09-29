@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		04E4DE2E2CAA160F002CB2C1 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 04E4DE2D2CAA160F002CB2C1 /* FirebaseAnalytics */; };
+		04E4DE302CAA160F002CB2C1 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 04E4DE2F2CAA160F002CB2C1 /* FirebaseAuth */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		CE4CCF0A2CA3B3440058BB93 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -29,9 +34,30 @@
 		CE4CCF132CA3B3440058BB93 /* fitlifeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fitlifeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		04E4DE2A2CAA15A8002CB2C1 /* Exceptions for "fitlife" folder in "fitlifeTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GoogleService-Info.plist",
+			);
+			target = CE4CCF082CA3B3440058BB93 /* fitlifeTests */;
+		};
+		04E4DE2B2CAA15A8002CB2C1 /* Exceptions for "fitlife" folder in "fitlifeUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GoogleService-Info.plist",
+			);
+			target = CE4CCF122CA3B3440058BB93 /* fitlifeUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CE4CCEFB2CA3B3430058BB93 /* fitlife */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				04E4DE2A2CAA15A8002CB2C1 /* Exceptions for "fitlife" folder in "fitlifeTests" target */,
+				04E4DE2B2CAA15A8002CB2C1 /* Exceptions for "fitlife" folder in "fitlifeUITests" target */,
+			);
 			path = fitlife;
 			sourceTree = "<group>";
 		};
@@ -52,6 +78,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04E4DE2E2CAA160F002CB2C1 /* FirebaseAnalytics in Frameworks */,
+				04E4DE302CAA160F002CB2C1 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +140,8 @@
 			);
 			name = fitlife;
 			packageProductDependencies = (
+				04E4DE2D2CAA160F002CB2C1 /* FirebaseAnalytics */,
+				04E4DE2F2CAA160F002CB2C1 /* FirebaseAuth */,
 			);
 			productName = fitlife;
 			productReference = CE4CCEF92CA3B3430058BB93 /* fitlife.app */;
@@ -195,6 +225,9 @@
 			);
 			mainGroup = CE4CCEF02CA3B3430058BB93;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				04E4DE2C2CAA160F002CB2C1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CE4CCEFA2CA3B3430058BB93 /* Products */;
 			projectDirPath = "";
@@ -396,7 +429,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"fitlife/Preview Content\"";
-				DEVELOPMENT_TEAM = 26H89MHLG3;
+				DEVELOPMENT_TEAM = 9VVXK2959V;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -409,7 +442,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = borgs.fitlife;
+				PRODUCT_BUNDLE_IDENTIFIER = com.borgs.fitlife;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -425,7 +458,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"fitlife/Preview Content\"";
-				DEVELOPMENT_TEAM = 26H89MHLG3;
+				DEVELOPMENT_TEAM = 9VVXK2959V;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -438,7 +471,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = borgs.fitlife;
+				PRODUCT_BUNDLE_IDENTIFIER = com.borgs.fitlife;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -558,6 +591,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		04E4DE2C2CAA160F002CB2C1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		04E4DE2D2CAA160F002CB2C1 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04E4DE2C2CAA160F002CB2C1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		04E4DE2F2CAA160F002CB2C1 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 04E4DE2C2CAA160F002CB2C1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CE4CCEF12CA3B3430058BB93 /* Project object */;
 }
