@@ -29,9 +29,22 @@
 		CE4CCF132CA3B3440058BB93 /* fitlifeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fitlifeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		49FAECC62CA9C2F900FCE143 /* Exceptions for "fitlife" folder in "fitlife" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CE4CCEF82CA3B3430058BB93 /* fitlife */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CE4CCEFB2CA3B3430058BB93 /* fitlife */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				49FAECC62CA9C2F900FCE143 /* Exceptions for "fitlife" folder in "fitlife" target */,
+			);
 			path = fitlife;
 			sourceTree = "<group>";
 		};
