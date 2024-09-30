@@ -8,10 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var userGoals = UserGoals()
-    
     var body: some View {
-        WelcomeView(userGoals: $userGoals)
+        VStack {
+            Image(systemName: "globe")
+                .imageScale(.large)
+                .foregroundStyle(.tint)
+            Text("Hello, world!")
+        }
+        .padding()
     }
 }
 
