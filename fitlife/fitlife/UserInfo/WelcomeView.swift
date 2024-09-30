@@ -10,7 +10,7 @@ import SwiftData
 
 struct WelcomeView: View {
     @Environment(\.modelContext) var modelContext
-    @State var userGoals: UserGoals
+    @Binding var userGoals: UserGoals
     
     var body: some View {
         NavigationStack {
@@ -27,20 +27,18 @@ struct WelcomeView: View {
                 .padding()
                 .frame(maxWidth: .infinity)
                 Spacer()
-                Button(action: {
-//                    modelContext.save()
-                }) {
-                    Text("Next")
-                        .font(.headline)
-                        .bold()
-                        .frame(maxWidth: .infinity)  // Full width
-                        .padding()  // Add padding to make it more tappable
-                        .foregroundColor(Color.white)  // White text
-                        .background(Color.black)  // Black background
-                        .cornerRadius(12)  // Rounded corners
-                }
-                .frame(height: 50)  // Ensure the button has a consistent height
-                .padding(.horizontal)  // Add padding around the button for spacing
+                NavigationLink(destination: GoalSelectionView(userGoals: $userGoals)) {
+                        Text("Next")
+                            .font(.headline)
+                            .bold()
+                            .frame(maxWidth: .infinity)  // Full width
+                            .padding()  // Add padding to make it more tappable
+                            .foregroundColor(Color.white)  // White text
+                            .background(Color.black)  // Black background
+                            .cornerRadius(12)  // Rounded corners
+                    }
+                    .frame(height: 50)  // Ensure the button has a consistent height
+                    .padding(.horizontal)  // Add padding around the button for spacing
             }
             .padding()
 
@@ -56,5 +54,5 @@ struct WelcomeView: View {
 }
 
 #Preview {
-    WelcomeView(userGoals: UserGoals())
+    WelcomeView(userGoals: .constant(UserGoals()))
 }

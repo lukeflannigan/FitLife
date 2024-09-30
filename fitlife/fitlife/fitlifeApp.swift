@@ -22,6 +22,7 @@ struct fitlifeApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .modelContainer(modelContainer)
         }
     }
 }

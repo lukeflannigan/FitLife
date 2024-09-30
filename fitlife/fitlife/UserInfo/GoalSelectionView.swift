@@ -3,10 +3,10 @@ import SwiftData
 
 struct GoalSelectionView: View {
     @Environment(\.modelContext) var modelContext
-    @State var userGoals: UserGoals
+    @Binding var userGoals: UserGoals
     
-    // Tracks the selected goal
-    @State private var selectedGoal: BaseGoal? = nil
+    // Tracks the selected goals
+    @State private var selectedGoals: [BaseGoal] = []
     
     // Use all the cases from the BaseGoal enum
     let goalOptions: [BaseGoal] = [
@@ -38,15 +38,19 @@ struct GoalSelectionView: View {
                 ForEach(goalOptions, id: \.self) { goal in
                     Button(action: {
                         // Toggle selection
-                        selectedGoal = goal
+                        if selectedGoals.contains(goal) {
+                            selectedGoals.removeAll { $0 == goal }
+                        } else {
+                            selectedGoals.append(goal)
+                        }
                     }) {
                         Text(goal.rawValue)
                             .font(.headline)
                             .bold()
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(selectedGoal == goal ? Color.black : Color(.systemGray5))
-                            .foregroundColor(selectedGoal == goal ? .white : .black)
+                            .background(selectedGoals.contains(goal) ? Color.black : Color(.systemGray5))
+                            .foregroundColor(selectedGoals.contains(goal) ? .white : .black)
                             .cornerRadius(12)
                     }
                     .padding(.horizontal)
@@ -56,9 +60,9 @@ struct GoalSelectionView: View {
                 
                 // Next button
                 Button(action: {
-                    // Save selected goal to the userGoals model
-                    if let selected = selectedGoal {
-                        userGoals.baseGoals = [selected]
+                    // Save selected goals to the userGoals model
+                    if !selectedGoals.isEmpty {
+                        userGoals.baseGoals = selectedGoals
                         // modelContext.save() or next action
                     }
                 }) {
@@ -82,5 +86,5 @@ struct GoalSelectionView: View {
 }
 
 #Preview {
-    GoalSelectionView(userGoals: UserGoals())
+    GoalSelectionView(userGoals: .constant(UserGoals()))
 }
