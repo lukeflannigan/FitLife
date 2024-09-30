@@ -52,6 +52,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		040E9FD22CAA2E9000A7AB6A /* Documents */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Documents;
+			sourceTree = "<group>";
+		};
 		CE4CCEFB2CA3B3430058BB93 /* fitlife */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -104,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				CE4CCEFB2CA3B3430058BB93 /* fitlife */,
+				040E9FD22CAA2E9000A7AB6A /* Documents */,
 				CE4CCF0C2CA3B3440058BB93 /* fitlifeTests */,
 				CE4CCF162CA3B3440058BB93 /* fitlifeUITests */,
 				CE4CCEFA2CA3B3430058BB93 /* Products */,
@@ -136,6 +142,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				040E9FD22CAA2E9000A7AB6A /* Documents */,
 				CE4CCEFB2CA3B3430058BB93 /* fitlife */,
 			);
 			name = fitlife;
