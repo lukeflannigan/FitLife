@@ -10,21 +10,48 @@ import SwiftData
 
 @Model
 class UserGoals {
+    var locale: Locale
     var name: String
+    var height: Double
+    var age: Int
+    var gender: String
     var startingWeight: Double
     var currentWeight: Double
     var goalWeight: Double
     var activityLevel: ActivityLevel
     var weeklyGoal: WeeklyGoal
     var baseGoals: [BaseGoal]
+    var nutritionGoals: [NutritionGoal]
     
-    init(name: String = "", startingWeight: Double = 0, currentWeight: Double = 0, goalWeight: Double = 0, weeklyGoal: WeeklyGoal = .maintainWeight, activityLevel: ActivityLevel = .sedentary, baseGoals: [BaseGoal] = []) {
-            self.name = name
-            self.startingWeight = startingWeight
-            self.currentWeight = currentWeight
-            self.goalWeight = goalWeight
-            self.weeklyGoal = weeklyGoal
-            self.activityLevel = activityLevel
-            self.baseGoals = baseGoals
+    init(locale: Locale, height: Double = 0, age: Int = 0, gender: String = "", name: String = "", startingWeight: Double = 0, currentWeight: Double = 0, goalWeight: Double = 0, weeklyGoal: WeeklyGoal = .maintainWeight, activityLevel: ActivityLevel = .sedentary, baseGoals: [BaseGoal] = [], nutritionGoals: [NutritionGoal] = []) {
+        self.locale = NSLocale.autoupdatingCurrent
+        self.name = name
+        self.height = height
+        self.age = age
+        self.gender = gender
+        self.startingWeight = startingWeight
+        self.currentWeight = currentWeight
+        self.goalWeight = goalWeight
+        self.weeklyGoal = weeklyGoal
+        self.activityLevel = activityLevel
+        self.baseGoals = baseGoals
+        self.nutritionGoals = nutritionGoals
         }
+}
+
+extension UserGoals {
+    static var mockUserGoals = UserGoals(
+            locale: Locale.autoupdatingCurrent,
+            height: 175,  // example height in cm
+            age: 25,
+            gender: "Male",
+            name: "John Doe",
+            startingWeight: 75,  // example weight in kg
+            currentWeight: 75,
+            goalWeight: 70,
+            weeklyGoal: .maintainWeight,
+            activityLevel: .sedentary,
+            baseGoals: [.weightLoss, .muscleGain],
+            nutritionGoals: [.eatVegan]
+        )
 }

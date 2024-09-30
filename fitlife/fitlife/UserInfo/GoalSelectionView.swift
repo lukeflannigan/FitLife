@@ -22,7 +22,7 @@ struct GoalSelectionView: View {
         NavigationStack {
             VStack(alignment: .center, spacing: 20) {
                 // Title
-                Text("What are your goals?")
+                Text("What are your goals, \(userGoals.name)?")
                     .font(.title)
                     .bold()
                     .padding(.top)
@@ -86,5 +86,6 @@ struct GoalSelectionView: View {
 }
 
 #Preview {
-    GoalSelectionView(userGoals: .constant(UserGoals()))
+    GoalSelectionView(userGoals: .constant(UserGoals.mockUserGoals))
+
 }

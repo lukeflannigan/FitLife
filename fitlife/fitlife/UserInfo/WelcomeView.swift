@@ -54,5 +54,5 @@ struct WelcomeView: View {
 }
 
 #Preview {
-    WelcomeView(userGoals: .constant(UserGoals()))
+    WelcomeView(userGoals: .constant(UserGoals.mockUserGoals))
 }
