@@ -1,0 +1,193 @@
+//
+//  GetHeightWeightView.swift
+//  fitlife
+//
+//  Created by Gabriel Ciaburri on 9/30/24.
+//
+
+import SwiftUI
+import SwiftData
+
+struct GetHeightWeightView: View {
+    @Environment(\.modelContext) var modelContext
+    @Binding var userGoals: UserGoals
+    
+    // Local state variables
+    @State private var heightFeet: Int = 5
+    @State private var heightInches: Int = 7
+    @State private var heightCentimeters: Int = 170
+    @State private var useMetric: Bool = false // Toggle between Feet/Inches and Centimeters
+    @State private var currentWeight: String = ""
+    @State private var goalWeight: String = ""
+    
+    // Controls visibility of the height picker sheet
+    @State private var showHeightPicker = false
+    
+    var body: some View {
+        NavigationStack {
+            VStack(alignment: .center, spacing: 20) {
+                
+                // Title
+                Text("How tall are you?")
+                    .font(.title2)
+                    .bold()
+                    .padding(.top)
+                
+                // Height Selector (Feet/Inches or Centimeters)
+                Button(action: {
+                    // Show the height picker
+                    showHeightPicker.toggle()
+                }) {
+                    HStack {
+                        if useMetric {
+                            Text("\(heightCentimeters) cm")
+                        } else {
+                            Text("\(heightFeet) ft, \(heightInches) in")
+                        }
+                        Spacer()
+                    }
+                    .font(.headline)
+                    .foregroundColor(.blue)
+                    .padding()
+                    .frame(maxWidth: .infinity)  // Ensure full width
+                    .background(Color(.systemGray5))
+                    .cornerRadius(12)
+                }
+                .padding(.horizontal)  // Make padding consistent with the other fields
+                .sheet(isPresented: $showHeightPicker) {
+                    VStack {
+                        HStack {
+                            Button("Cancel") {
+                                showHeightPicker = false // Dismiss the sheet
+                            }
+                            Spacer()
+                            Text("Your Height")
+                                .font(.title2)
+                                .bold()
+                            Spacer()
+                            Button("Done") {
+                                showHeightPicker = false // Dismiss the sheet
+                            }
+                        }
+                        .padding()
+                        
+                        // Picker for Feet/Inches or Centimeters
+                        Picker("", selection: $useMetric) {
+                            Text("Feet/Inches").tag(false)
+                            Text("Centimeters").tag(true)
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .padding()
+                        
+                        if useMetric {
+                            Picker("Height (cm)", selection: $heightCentimeters) {
+                                ForEach(100...250, id: \.self) { cm in
+                                    Text("\(cm) cm").tag(cm)
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .clipped()
+                            .pickerStyle(WheelPickerStyle())
+                        } else {
+                            HStack {
+                                Picker("Feet", selection: $heightFeet) {
+                                    ForEach(4...7, id: \.self) { feet in
+                                        Text("\(feet) ft").tag(feet)
+                                    }
+                                }
+                                .frame(maxWidth: .infinity)
+                                .clipped()
+                                .pickerStyle(WheelPickerStyle())
+                                
+                                Picker("Inches", selection: $heightInches) {
+                                    ForEach(0...11, id: \.self) { inches in
+                                        Text("\(inches) in").tag(inches)
+                                    }
+                                }
+                                .frame(maxWidth: .infinity)
+                                .clipped()
+                                .pickerStyle(WheelPickerStyle())
+                            }
+                        }
+                    }
+                    .presentationDetents([.fraction(0.35)]) // Set sheet height to 35% of the screen
+                }
+                
+                // Weight Input (Current and Goal)
+                Text("How much do you weigh?")
+                    .font(.headline)
+                    .bold()
+                
+                TextField("0 lbs", text: $currentWeight)
+                    .keyboardType(.numberPad)
+                    .padding()
+                    .frame(maxWidth: .infinity)  // Ensure full width
+                    .background(Color(.systemGray5))
+                    .cornerRadius(12)
+                    .padding(.horizontal)
+                
+                Text("It's ok to estimate, you can update this later.")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                    .padding(.horizontal)
+                
+                Text("What's your goal weight?")
+                    .font(.headline)
+                    .bold()
+                
+                TextField("0 lbs", text: $goalWeight)
+                    .keyboardType(.numberPad)
+                    .padding()
+                    .frame(maxWidth: .infinity)  // Ensure full width
+                    .background(Color(.systemGray5))
+                    .cornerRadius(12)
+                    .padding(.horizontal)
+                
+                Text("Don't worry, this doesn't affect your daily calorie goal and you can always change it later.")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                
+                Spacer()
+                
+                // Next button
+//                NavigationLink(destination: /* Next View */) {
+//                    Text("Next")
+//                        .font(.headline)
+//                        .bold()
+//                        .frame(maxWidth: .infinity)
+//                        .padding()
+//                        .background(Color.blue)
+//                        .foregroundColor(.white)
+//                        .cornerRadius(12)
+//                }
+//                .disabled(currentWeight.isEmpty || goalWeight.isEmpty) // Disable if no weight entered
+//                .frame(height: 50)
+//                .padding(.horizontal)
+//                .padding(.bottom, 30)
+//                .onTapGesture {
+//                    // Save height and weight to userGoals before navigating
+//                    if useMetric {
+//                        userGoals.height = Double(heightCentimeters)
+//                    } else {
+//                        userGoals.height = Double((heightFeet * 12) + heightInches) * 2.54 // Convert feet/inches to cm
+//                    }
+//                    if let currentWeightValue = Double(currentWeight) {
+//                        userGoals.currentWeight = currentWeightValue
+//                    }
+//                    if let goalWeightValue = Double(goalWeight) {
+//                        userGoals.goalWeight = goalWeightValue
+//                    }
+//                    // modelContext.save() or any other action
+//                }
+            }
+            .navigationTitle("You")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+}
+
+#Preview {
+    GetHeightWeightView(userGoals: .constant(UserGoals.mockUserGoals))
+}

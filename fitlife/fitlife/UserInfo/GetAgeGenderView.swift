@@ -70,28 +70,28 @@ struct GetAgeGenderView: View {
                 Spacer()
                 
                 // Next button
-//                NavigationLink(destination: /* Next View */) {
-//                    Text("Next")
-//                        .font(.headline)
-//                        .bold()
-//                        .frame(maxWidth: .infinity)
-//                        .padding()
-//                        .background(Color.black)
-//                        .foregroundColor(.white)
-//                        .cornerRadius(12)
-//                }
-//                .frame(height: 50)
-//                .padding(.horizontal)
-//                .padding(.bottom, 30)
-//                .disabled(selectedGender.isEmpty || ageInput.isEmpty || Int(ageInput) == nil) // Disable if no gender or invalid age
-//                .onTapGesture {
-//                    // Save selected data to userGoals before navigation
-//                    if let validAge = Int(ageInput) {
-//                        userGoals.gender = selectedGender
-//                        userGoals.age = validAge
-//                        // modelContext.save() or any other action
-//                    }
-//                }
+                NavigationLink(destination: GetHeightWeightView(userGoals: $userGoals)) {
+                    Text("Next")
+                        .font(.headline)
+                        .bold()
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.black)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                }
+                .frame(height: 50)
+                .padding(.horizontal)
+                .padding(.bottom, 30)
+                .disabled(selectedGender.isEmpty || ageInput.isEmpty || Int(ageInput) == nil) // Disable if no gender or invalid age
+                .onTapGesture {
+                    // Save selected data to userGoals before navigation
+                    if let validAge = Int(ageInput) {
+                        userGoals.gender = selectedGender
+                        userGoals.age = validAge
+                        // modelContext.save() or any other action
+                    }
+                }
             }
             .navigationTitle("You")
             .navigationBarTitleDisplayMode(.inline)
@@ -100,5 +100,5 @@ struct GetAgeGenderView: View {
 }
 
 #Preview {
-    GetUserInfoView(userGoals: .constant(UserGoals.mockUserGoals))
+    GetAgeGenderView(userGoals: .constant(UserGoals.mockUserGoals))
 }
