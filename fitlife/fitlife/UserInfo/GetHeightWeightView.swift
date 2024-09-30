@@ -35,8 +35,7 @@ struct GetHeightWeightView: View {
                 
                 // Height Selector (Feet/Inches or Centimeters)
                 Button(action: {
-                    // Show the height picker
-                    showHeightPicker.toggle()
+                    showHeightPicker.toggle() // Show the height picker
                 }) {
                     HStack {
                         if useMetric {
@@ -49,16 +48,16 @@ struct GetHeightWeightView: View {
                     .font(.headline)
                     .foregroundColor(.blue)
                     .padding()
-                    .frame(maxWidth: .infinity)  // Ensure full width
+                    .frame(maxWidth: .infinity)
                     .background(Color(.systemGray5))
                     .cornerRadius(12)
                 }
-                .padding(.horizontal)  // Make padding consistent with the other fields
+                .padding(.horizontal)
                 .sheet(isPresented: $showHeightPicker) {
                     VStack {
                         HStack {
                             Button("Cancel") {
-                                showHeightPicker = false // Dismiss the sheet
+                                showHeightPicker = false
                             }
                             Spacer()
                             Text("Your Height")
@@ -66,7 +65,7 @@ struct GetHeightWeightView: View {
                                 .bold()
                             Spacer()
                             Button("Done") {
-                                showHeightPicker = false // Dismiss the sheet
+                                showHeightPicker = false
                             }
                         }
                         .padding()
@@ -121,7 +120,7 @@ struct GetHeightWeightView: View {
                 TextField("0 lbs", text: $currentWeight)
                     .keyboardType(.numberPad)
                     .padding()
-                    .frame(maxWidth: .infinity)  // Ensure full width
+                    .frame(maxWidth: .infinity)
                     .background(Color(.systemGray5))
                     .cornerRadius(12)
                     .padding(.horizontal)
@@ -138,7 +137,7 @@ struct GetHeightWeightView: View {
                 TextField("0 lbs", text: $goalWeight)
                     .keyboardType(.numberPad)
                     .padding()
-                    .frame(maxWidth: .infinity)  // Ensure full width
+                    .frame(maxWidth: .infinity)
                     .background(Color(.systemGray5))
                     .cornerRadius(12)
                     .padding(.horizontal)
@@ -151,36 +150,35 @@ struct GetHeightWeightView: View {
                 
                 Spacer()
                 
-                // Next button
-//                NavigationLink(destination: /* Next View */) {
-//                    Text("Next")
-//                        .font(.headline)
-//                        .bold()
-//                        .frame(maxWidth: .infinity)
-//                        .padding()
-//                        .background(Color.blue)
-//                        .foregroundColor(.white)
-//                        .cornerRadius(12)
-//                }
-//                .disabled(currentWeight.isEmpty || goalWeight.isEmpty) // Disable if no weight entered
-//                .frame(height: 50)
-//                .padding(.horizontal)
-//                .padding(.bottom, 30)
-//                .onTapGesture {
-//                    // Save height and weight to userGoals before navigating
-//                    if useMetric {
-//                        userGoals.height = Double(heightCentimeters)
-//                    } else {
-//                        userGoals.height = Double((heightFeet * 12) + heightInches) * 2.54 // Convert feet/inches to cm
-//                    }
-//                    if let currentWeightValue = Double(currentWeight) {
-//                        userGoals.currentWeight = currentWeightValue
-//                    }
-//                    if let goalWeightValue = Double(goalWeight) {
-//                        userGoals.goalWeight = goalWeightValue
-//                    }
-//                    // modelContext.save() or any other action
-//                }
+                // Next button wrapped in NavigationLink
+                NavigationLink(destination: GetWeeklyGoalView(userGoals: $userGoals)) {
+                    Text("Next")
+                        .font(.headline)
+                        .bold()
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                }
+                .simultaneousGesture(TapGesture().onEnded {
+                    // Save height and weight to userGoals before navigating
+                    if useMetric {
+                        userGoals.height = Double(heightCentimeters)
+                    } else {
+                        userGoals.height = Double((heightFeet * 12) + heightInches) * 2.54 // Convert feet/inches to cm
+                    }
+                    if let currentWeightValue = Double(currentWeight) {
+                        userGoals.currentWeight = currentWeightValue
+                    }
+                    if let goalWeightValue = Double(goalWeight) {
+                        userGoals.goalWeight = goalWeightValue
+                    }
+                })
+                .disabled(currentWeight.isEmpty || goalWeight.isEmpty) // Disable if no weight entered
+                .frame(height: 50)
+                .padding(.horizontal)
+                .padding(.bottom, 30)
             }
             .navigationTitle("You")
             .navigationBarTitleDisplayMode(.inline)
