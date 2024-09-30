@@ -59,13 +59,7 @@ struct GoalSelectionView: View {
                 Spacer()
                 
                 // Next button
-                Button(action: {
-                    // Save selected goals to the userGoals model
-                    if !selectedGoals.isEmpty {
-                        userGoals.baseGoals = selectedGoals
-                        // modelContext.save() or next action
-                    }
-                }) {
+                NavigationLink(destination: NutritionGoalSelectionView(userGoals: $userGoals)) {
                     Text("Next")
                         .font(.headline)
                         .bold()
@@ -78,6 +72,13 @@ struct GoalSelectionView: View {
                 .frame(height: 50)
                 .padding(.horizontal)
                 .padding(.bottom, 30) // Extra padding at the bottom
+                .onTapGesture {
+                    // Save selected goals to the userGoals model before navigating
+                    if !selectedGoals.isEmpty {
+                        userGoals.baseGoals = selectedGoals
+                        // modelContext.save() or next action
+                    }
+                }
             }
             .navigationTitle("Goals")
             .navigationBarTitleDisplayMode(.inline)

@@ -10,7 +10,12 @@ import SwiftData
 
 @Model
 class UserGoals {
-    var locale: Locale
+    typealias LocaleIdentifier = String
+    private(set) var localeIdentifier: LocaleIdentifier
+    var locale: Locale {
+        get { Locale(identifier: localeIdentifier) }
+        set { localeIdentifier = newValue.identifier }
+    }
     var name: String
     var height: Double
     var age: Int
@@ -23,8 +28,8 @@ class UserGoals {
     var baseGoals: [BaseGoal]
     var nutritionGoals: [NutritionGoal]
     
-    init(locale: Locale, height: Double = 0, age: Int = 0, gender: String = "", name: String = "", startingWeight: Double = 0, currentWeight: Double = 0, goalWeight: Double = 0, weeklyGoal: WeeklyGoal = .maintainWeight, activityLevel: ActivityLevel = .sedentary, baseGoals: [BaseGoal] = [], nutritionGoals: [NutritionGoal] = []) {
-        self.locale = NSLocale.autoupdatingCurrent
+    init(localeIdentifier: LocaleIdentifier = Locale.autoupdatingCurrent.identifier, height: Double = 0, age: Int = 0, gender: String = "", name: String = "", startingWeight: Double = 0, currentWeight: Double = 0, goalWeight: Double = 0, weeklyGoal: WeeklyGoal = .maintainWeight, activityLevel: ActivityLevel = .sedentary, baseGoals: [BaseGoal] = [], nutritionGoals: [NutritionGoal] = []) {
+        self.localeIdentifier = localeIdentifier
         self.name = name
         self.height = height
         self.age = age
@@ -41,7 +46,6 @@ class UserGoals {
 
 extension UserGoals {
     static var mockUserGoals = UserGoals(
-            locale: Locale.autoupdatingCurrent,
             height: 175,  // example height in cm
             age: 25,
             gender: "Male",
