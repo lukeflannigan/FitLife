@@ -7,9 +7,17 @@
 
 import Foundation
 
-struct Exercise: Identifiable, Codable {
-    var id = UUID()
+class Exercise: Identifiable, Codable, ObservableObject {
+    var id: UUID
     var name: String
     var type: String
     var muscleGroup: String
+    
+    init(id: UUID = UUID(), name: String, type: String, muscleGroup: String) {
+        self.id = id
+        self.name = name
+        self.type = type
+        self.muscleGroup = muscleGroup
+    }
 }
+
