@@ -38,14 +38,13 @@ struct WorkoutEntryForm: View {
                     TextField("Weight", value: $workout.weight, formatter: NumberFormatter())
                         .keyboardType(.decimalPad)
                 }
-                DatePicker("Date", selection: $workout.date, displayedComponents: .date)
             }
         }
     }
 }
 
 struct WorkoutListView: View {
-    @Query private var workouts: [Workout]
+    @State private var workouts: [Workout] = []
     @State private var selectedExercise: Exercise = Exercise.mockExercises[0]
     @State private var newWorkout = Workout(exercise: Exercise.mockExercises[0])
     @State private var showingNewWorkoutForm = false
@@ -94,21 +93,17 @@ struct WorkoutListView: View {
     }
     
     private func deleteWorkouts(at offsets: IndexSet) {
-        for index in offsets {
-            let workout = workouts[index]
-            modelContext.delete(workout)
-        }
+        workouts.remove(atOffsets: offsets)
     }
     
     private func saveNewWorkout() {
         newWorkout.exercise = selectedExercise
+        workouts.append(newWorkout)
         modelContext.insert(newWorkout)
         newWorkout = Workout(exercise: selectedExercise)
     }
 }
 
-struct WorkoutListView_Previews: PreviewProvider {
-    static var previews: some View {
-        WorkoutListView()
-    }
+#Preview {
+    WorkoutListView()
 }
