@@ -4,15 +4,28 @@ struct DashboardView: View {
     @State private var selectedTab = 2 // Start on Home tab
     
     let userName = "Dr. Lehr"
+    let stats = [
+        Stat(title: "Calories", value: "1,200", goal: "2,000"),
+        Stat(title: "Protein", value: "75g", goal: "120g"),
+        Stat(title: "Carbs", value: "150g", goal: "250g"),
+        Stat(title: "Fats", value: "40g", goal: "65g")
+    ]
+    let activities = [
+        Activity(icon: "dumbbell.fill", title: "Upper Body Workout", subtitle: "45 minutes • 250 calories", time: "2h ago"),
+        Activity(icon: "fork.knife", title: "Lunch", subtitle: "Grilled Chicken Salad", time: "5h ago")
+    ]
     
     var body: some View {
         ZStack {
             Color(UIColor.systemBackground)
+                .edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 0) {
                 ScrollView {
                     VStack(spacing: 20) {
                         headerSection
+                        quickStatsSection
+                        recentActivitySection
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 60)
@@ -47,6 +60,38 @@ struct DashboardView: View {
         }
     }
     
+    private var quickStatsSection: some View {
+        VStack(alignment: .leading, spacing: 15) {
+            Text("Today's Overview")
+                .font(.headline)
+            
+            ForEach(0..<stats.count / 2) { row in
+                HStack(spacing: 15) {
+                    StatCard(stat: stats[row * 2])
+                    StatCard(stat: stats[row * 2 + 1])
+                }
+            }
+        }
+    }
+    
+    private var recentActivitySection: some View {
+        VStack(alignment: .leading, spacing: 15) {
+            HStack {
+                Text("Recent Activity")
+                    .font(.headline)
+                Spacer()
+                Button("See All") {
+                    // Action to see all activities
+                }
+                .foregroundColor(.blue)
+            }
+            
+            ForEach(activities) { activity in
+                ActivityRow(activity: activity)
+            }
+        }
+    }
+    
     private var customTabBar: some View {
         HStack {
             ForEach(TabItem.allCases, id: \.self) { tab in
@@ -60,6 +105,58 @@ struct DashboardView: View {
         .padding(.top, 10)
         .padding(.bottom, 30)
         .background(Color(UIColor.systemBackground).opacity(0.95))
+    }
+}
+
+struct StatCard: View {
+    let stat: Stat
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(stat.title)
+                .foregroundColor(.secondary)
+            Text(stat.value)
+                .font(.title2)
+                .fontWeight(.bold)
+            Text("Goal: \(stat.goal)")
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(15)
+        .background(Color(UIColor.secondarySystemBackground))
+        .cornerRadius(15)
+    }
+}
+
+struct ActivityRow: View {
+    let activity: Activity
+    
+    var body: some View {
+        HStack(spacing: 15) {
+            Image(systemName: activity.icon)
+                .foregroundColor(.white)
+                .frame(width: 40, height: 40)
+                .background(Color.blue)
+                .clipShape(Circle())
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(activity.title)
+                    .fontWeight(.semibold)
+                Text(activity.subtitle)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            
+            Spacer()
+            
+            Text(activity.time)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .padding(15)
+        .background(Color(UIColor.secondarySystemBackground))
+        .cornerRadius(15)
     }
 }
 
@@ -103,6 +200,21 @@ enum TabItem: Int, CaseIterable {
         case .progress: return "chart.bar.fill"
         }
     }
+}
+
+struct Stat: Identifiable {
+    let id = UUID()
+    let title: String
+    let value: String
+    let goal: String
+}
+
+struct Activity: Identifiable {
+    let id = UUID()
+    let icon: String
+    let title: String
+    let subtitle: String
+    let time: String
 }
 
 struct DashboardView_Previews: PreviewProvider {
