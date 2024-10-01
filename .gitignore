@@ -48,3 +48,7 @@ Thumbs.db
 *.mov
 *.wmv
 
+
+*.xcuserstate
+
+fitlife/fitlife.xcodeproj/xcuserdata/gabrielciaburri.xcuserdatad/xcdebugger/
