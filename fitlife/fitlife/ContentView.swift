@@ -15,15 +15,6 @@ struct ContentView: View {
                 .foregroundStyle(.tint)
             Text("Welcome to FitLife!")
                 .padding()
-            
-            NavigationLink(destination: WorkoutInputView()){
-                    Text("Log a Workout")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(10)
-            }
         }
     }
 }

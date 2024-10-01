@@ -7,7 +7,7 @@
 
 import Foundation
 
-class WorkoutEntry: Identifiable, Codable, ObservableObject {
+class Workout: Identifiable, Codable, ObservableObject {
     var id: UUID
     var exercise: Exercise
     var sets: Int
