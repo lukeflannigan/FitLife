@@ -6,16 +6,18 @@
 //
 
 import Foundation
+import SwiftData
 
-class Workout: Identifiable, Codable, ObservableObject {
+@Model
+class Workout: Identifiable, ObservableObject {
     var id: UUID
     var exercise: Exercise
     var sets: Int
     var reps: Int
     var weight: Double
     var date: Date
-    
-    init(id: UUID = UUID(), exercise: Exercise, sets: Int, reps: Int, weight: Double, date: Date = Date()) {
+
+    init(id: UUID = UUID(), exercise: Exercise, sets: Int = 0, reps: Int = 0, weight: Double = 0.0, date: Date = Date()) {
         self.id = id
         self.exercise = exercise
         self.sets = sets
@@ -24,3 +26,11 @@ class Workout: Identifiable, Codable, ObservableObject {
         self.date = date
     }
 }
+
+extension Workout {
+    static var mockWorkoutEntries = [
+        Workout(exercise: Exercise(name: "Bench Press", type: "Strength", muscleGroup: "Chest"), sets: 3, reps: 10, weight: 150),
+        Workout(exercise: Exercise(name: "Squat", type: "Strength", muscleGroup: "Legs"), sets: 4, reps: 8, weight: 200)
+    ]
+}
+
