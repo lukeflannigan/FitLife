@@ -7,7 +7,10 @@
 
 import SwiftUI
 
-struct RecipeObject: Hashable, Codable
+struct RecipeObject: Hashable, Codable{
+    
+    
+}
 
 
 class ViewModel: ObservableObject {
