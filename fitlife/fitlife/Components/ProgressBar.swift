@@ -4,47 +4,25 @@
 import SwiftUI
 
 struct ProgressBar: View {
-    let progress: CGFloat 
-    let goal: String
-    let current: String
-    let target: String
+    let progress: CGFloat // Basically a double 0-1. 
+    var gradientColors: [Color] = [Color("GradientStart"), Color("GradientEnd")]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(goal)
-                .font(.custom("Poppins-SemiBold", size: 16))
-                .foregroundColor(.primary)
-
-            GeometryReader { geometry in
-                ZStack(alignment: .leading) {
-                    Rectangle()
-                        .fill(Color(UIColor.systemGray5))
-                        .frame(height: 8)
-                        .cornerRadius(4)
-                    Rectangle()
-                        .fill(
-                            LinearGradient(gradient: Gradient(colors: [Color("GradientStart"), Color("GradientEnd")]),
-                                           startPoint: .leading,
-                                           endPoint: .trailing)
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .fill(Color(UIColor.systemGray5))
+                Capsule()
+                    .fill(
+                        LinearGradient(
+                            gradient: Gradient(colors: gradientColors),
+                            startPoint: .leading,
+                            endPoint: .trailing
                         )
-                        .frame(width: geometry.size.width * progress, height: 8)
-                        .cornerRadius(4)
-                }
-            }
-            .frame(height: 8)
-
-            HStack {
-                Text("\(current)/\(target)")
-                    .font(.custom("Poppins-Medium", size: 14))
-                    .foregroundColor(.secondary)
-                Spacer()
-                Text("\(Int(progress * 100))%")
-                    .font(.custom("Poppins-Bold", size: 14))
-                    .foregroundColor(.primary)
+                    )
+                    .frame(width: geometry.size.width * progress)
             }
         }
-        .padding()
-        .background(Color(UIColor.secondarySystemBackground))
-        .cornerRadius(15)
+        .frame(height: 8)
     }
 }
