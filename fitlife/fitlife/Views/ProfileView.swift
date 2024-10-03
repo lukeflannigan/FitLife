@@ -19,16 +19,37 @@ struct ProfileView: View {
     
     // Header Section
     private var headerSection: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Profile")
-                    .font(.custom("Poppins-Bold", size: 28))
-                    .foregroundColor(.primary)
-                Text("Welcome, Dr. Lehr")
-                    .font(.custom("Poppins-Regular", size: 16))
-                    .foregroundColor(.secondary)
+        VStack(spacing: 15) {
+            // Profile Picture
+            Image("profile_picture")
+                .resizable()
+                .scaledToFill()
+                .frame(width: 120, height: 120)
+                .clipShape(Circle())
+                .overlay(
+                    Circle().stroke(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color("GradientStart"), Color("GradientEnd")]),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 4
+                    )
+                )
+                .shadow(radius: 10)
+            
+            // Username
+            Text("Dr. Lehr")
+                .font(.custom("Poppins-Bold", size: 28))
+                .foregroundColor(.primary)
+            
+            // Edit Profile Button
+            Button(action: {
+            }) {
+                Text("Edit Profile")
+                    .font(.custom("Poppins-Medium", size: 16))
+                    .foregroundColor(Color("GradientStart"))
             }
-            Spacer()
         }
     }
 }
