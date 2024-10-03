@@ -8,6 +8,7 @@ struct NutritionView: View {
         ScrollView {
             VStack(spacing: 20) {
                 headerSection
+                caloricIntakeSection
                 // Will need to add more here eventually
             }
             .padding(.horizontal, 20)
@@ -29,6 +30,19 @@ struct NutritionView: View {
                     .foregroundColor(.secondary)
             }
             Spacer()
+        }
+    }
+
+    private var caloricIntakeSection: some View {
+        VStack(spacing: 15) {
+            HStack {
+                Text("Today's Calories")
+                    .font(.custom("Poppins-SemiBold", size: 18))
+                    .foregroundColor(.primary)
+                Spacer()
+            }
+
+            CaloricIntakeCard(currentCalories: 1200, goalCalories: 2000)
         }
     }
 }
