@@ -11,6 +11,7 @@ struct NutritionView: View {
                 caloricIntakeSection
                 macronutrientsSection
                 mealsLoggedSection
+                actionButtonsSection
             }
             .padding(.horizontal, 20)
             .padding(.top, 20)
@@ -102,6 +103,18 @@ private var mealsLoggedSection: some View {
                 // Hardcoding this for now just to see it works - will need to tie this to actual data.
             }
         }
+    }
+
+private var actionButtonsSection: some View {
+        HStack(spacing: 20) {
+            ActionButton(title: "Add Food", iconName: "plus.circle.fill") {
+                // Add food
+            }
+            ActionButton(title: "Scan Barcode", iconName: "barcode.viewfinder") {
+                // Barcode scanning implemented eventually
+            }
+        }
+        .padding(.top, 10)
     }
 
 
