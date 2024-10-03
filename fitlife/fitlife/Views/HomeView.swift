@@ -2,8 +2,13 @@
 // Created by Luke Flannigan on 10/1/24.
 
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
+    @Environment(\.modelContext) var modelContext
+    @Query var userGoals: [UserGoals]
+    var userGoal: UserGoals? { userGoals.first }
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -26,10 +31,11 @@ struct HomeView: View {
                 Text("Welcome back,")
                     .font(.custom("Poppins-Regular", size: 16))
                     .foregroundColor(.secondary)
-                Text("Dr. Lehr")
+                Text("\(userGoal?.name ?? "Ted Lehr")")
                     .font(.custom("Poppins-Bold", size: 28))
                     .foregroundColor(.primary)
             }
+            .padding(.vertical)
             Spacer()
             Button(action: {
                 // Handle notification action

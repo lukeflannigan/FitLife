@@ -35,6 +35,7 @@ struct GetWeeklyGoalView: View {
                     .bold()
                     .padding(.top)
                     .padding(.horizontal)
+                
                 // Subtitle
                 Text("We use this info to set your weekly target.")
                     .font(.subheadline)
@@ -60,8 +61,18 @@ struct GetWeeklyGoalView: View {
                         .padding(.horizontal)
                         .listRowSeparator(.hidden)
                     }
+                    Text("How many workouts per week?")
+                        .padding(.horizontal)
+                        .bold()
+                    Stepper(value: $userGoals.workoutGoal, in: 1...7) {
+                        Text("\(userGoals.workoutGoal) workout(s)")
+                            .font(.headline)
+                    }
+                    .padding(.horizontal)
+                    .listRowSeparator(.hidden)
                 }
                 .listStyle(PlainListStyle())
+                
                 
                 Spacer()
                 
