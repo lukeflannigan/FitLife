@@ -9,12 +9,13 @@ struct ProfileView: View {
     @State private var userName: String = "Dr. Lehr"
     @State private var userEmail: String = "email@email.com"
     @State private var userPhone: String = "+1 (123) 456-7890"
-
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 headerSection
                 personalInfoSection
+                settingsSection
             }
             .padding(.horizontal, 20)
             .padding(.top, 20)
@@ -49,7 +50,7 @@ struct ProfileView: View {
             Text(userName)
                 .font(.custom("Poppins-Bold", size: 28))
                 .foregroundColor(.primary)
-
+            
             // Edit Profile Button
             Button(action: {
             }) {
@@ -59,7 +60,7 @@ struct ProfileView: View {
             }
         }
     }
-
+    
     // Personal Info Section
     private var personalInfoSection: some View {
         VStack(spacing: 15) {
@@ -69,17 +70,41 @@ struct ProfileView: View {
                     .foregroundColor(.primary)
                 Spacer()
             }
-
+            
             VStack(spacing: 10) {
                 InfoRow(iconName: "envelope.fill", title: "Email", value: userEmail)
                 InfoRow(iconName: "phone.fill", title: "Phone", value: userPhone)
             }
         }
     }
-}
-
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
+    
+    // Settings Section
+    private var settingsSection: some View {
+        VStack(spacing: 15) {
+            HStack {
+                Text("Settings")
+                    .font(.custom("Poppins-SemiBold", size: 18))
+                    .foregroundColor(.primary)
+                Spacer()
+            }
+            
+            VStack(spacing: 10) {
+                SettingsRow(iconName: "lock.fill", title: "Change Password") {
+                    // Change password
+                }
+                SettingsRow(iconName: "bell.fill", title: "Notifications") {
+                    // Manage notifications
+                }
+                SettingsRow(iconName: "hand.raised.fill", title: "Privacy Settings") {
+                    // Manage privacy
+                }
+            }
+        }
+    }
+    
+    struct ProfileView_Previews: PreviewProvider {
+        static var previews: some View {
+            ProfileView()
+        }
     }
 }
