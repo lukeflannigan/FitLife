@@ -10,6 +10,7 @@ struct NutritionView: View {
                 headerSection
                 caloricIntakeSection
                 macronutrientsSection
+                mealsLoggedSection
             }
             .padding(.horizontal, 20)
             .padding(.top, 20)
@@ -78,6 +79,31 @@ private var macronutrientsSection: some View {
             }
         }
     }
+
+private var mealsLoggedSection: some View {
+        VStack(spacing: 15) {
+            HStack {
+                Text("Meals Logged")
+                    .font(.custom("Poppins-SemiBold", size: 18))
+                    .foregroundColor(.primary)
+                Spacer()
+                Button(action: {
+                    // Add a meal here
+                }) {
+                    Text("Add Meal")
+                        .font(.custom("Poppins-Medium", size: 14))
+                        .foregroundColor(Color("GradientStart"))
+                }
+            }
+
+            VStack(spacing: 10) {
+                ActivityRow(icon: "sunrise.fill", title: "Breakfast", subtitle: "Oatmeal, Banana", time: "350 cal")
+                ActivityRow(icon: "sun.max.fill", title: "Lunch", subtitle: "Grilled Chicken Salad", time: "500 cal")
+                // Hardcoding this for now just to see it works - will need to tie this to actual data.
+            }
+        }
+    }
+
 
 struct NutritionView_Previews: PreviewProvider {
     static var previews: some View {
