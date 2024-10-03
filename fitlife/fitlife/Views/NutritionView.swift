@@ -9,7 +9,7 @@ struct NutritionView: View {
             VStack(spacing: 20) {
                 headerSection
                 caloricIntakeSection
-                // Will need to add more here eventually
+                macronutrientsSection
             }
             .padding(.horizontal, 20)
             .padding(.top, 20)
@@ -46,6 +46,38 @@ struct NutritionView: View {
         }
     }
 }
+
+private var macronutrientsSection: some View {
+        VStack(spacing: 15) {
+            HStack {
+                Text("Macronutrients")
+                    .font(.custom("Poppins-SemiBold", size: 18))
+                    .foregroundColor(.primary)
+                Spacer()
+            }
+
+            VStack(spacing: 15) {
+                MacroNutrientProgressCard(
+                    nutrientName: "Protein",
+                    currentAmount: 75,
+                    goalAmount: 120,
+                    color: Color("GradientStart")
+                )
+                MacroNutrientProgressCard(
+                    nutrientName: "Carbs",
+                    currentAmount: 150,
+                    goalAmount: 250,
+                    color: Color("GradientEnd")
+                )
+                MacroNutrientProgressCard(
+                    nutrientName: "Fats",
+                    currentAmount: 40,
+                    goalAmount: 65,
+                    color: Color("GradientStart")
+                )
+            }
+        }
+    }
 
 struct NutritionView_Previews: PreviewProvider {
     static var previews: some View {
