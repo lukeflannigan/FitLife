@@ -49,6 +49,13 @@
 			);
 			target = CE4CCF122CA3B3440058BB93 /* fitlifeUITests */;
 		};
+		49B5D8A82CACD07A00668C3F /* Exceptions for "fitlife" folder in "fitlife" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CE4CCEF82CA3B3430058BB93 /* fitlife */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -60,6 +67,7 @@
 		CE4CCEFB2CA3B3430058BB93 /* fitlife */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				49B5D8A82CACD07A00668C3F /* Exceptions for "fitlife" folder in "fitlife" target */,
 				04E4DE2A2CAA15A8002CB2C1 /* Exceptions for "fitlife" folder in "fitlifeTests" target */,
 				04E4DE2B2CAA15A8002CB2C1 /* Exceptions for "fitlife" folder in "fitlifeUITests" target */,
 			);
@@ -435,10 +443,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"fitlife/Preview Content\"";
 				DEVELOPMENT_TEAM = 9VVXK2959V;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = fitlife/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -464,10 +472,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"fitlife/Preview Content\"";
 				DEVELOPMENT_TEAM = 9VVXK2959V;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = fitlife/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
