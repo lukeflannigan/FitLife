@@ -19,7 +19,7 @@ struct HomeView: View {
         .background(Color(UIColor.systemBackground))
         .edgesIgnoringSafeArea(.bottom)
     }
-
+    
     private var headerSection: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
@@ -43,7 +43,7 @@ struct HomeView: View {
             }
         }
     }
-
+    
     private var quickStatsSection: some View {
         VStack(spacing: 15) {
             HStack {
@@ -52,7 +52,7 @@ struct HomeView: View {
                     .foregroundColor(.primary)
                 Spacer()
             }
-
+            
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
                 StatCard(title: "Calories", value: "1,200", goal: "2,000", color: Color("GradientStart"))
                 StatCard(title: "Protein", value: "75g", goal: "120g", color: Color("GradientEnd"))
@@ -61,7 +61,7 @@ struct HomeView: View {
             }
         }
     }
-
+    
     private var recentActivitySection: some View {
         VStack(spacing: 15) {
             HStack {
@@ -77,14 +77,14 @@ struct HomeView: View {
                         .foregroundColor(Color("GradientStart"))
                 }
             }
-
+            
             VStack(spacing: 10) {
                 ActivityRow(icon: "dumbbell.fill", title: "Upper Body Workout", subtitle: "45 minutes • 250 calories", time: "2h ago")
                 ActivityRow(icon: "fork.knife", title: "Lunch", subtitle: "Grilled Chicken Salad", time: "5h ago")
             }
         }
     }
-
+    
     private var goalProgressSection: some View {
         VStack(spacing: 15) {
             HStack {
@@ -93,15 +93,15 @@ struct HomeView: View {
                     .foregroundColor(.primary)
                 Spacer()
             }
-
-            ProgressBar(progress: 0.7, goal: "Weekly Workout Goal", current: "4", target: "5")
+            
+            // Use GoalProgressView instead of ProgressBar
+            GoalProgressView(progress: 0.7, goal: "Weekly Workout Goal", current: "4", target: "5")
+        }
+    }
+    
+    struct HomeView_Previews: PreviewProvider {
+        static var previews: some View {
+            HomeView()
         }
     }
 }
-
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-    }
-}
-
