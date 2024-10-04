@@ -8,6 +8,15 @@
 import SwiftUI
 import SwiftData
 
+struct WorkoutItem: View {
+    var workout: Workout // passing in workout object
+    var body: some View {
+        VStack() {
+            // TODO : implement functionality to display formatted workout object
+        }
+    }
+}
+
 struct ExerciseSelector: View {
     @Binding var selectedExercise: Exercise
     let exercises: [Exercise]
@@ -54,14 +63,7 @@ struct WorkoutListView: View {
         NavigationView {
             List {
                 ForEach(workouts) { workout in
-                    VStack(alignment: .leading) {
-                        Text(workout.exercise.name)
-                            .font(.headline)
-                        Text("\(workout.sets) sets, \(workout.reps) reps, \(String(format: "%.1f", workout.weight)) lbs")
-                            .font(.subheadline)
-                        Text(workout.date, style: .date)
-                            .font(.caption)
-                    }
+                    WorkoutItem(workout: workout)
                 }
                 .onDelete(perform: deleteWorkouts)
             }
