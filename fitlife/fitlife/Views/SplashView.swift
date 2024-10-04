@@ -26,6 +26,14 @@ struct SplashView: View {
                 }
             }
         }
+        .onAppear {
+            // Simulate a brief delay for the splash screen
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                withAnimation {
+                    self.isActive = true
+                }
+            }
+        }
     }
 }
 
