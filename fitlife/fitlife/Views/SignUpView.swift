@@ -4,10 +4,12 @@
 import SwiftUI
 
 struct SignUpView: View {
-    // Will want to transition to viewmodel eventually 
+    // Will want to transition to viewmodel eventually
     @State private var email = ""
     @State private var password = ""
     @State private var confirmPassword = ""
+    @State private var userGoals = UserGoals(name: "")  // Create a UserGoals instance
+    @State private var navigateToWelcome = false
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
@@ -22,6 +24,11 @@ struct SignUpView: View {
                     signInSection
                 }
                 .padding(.horizontal, 30)
+            }
+            
+            // NavigationLink for WelcomeView triggered by signUpButton
+            NavigationLink(destination: WelcomeView(userGoals: $userGoals), isActive: $navigateToWelcome) {
+                EmptyView()
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -78,7 +85,9 @@ struct SignUpView: View {
     }
     
     private func signUp() {
+        // Simulate signing up and navigate to WelcomeView
         print("Sign up with email: \(email)")
+        navigateToWelcome = true
     }
 }
 
@@ -89,3 +98,4 @@ struct SignUpView_Previews: PreviewProvider {
         }
     }
 }
+
