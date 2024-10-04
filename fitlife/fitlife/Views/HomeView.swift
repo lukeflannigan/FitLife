@@ -18,6 +18,7 @@ struct HomeView: View {
         }
         .background(Color(UIColor.systemBackground))
         .edgesIgnoringSafeArea(.bottom)
+        .navigationBarBackButtonHidden(true)  // Ensure the back button is hidden
     }
     
     private var headerSection: some View {
@@ -70,7 +71,7 @@ struct HomeView: View {
                     .foregroundColor(.primary)
                 Spacer()
                 Button(action: {
-                    // Handle See all" action
+                    // Handle "See all" action
                 }) {
                     Text("See All")
                         .font(.custom("Poppins-Medium", size: 14))
@@ -94,14 +95,13 @@ struct HomeView: View {
                 Spacer()
             }
             
-            // Use GoalProgressView instead of ProgressBar
             GoalProgressView(progress: 0.7, goal: "Weekly Workout Goal", current: "4", target: "5")
         }
     }
-    
-    struct HomeView_Previews: PreviewProvider {
-        static var previews: some View {
-            HomeView()
-        }
+}
+
+struct HomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
     }
 }
