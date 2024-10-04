@@ -4,10 +4,10 @@
 import SwiftUI
 
 struct SignInView: View {
-    // Will want to transition to viewmodel eventually 
-    @State private var email = ""
-    @State private var password = ""
+    @StateObject private var viewModel = AuthenticationViewModel()
     @Environment(\.presentationMode) var presentationMode
+    
+    @State private var navigateToHome = false  // Navigation flag
     
     var body: some View {
         ZStack {
@@ -23,6 +23,11 @@ struct SignInView: View {
                 }
                 .padding(.horizontal, 30)
                 .padding(.top, 50)
+            }
+            
+            // NavigationLink to HomeView on successful sign-in
+            NavigationLink(destination: HomeView(), isActive: $navigateToHome) {
+                EmptyView()
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -42,28 +47,41 @@ struct SignInView: View {
     
     private var formSection: some View {
         VStack(spacing: 20) {
-            CustomTextField(text: $email, placeholder: "Email", imageName: "envelope")
-            CustomTextField(text: $password, placeholder: "Password", imageName: "lock", isSecure: true)
+            CustomTextField(text: $viewModel.email, placeholder: "Email", imageName: "envelope")
+            CustomTextField(text: $viewModel.password, placeholder: "Password", imageName: "lock", isSecure: true)
         }
     }
     
     private var forgotPasswordButton: some View {
         Button("Forgot Password?") {
-            // Eventually will need to handle forgot passsword function
+            viewModel.sendPasswordReset()
         }
         .font(.system(size: 14))
         .foregroundColor(.white)
     }
     
     private var signInButton: some View {
-        Button(action: signIn) {
-            Text("Sign In")
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(.black)
-                .frame(maxWidth: .infinity)
-                .frame(height: 56)
-                .background(Color.white)
-                .cornerRadius(12)
+        VStack {
+            Button(action: {
+                viewModel.signIn()
+                if viewModel.userSession != nil {
+                    navigateToHome = true
+                }
+            }) {
+                Text("Sign In")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 56)
+                    .background(Color.white)
+                    .cornerRadius(12)
+            }
+            
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .font(.system(size: 14))
+            }
         }
     }
     
@@ -82,10 +100,6 @@ struct SignInView: View {
                 .foregroundColor(.white)
                 .imageScale(.large)
         }
-    }
-    
-    private func signIn() {
-        print("Sign in with email: \(email)")
     }
 }
 
