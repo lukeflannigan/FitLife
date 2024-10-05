@@ -5,9 +5,7 @@ import SwiftUI
 
 struct SignInView: View {
     @StateObject private var viewModel = AuthenticationViewModel()
-    @Environment(\.presentationMode) var presentationMode
-    
-    @State private var navigateToHome = false  // Navigation flag
+    @State private var navigateToMain = false  // Navigation flag
     
     var body: some View {
         ZStack {
@@ -25,13 +23,11 @@ struct SignInView: View {
                 .padding(.top, 50)
             }
             
-            // NavigationLink to HomeView on successful sign-in
-            NavigationLink(destination: HomeView(), isActive: $navigateToHome) {
-                EmptyView()
+            // Use FullScreenCover to navigate to MainView, removing SignInView from the view hierarchy
+            .fullScreenCover(isPresented: $navigateToMain) {
+                MainView()
             }
         }
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: backButton)
     }
     
     private var headerSection: some View {
@@ -65,7 +61,7 @@ struct SignInView: View {
             Button(action: {
                 viewModel.signIn()
                 if viewModel.userSession != nil {
-                    navigateToHome = true
+                    navigateToMain = true  // Trigger navigation to MainView
                 }
             }) {
                 Text("Sign In")
@@ -93,20 +89,10 @@ struct SignInView: View {
         .font(.system(size: 14))
         .foregroundColor(.white)
     }
-    
-    private var backButton: some View {
-        Button(action: { presentationMode.wrappedValue.dismiss() }) {
-            Image(systemName: "chevron.left")
-                .foregroundColor(.white)
-                .imageScale(.large)
-        }
-    }
 }
 
 struct SignInView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            SignInView()
-        }
+        SignInView()
     }
 }

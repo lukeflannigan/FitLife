@@ -17,8 +17,8 @@ struct HomeView: View {
             .padding(.bottom, 80)
         }
         .background(Color(UIColor.systemBackground))
+        .navigationBarBackButtonHidden(true)  // Ensure the back button is hidden in HomeView
         .edgesIgnoringSafeArea(.bottom)
-        .navigationBarBackButtonHidden(true)  // Ensure the back button is hidden
     }
     
     private var headerSection: some View {
