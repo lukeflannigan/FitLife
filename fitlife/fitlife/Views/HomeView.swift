@@ -60,10 +60,10 @@ struct HomeView: View {
             }
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
-                StatCard(title: "Calories", value: "1,200", goal: "2,000", color: Color("GradientStart"))
-                StatCard(title: "Protein", value: "75g", goal: "120g", color: Color("GradientEnd"))
-                StatCard(title: "Carbs", value: "150g", goal: "250g", color: Color("GradientStart"))
-                StatCard(title: "Fats", value: "40g", goal: "65g", color: Color("GradientEnd"))
+                StatCard(title: "Calories", value: "1,200", goal: "\(userGoal?.caloriesGoal ?? 0)g", color: Color("GradientStart"))
+                StatCard(title: "Protein", value: "75g", goal: "\(userGoal?.proteinGoal ?? 0)g", color: Color("GradientEnd"))
+                StatCard(title: "Carbs", value: "150g", goal: "\(userGoal?.carbsGoal ?? 0)g", color: Color("GradientStart"))
+                StatCard(title: "Fats", value: "40g", goal: "\(userGoal?.fatsGoal ?? 0)g", color: Color("GradientEnd"))
             }
         }
     }
@@ -100,7 +100,7 @@ struct HomeView: View {
                 Spacer()
             }
 
-            ProgressBar(progress: 0.7, goal: "Weekly Workout Goal", current: "4", target: "5")
+            ProgressBar(progress: 0.7, goal: "Weekly Workout Goal", current: "4", target: "\(userGoal?.workoutGoal ?? 0)")
         }
     }
 }
