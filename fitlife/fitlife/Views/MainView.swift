@@ -34,6 +34,7 @@ struct MainView: View {
                 CustomTabBarView(selectedTab: $selectedTab)
             }
         }
+        .navigationBarBackButtonHidden(true)  // No back button in MainView
         .edgesIgnoringSafeArea(.bottom)
     }
 }

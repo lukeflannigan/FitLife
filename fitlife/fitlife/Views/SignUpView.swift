@@ -4,10 +4,10 @@
 import SwiftUI
 
 struct SignUpView: View {
-    // Will want to transition to viewmodel eventually 
-    @State private var email = ""
-    @State private var password = ""
-    @State private var confirmPassword = ""
+    @StateObject private var viewModel = AuthenticationViewModel()
+    @State private var userGoals = UserGoals(name: "")  // Define userGoals
+    @State private var navigateToWelcome = false  // Navigation flag
+    
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
@@ -22,6 +22,18 @@ struct SignUpView: View {
                     signInSection
                 }
                 .padding(.horizontal, 30)
+            }
+            
+            // Pass userGoals when navigating to WelcomeView
+            NavigationLink(destination: WelcomeView(userGoals: $userGoals), isActive: $navigateToWelcome) {
+                EmptyView()
+            }
+            
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .font(.system(size: 14))
+                    .padding()
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -42,14 +54,19 @@ struct SignUpView: View {
     
     private var formSection: some View {
         VStack(spacing: 20) {
-            CustomTextField(text: $email, placeholder: "Email", imageName: "envelope")
-            CustomTextField(text: $password, placeholder: "Password", imageName: "lock", isSecure: true)
-            CustomTextField(text: $confirmPassword, placeholder: "Confirm Password", imageName: "lock", isSecure: true)
+            CustomTextField(text: $viewModel.email, placeholder: "Email", imageName: "envelope")
+            CustomTextField(text: $viewModel.password, placeholder: "Password", imageName: "lock", isSecure: true)
+            CustomTextField(text: $viewModel.confirmPassword, placeholder: "Confirm Password", imageName: "lock", isSecure: true)
         }
     }
     
     private var signUpButton: some View {
-        Button(action: signUp) {
+        Button(action: {
+            viewModel.signUp()
+            if viewModel.userSession != nil {
+                navigateToWelcome = true
+            }
+        }) {
             Text("Sign Up")
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(.black)
@@ -75,10 +92,6 @@ struct SignUpView: View {
                 .foregroundColor(.white)
                 .imageScale(.large)
         }
-    }
-    
-    private func signUp() {
-        print("Sign up with email: \(email)")
     }
 }
 
