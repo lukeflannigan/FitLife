@@ -11,8 +11,9 @@ import SwiftData
 struct WorkoutItem: View {
     var workout: Workout // passing in workout object
     var body: some View {
-        VStack() {
-            // TODO: implement functionality to display formatted workout object
+        VStack(alignment: .leading) {
+            Text(workout.exercise.name)
+            Text("Sets: \(workout.sets), Reps: \(workout.reps), Weight: \(String(format: "%.1f", workout.weight)) lbs")
         }
     }
 }
@@ -75,7 +76,7 @@ struct WorkoutListView: View {
                     Button(action: { showingNewWorkoutForm.toggle() }) {
                         HStack {
                             Image(systemName: "plus.circle.fill")
-                            Text("Add New Workout")
+                            Text("Add New Exercise")
                         }
                         .frame(maxWidth: 300)
                         .padding()
