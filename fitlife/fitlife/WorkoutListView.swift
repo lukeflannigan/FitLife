@@ -53,7 +53,6 @@ struct NewWorkoutForm: View {
                     }
                 }
             }
-            
         }
     }
 }
@@ -66,17 +65,28 @@ struct WorkoutListView: View {
 
     var body: some View {
         NavigationView {
-            List {
-                ForEach(workouts) { workout in
-                    WorkoutItem(workout: workout)
+            VStack {
+                List {
+                    ForEach(workouts) { workout in
+                        WorkoutItem(workout: workout)
+                    }
+                    .onDelete(perform: deleteWorkouts)
                 }
-                .onDelete(perform: deleteWorkouts)
+                .listStyle(PlainListStyle())
+                Button(action: {showingNewWorkoutForm.toggle()}) {
+                    Text("Add New Workout")
+                }
+                .frame(maxWidth: 300)
+                .padding()
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(15)
             }
-            .navigationTitle("Workouts")
+            .padding()
+            .navigationTitle("My Daily Split")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { showingNewWorkoutForm = true }) {
-                        Image(systemName: "plus")
+                ToolbarItem(placement: .navigationBarLeading){
+                    NavigationLink(destination: ContentView()) {
+                        Image(systemName: "house")
                     }
                 }
             }
