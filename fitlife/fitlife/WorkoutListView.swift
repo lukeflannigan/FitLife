@@ -19,6 +19,7 @@ struct WorkoutItem: View {
 
 
 struct NewWorkoutForm: View {
+    @Environment(\.presentationMode) var presentationMode
     @Binding var workouts: [Workout]
     @State private var currExercise = Exercise()
     @State private var inputSetCount: Int = 0
@@ -37,6 +38,22 @@ struct NewWorkoutForm: View {
                     Stepper("Weight: \(inputWeight)", value: $inputWeight, in: 0...100)
                 }
             }
+            .navigationBarTitle("Add Exercise")
+            .toolbar{
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Add") {
+                        let newWorkout = Workout(exercise: currExercise, sets: inputSetCount, reps: inputRepCount, weight: inputWeight)
+                        workouts.append(newWorkout)
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            }
+            
         }
     }
 }
