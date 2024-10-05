@@ -4,13 +4,36 @@
 import SwiftUI
 
 struct NutritionView: View {
+    @State private var foods: [Food] = [
+        Food(name: "Chicken", calories: 200, protein: 30, carbs: 0, fat: 5),
+        Food(name: "Rice", calories: 250, protein: 5, carbs: 45, fat: 0),
+        Food(name: "Broccoli", calories: 50, protein: 1, carbs: 15, fat: 0),
+        Food(name: "Salmon", calories: 200, protein: 30, carbs: 0, fat: 10),
+    ]
+    
+    private var totalCalories: Int {
+        foods.reduce(0) { $0 + $1.calories }
+    }
+    
+    private var totalProtein: Double {
+        foods.reduce(0) { $0 + $1.protein }
+    }
+    
+    private var totalCarbs: Double {
+        foods.reduce(0) { $0 + $1.carbs }
+    }
+    
+    private var totalFat: Double {
+        foods.reduce(0) { $0 + $1.fat }
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 headerSection
                 caloricIntakeSection
                 macronutrientsSection
-                mealsLoggedSection
+                foodsLoggedSection
                 actionButtonsSection
             }
             .padding(.horizontal, 20)
@@ -44,12 +67,11 @@ struct NutritionView: View {
                 Spacer()
             }
 
-            CaloricIntakeCard(currentCalories: 1200, goalCalories: 2000)
+            CaloricIntakeCard(currentCalories: totalCalories, goalCalories: 2000)
         }
     }
-}
 
-private var macronutrientsSection: some View {
+    private var macronutrientsSection: some View {
         VStack(spacing: 15) {
             HStack {
                 Text("Macronutrients")
@@ -61,19 +83,19 @@ private var macronutrientsSection: some View {
             VStack(spacing: 15) {
                 MacroNutrientProgressCard(
                     nutrientName: "Protein",
-                    currentAmount: 75,
+                    currentAmount: Int(totalProtein),
                     goalAmount: 120,
                     color: Color("GradientStart")
                 )
                 MacroNutrientProgressCard(
                     nutrientName: "Carbs",
-                    currentAmount: 150,
+                    currentAmount: Int(totalCarbs),
                     goalAmount: 250,
                     color: Color("GradientEnd")
                 )
                 MacroNutrientProgressCard(
                     nutrientName: "Fats",
-                    currentAmount: 40,
+                    currentAmount: Int(totalFat),
                     goalAmount: 65,
                     color: Color("GradientStart")
                 )
@@ -81,31 +103,24 @@ private var macronutrientsSection: some View {
         }
     }
 
-private var mealsLoggedSection: some View {
+    private var foodsLoggedSection: some View {
         VStack(spacing: 15) {
             HStack {
-                Text("Meals Logged")
+                Text("Foods Logged")
                     .font(.custom("Poppins-SemiBold", size: 18))
                     .foregroundColor(.primary)
                 Spacer()
-                Button(action: {
-                    // Add a meal here
-                }) {
-                    Text("Add Meal")
-                        .font(.custom("Poppins-Medium", size: 14))
-                        .foregroundColor(Color("GradientStart"))
-                }
             }
 
-            VStack(spacing: 10) {
-                ActivityRow(icon: "sunrise.fill", title: "Breakfast", subtitle: "Oatmeal, Banana", time: "350 cal")
-                ActivityRow(icon: "sun.max.fill", title: "Lunch", subtitle: "Grilled Chicken Salad", time: "500 cal")
-                // Hardcoding this for now just to see it works - will need to tie this to actual data.
+            ForEach(foods) { food in
+                NavigationLink(destination: FoodDetailView(food: food)) {
+                    ActivityRow(icon: "fork.knife", title: food.name, subtitle: "\(food.calories) cal", time: "")
+                }
             }
         }
     }
 
-private var actionButtonsSection: some View {
+    private var actionButtonsSection: some View {
         HStack(spacing: 20) {
             ActionButton(title: "Add Food", iconName: "plus.circle.fill") {
                 // Add food
@@ -116,7 +131,7 @@ private var actionButtonsSection: some View {
         }
         .padding(.top, 10)
     }
-
+}
 
 struct NutritionView_Previews: PreviewProvider {
     static var previews: some View {
