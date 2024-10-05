@@ -36,7 +36,7 @@ struct NewWorkoutForm: View {
                 Section(header: Text("Details")) {
                     Stepper("Sets: \(inputSetCount)", value: $inputSetCount, in: 0...10)
                     Stepper("Reps: \(inputRepCount)", value: $inputRepCount, in: 0...10)
-                    Stepper("Weight: \(inputWeight)", value: $inputWeight, in: 0...100)
+                    Stepper("Weight: \(String(format: "%.1f",inputWeight)) lbs", value: $inputWeight, in: 0...100)
                 }
             }
             .navigationBarTitle("Add Exercise")
