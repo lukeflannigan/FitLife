@@ -12,50 +12,21 @@ struct WorkoutItem: View {
     var workout: Workout // passing in workout object
     var body: some View {
         VStack() {
-            // TODO : implement functionality to display formatted workout object
+            // TODO: implement functionality to display formatted workout object
         }
     }
 }
 
-struct ExerciseSelector: View {
-    @Binding var selectedExercise: Exercise
-    let exercises: [Exercise]
 
+struct NewWorkoutForm: View {
     var body: some View {
-        Picker("Select Exercise", selection: $selectedExercise) {
-            ForEach(exercises) { exercise in
-                Text(exercise.name).tag(exercise)
-            }
-        }
-        .pickerStyle(MenuPickerStyle())
-        .padding()
-        .background(Color.gray.opacity(0.1))
-        .cornerRadius(10)
+        Text("Hello, World!") // TODO: implement add workout functionality
     }
 }
 
-struct WorkoutEntryForm: View {
-    @Binding var workout: Workout
-    
-    var body: some View {
-        Form {
-            Section(header: Text("Workout Details")) {
-                Stepper("Sets: \(workout.sets)", value: $workout.sets, in: 1...10)
-                Stepper("Reps: \(workout.reps)", value: $workout.reps, in: 1...100)
-                HStack {
-                    Text("Weight:")
-                    TextField("Weight", value: $workout.weight, formatter: NumberFormatter())
-                        .keyboardType(.decimalPad)
-                }
-            }
-        }
-    }
-}
 
 struct WorkoutListView: View {
     @State private var workouts: [Workout] = []
-    @State private var selectedExercise: Exercise = Exercise.mockExercises[0]
-    @State private var newWorkout = Workout(exercise: Exercise.mockExercises[0])
     @State private var showingNewWorkoutForm = false
     @Environment(\.modelContext) private var modelContext
 
@@ -76,20 +47,7 @@ struct WorkoutListView: View {
                 }
             }
             .sheet(isPresented: $showingNewWorkoutForm) {
-                NavigationView {
-                    VStack {
-                        ExerciseSelector(selectedExercise: $selectedExercise, exercises: Exercise.mockExercises)
-                        WorkoutEntryForm(workout: $newWorkout)
-                    }
-                    .navigationTitle("New Workout")
-                    .navigationBarItems(
-                        leading: Button("Cancel") { showingNewWorkoutForm = false },
-                        trailing: Button("Save") {
-                            saveNewWorkout()
-                            showingNewWorkoutForm = false
-                        }
-                    )
-                }
+                NewWorkoutForm(workouts: $workouts)
             }
         }
     }
@@ -98,12 +56,6 @@ struct WorkoutListView: View {
         workouts.remove(atOffsets: offsets)
     }
     
-    private func saveNewWorkout() {
-        newWorkout.exercise = selectedExercise
-        workouts.append(newWorkout)
-        modelContext.insert(newWorkout)
-        newWorkout = Workout(exercise: selectedExercise)
-    }
 }
 
 #Preview {
