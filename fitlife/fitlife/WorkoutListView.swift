@@ -71,20 +71,25 @@ struct WorkoutListView: View {
                         WorkoutItem(workout: workout)
                     }
                     .onDelete(perform: deleteWorkouts)
+
+                    Button(action: { showingNewWorkoutForm.toggle() }) {
+                        HStack {
+                            Image(systemName: "plus.circle.fill")
+                            Text("Add New Workout")
+                        }
+                        .frame(maxWidth: 300)
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(15)
+                    }
+                    .padding(.vertical)
                 }
                 .listStyle(PlainListStyle())
-                Button(action: {showingNewWorkoutForm.toggle()}) {
-                    Text("Add New Workout")
-                }
-                .frame(maxWidth: 300)
-                .padding()
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(15)
             }
             .padding()
             .navigationTitle("My Daily Split")
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading){
+                ToolbarItem(placement: .navigationBarLeading) {
                     NavigationLink(destination: ContentView()) {
                         Image(systemName: "house")
                     }
