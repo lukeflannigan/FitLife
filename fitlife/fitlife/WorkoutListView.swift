@@ -19,8 +19,25 @@ struct WorkoutItem: View {
 
 
 struct NewWorkoutForm: View {
+    @Binding var workouts: [Workout]
+    @State private var currExercise = Exercise()
+    @State private var inputSetCount: Int = 0
+    @State private var inputRepCount: Int = 0
+    @State private var inputWeight: Double = 0
+    
     var body: some View {
-        Text("Hello, World!") // TODO: implement add workout functionality
+        NavigationView {
+            Form {
+                Section(header: Text("Select Exercise")) {
+                    TextField("Exercise Name", text: $currExercise.name)
+                }
+                Section(header: Text("Details")) {
+                    Stepper("Sets: \(inputSetCount)", value: $inputSetCount, in: 0...10)
+                    Stepper("Reps: \(inputRepCount)", value: $inputRepCount, in: 0...10)
+                    Stepper("Weight: \(inputWeight)", value: $inputWeight, in: 0...100)
+                }
+            }
+        }
     }
 }
 
