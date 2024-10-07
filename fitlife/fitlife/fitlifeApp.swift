@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 import FirebaseCore
 
 class AppDelegate: NSObject, UIApplicationDelegate {
@@ -19,13 +20,23 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct YourApp: App {
+    let modelContainer: ModelContainer
   // register app delegate for Firebase setup
-  @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
-  var body: some Scene {
-    WindowGroup {
-      NavigationView {
-        SplashView()
+    init() {
+            do {
+                modelContainer = try ModelContainer(for: UserGoals.self)
+            } catch {
+                fatalError("Could not initialize ModelContainer")
+            }
+        }
+    
+    var body: some Scene {
+        WindowGroup {
+            NavigationView {
+                ContentView()
+                    .modelContainer(modelContainer)
       }
     }
   }

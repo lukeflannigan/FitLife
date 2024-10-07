@@ -2,8 +2,13 @@
 // Created by Luke Flannigan on 10/1/24.
 
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
+    @Environment(\.modelContext) var modelContext
+    @Query var userGoals: [UserGoals]
+    var userGoal: UserGoals? { userGoals.first }
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -27,10 +32,11 @@ struct HomeView: View {
                 Text("Welcome back,")
                     .font(.custom("Poppins-Regular", size: 16))
                     .foregroundColor(.secondary)
-                Text("Dr. Lehr")
+                Text("\(userGoal?.name ?? "Ted Lehr")")
                     .font(.custom("Poppins-Bold", size: 28))
                     .foregroundColor(.primary)
             }
+            .padding(.vertical)
             Spacer()
             Button(action: {
                 // Handle notification action
@@ -55,10 +61,10 @@ struct HomeView: View {
             }
             
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
-                StatCard(title: "Calories", value: "1,200", goal: "2,000", color: Color("GradientStart"))
-                StatCard(title: "Protein", value: "75g", goal: "120g", color: Color("GradientEnd"))
-                StatCard(title: "Carbs", value: "150g", goal: "250g", color: Color("GradientStart"))
-                StatCard(title: "Fats", value: "40g", goal: "65g", color: Color("GradientEnd"))
+                StatCard(title: "Calories", value: "1,200", goal: "\(userGoal?.caloriesGoal ?? 0)g", color: Color("GradientStart"))
+                StatCard(title: "Protein", value: "75g", goal: "\(userGoal?.proteinGoal ?? 0)g", color: Color("GradientEnd"))
+                StatCard(title: "Carbs", value: "150g", goal: "\(userGoal?.carbsGoal ?? 0)g", color: Color("GradientStart"))
+                StatCard(title: "Fats", value: "40g", goal: "\(userGoal?.fatsGoal ?? 0)g", color: Color("GradientEnd"))
             }
         }
     }
@@ -94,8 +100,8 @@ struct HomeView: View {
                     .foregroundColor(.primary)
                 Spacer()
             }
-            
-            GoalProgressView(progress: 0.7, goal: "Weekly Workout Goal", current: "4", target: "5")
+
+            ProgressBar(progress: 0.7, goal: "Weekly Workout Goal", current: "4", target: "\(userGoal?.workoutGoal ?? 0)")
         }
     }
 }

@@ -8,14 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
+    
     var body: some View {
-        VStack {
-            Image(systemName: "dumbbell")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Welcome to FitLife!")
-                .padding()
-        }
+        HomeView()
     }
 }
 
