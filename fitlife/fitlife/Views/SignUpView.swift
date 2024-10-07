@@ -5,39 +5,29 @@ import SwiftUI
 
 struct SignUpView: View {
     @StateObject private var viewModel = AuthenticationViewModel()
-    @State private var userGoals = UserGoals(name: "")  // Define userGoals
-    @State private var navigateToWelcome = false  // Navigation flag
-    
-    @Environment(\.presentationMode) var presentationMode
+    @State private var userGoals = UserGoals(name: "")
+    @State private var showWelcomeView = false  // Flag for showing WelcomeView
     
     var body: some View {
-        ZStack {
-            GradientBackground()
-            
-            ScrollView {
-                VStack(spacing: 30) {
-                    headerSection
-                    formSection
-                    signUpButton
-                    signInSection
+        NavigationStack {
+            ZStack {
+                GradientBackground()
+                
+                ScrollView {
+                    VStack(spacing: 30) {
+                        headerSection
+                        formSection
+                        signUpButton
+                        signInSection
+                    }
+                    .padding(.horizontal, 30)
                 }
-                .padding(.horizontal, 30)
-            }
-            
-            // Pass userGoals when navigating to WelcomeView
-            NavigationLink(destination: WelcomeView(userGoals: $userGoals), isActive: $navigateToWelcome) {
-                EmptyView()
-            }
-            
-            if let errorMessage = viewModel.errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                    .font(.system(size: 14))
-                    .padding()
+                .fullScreenCover(isPresented: $showWelcomeView) {
+                    WelcomeView(userGoals: $userGoals)  // Show WelcomeView as a full screen cover
+                        .navigationBarBackButtonHidden(true)  // Ensure no back button in WelcomeView
+                }
             }
         }
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: backButton)
     }
     
     private var headerSection: some View {
@@ -64,7 +54,7 @@ struct SignUpView: View {
         Button(action: {
             viewModel.signUp()
             if viewModel.userSession != nil {
-                navigateToWelcome = true
+                showWelcomeView = true  // Trigger WelcomeView as full screen cover
             }
         }) {
             Text("Sign Up")
@@ -85,19 +75,11 @@ struct SignUpView: View {
         .font(.system(size: 14))
         .foregroundColor(.white)
     }
-    
-    private var backButton: some View {
-        Button(action: { presentationMode.wrappedValue.dismiss() }) {
-            Image(systemName: "chevron.left")
-                .foregroundColor(.white)
-                .imageScale(.large)
-        }
-    }
 }
 
 struct SignUpView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             SignUpView()
         }
     }

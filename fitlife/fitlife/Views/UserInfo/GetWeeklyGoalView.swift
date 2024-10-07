@@ -14,6 +14,8 @@ struct GetWeeklyGoalView: View {
     
     // Tracks the selected weekly goal
     @State private var selectedWeeklyGoal: WeeklyGoal? = nil
+    // To dismiss this view and navigate to HomeView permanently
+    @Environment(\.dismiss) private var dismiss
     
     // Filter weekly goals based on whether the user wants to lose, gain, or maintain weight
     var filteredGoals: [WeeklyGoal] {
@@ -73,17 +75,17 @@ struct GetWeeklyGoalView: View {
                 }
                 .listStyle(PlainListStyle())
                 
-                
                 Spacer()
                 
-                // Next button
+                // Finish button
                 Button(action: {
                     if let selectedGoal = selectedWeeklyGoal {
                         userGoals.weeklyGoal = selectedGoal
-                        // modelContext.save() or navigate to next step
+                        // Navigate permanently to HomeView
+                        navigateToHome()
                     }
                 }) {
-                    Text("Next")
+                    Text("Finish")
                         .font(.headline)
                         .bold()
                         .frame(maxWidth: .infinity)
@@ -99,6 +101,19 @@ struct GetWeeklyGoalView: View {
             }
             .navigationTitle("Goal")
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+        }
+    }
+    
+    // Helper function to replace the current view with HomeView
+    private func navigateToHome() {
+        // Replace the view with HomeView as a new root
+        let homeView = HomeView()
+        let rootView = UIHostingController(rootView: homeView)
+        
+        if let window = UIApplication.shared.windows.first {
+            window.rootViewController = rootView
+            window.makeKeyAndVisible()
         }
     }
 }
