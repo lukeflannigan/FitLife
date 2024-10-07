@@ -101,7 +101,7 @@ struct HomeView: View {
                 Spacer()
             }
 
-            ProgressBar(progress: 0.7, goal: "Weekly Workout Goal", current: "4", target: "\(userGoal?.workoutGoal ?? 0)")
+            GoalProgressView(progress: 0.7, goal: "Weekly Workout Goal", current: "4", target: "\(userGoal?.workoutGoal ?? 0)")
         }
     }
 }
