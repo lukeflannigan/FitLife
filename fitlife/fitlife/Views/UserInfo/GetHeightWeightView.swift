@@ -157,7 +157,7 @@ struct GetHeightWeightView: View {
                         .bold()
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.blue)
+                        .background(Color.black)
                         .foregroundColor(.white)
                         .cornerRadius(12)
                 }
