@@ -91,7 +91,7 @@ struct WorkoutListView: View {
             .navigationTitle("My Daily Split")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    NavigationLink(destination: ContentView()) {
+                    NavigationLink(destination: MainView()) {
                         Image(systemName: "house")
                     }
                 }
