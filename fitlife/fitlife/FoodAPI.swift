@@ -5,6 +5,7 @@
 //
 
 import SwiftUI
+import Foundation
 
 // The RecipeObject
 struct RecipeObject: Hashable, Codable{
@@ -29,13 +30,13 @@ struct RecipeResponse: Codable{
 class ViewModel: ObservableObject {
     @Published var recipes: [RecipeObject] = [] // Array to hold fetched recipes
     
-    class ViewModel: ObservableObject {
-        @Published var recipes: [RecipeObject] = [] // Array to hold fetched recipes
-        
         func fetchData(query: String) {
             // Replace with your actual App ID and API Key
-            let appID = Bundle.main.object(forInfoDictionaryKey: "APP_ID") as? String ?? ""
-            let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? ""
+//            let appID = Bundle.main.object(forInfoDictionaryKey: "APP_ID") as? String ?? ""
+//            let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? ""
+
+// --------------newest line here----------------------
+            let appID = Bundle.main.path(forResource: "Secrets", ofType: "plist")
             
             // Ensure the query is URL-safe
             let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
@@ -66,9 +67,9 @@ class ViewModel: ObservableObject {
                 }
             }
             task.resume()
-        }
     }
 }
+
 
 struct RecipeDetailView: View {
     let recipe: RecipeObject
@@ -118,12 +119,12 @@ struct RecipeDetailView: View {
     }
 }
 
-#Preview {
-    ContentView()
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
+//#Preview {
+//    ContentView()
+//}
+//
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}
