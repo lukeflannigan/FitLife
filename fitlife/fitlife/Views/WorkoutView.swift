@@ -59,14 +59,16 @@ struct NewWorkoutForm: View {
 }
 
 
-struct WorkoutListView: View {
+struct WorkoutsView: View {
     @State private var workouts: [Workout] = []
     @State private var showingNewWorkoutForm = false
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         NavigationView {
-            VStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("My Daily Split")
+                    .font(.custom("Poppins-Bold", size: 28))
                 List {
                     ForEach(workouts) { workout in
                         WorkoutItem(workout: workout)
@@ -77,6 +79,7 @@ struct WorkoutListView: View {
                         HStack {
                             Image(systemName: "plus.circle.fill")
                             Text("Add New Exercise")
+                                .font(.custom("Poppins-Bold", size: 16))
                         }
                         .frame(maxWidth: 300)
                         .padding()
@@ -88,14 +91,6 @@ struct WorkoutListView: View {
                 .listStyle(PlainListStyle())
             }
             .padding()
-            .navigationTitle("My Daily Split")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    NavigationLink(destination: MainView()) {
-                        Image(systemName: "house")
-                    }
-                }
-            }
             .sheet(isPresented: $showingNewWorkoutForm) {
                 NewWorkoutForm(workouts: $workouts)
             }
@@ -109,5 +104,5 @@ struct WorkoutListView: View {
 }
 
 #Preview {
-    WorkoutListView()
+    WorkoutsView()
 }
