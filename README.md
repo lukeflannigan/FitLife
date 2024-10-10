@@ -106,6 +106,21 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
 - `Jira Task: 3. Implement Functionality to Add and Save Workouts`
   - [CTP-24](https://cs3398-borgs-f24.atlassian.net/browse/CTP-24?atlOrigin=eyJpIjoiOGRiNDgyMTkwZjBmNDhmZGFiYjRiMDcwZTdiMzJhYWMiLCJwIjoiaiJ9), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/feature/CTP-24-3.-implement-functionality-to-add)
 
+**Luke**: "Designed and implemented key user interface components, including the nutrition view, opening screens, dashboard, and profile page, enhancing user navigation and interaction within the app."
+
+- `Jira Task: Design Nutrition Logging UI`
+  - [CTP-27](https://cs3398-borgs-f24.atlassian.net/browse/CTP-27), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-27-1.-nutrition-ui)
+- `Jira Task: Design Opening Screens`
+  - [CTP-96](https://cs3398-borgs-f24.atlassian.net/browse/CTP-96), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/pull-requests/2/overview)
+- `Jira Task: Implement Opening Screens`
+  - [CTP-98](https://cs3398-borgs-f24.atlassian.net/browse/CTP-98), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-98-implement-opening-screens)
+- `Jira Task: Design Dashboard UI for Daily Summaries`
+  - [CTP-32](https://cs3398-borgs-f24.atlassian.net/browse/CTP-32), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-32-1.-design-dashboard-ui)
+- `Jira Task: Implement Profile View Screen`
+  - [CTP-36](https://cs3398-borgs-f24.atlassian.net/browse/CTP-36), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-36-5.-implement-profile-view-screen)
+- `Jira Task: Calculate and Display Total Daily Nutrition`
+  - [CTP-30](https://cs3398-borgs-f24.atlassian.net/browse/CTP-30), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-30-4.-calculate-and-display-nutrition)
+
 ### Next Steps
 **Thomas**: 
 - Implement workout API to have prexisting exercises to simplify input process
@@ -114,6 +129,11 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
 - Use user workout data to generate customized reports
 - Implement daily AI-powered workout suggestions from user data
   - pull suggestions from goals and existing workouts
+
+**Luke**:
+- Integrate the Nutrition View UI with backend services to enable real-time tracking and input of user data.
+- Implement functionality in the Profile section to allow users to update and customize their personal profiles.
+- Connect the Progress section to backend services to display real-time user data and achievements.
 
 
 
