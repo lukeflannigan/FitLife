@@ -114,3 +114,29 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
 - Use user workout data to generate customized reports
 - Implement daily AI-powered workout suggestions from user data
   - pull suggestions from goals and existing workouts
+
+
+
+---
+
+<br/>
+<strong>Sam Arshad</strong>
+
+-[Worked on the API Recipe Search Feature.](https://cs3398-borgs-f24.atlassian.net/browse/CTP-28?atlOrigin=eyJpIjoiNGZkY2E2N2JjODFlNDc4Y2FlZTI4MzJhNTE0YzdiMWEiLCJwIjoiaiJ9) 
+
+  - [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/CTP-28-2.-integrate-food-database-api/)
+  
+-[Worked on the Create User Feature.](https://cs3398-borgs-f24.atlassian.net/browse/CTP-19?atlOrigin=eyJpIjoiNTIyZTZkZDg1ZDk0NDIzZmFjMDc5YzlkMDFlNzQ0ZDUiLCJwIjoiaiJ9)
+  
+    -Realized that this was a redundant step as all user authentication would be done through Firebase. Provided J.Tuttle boilerplate code for Firebase Authentication.
+  
+   - [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/CTP-19-3.-implement-sign-up-functionality/)
+   
+
+-[Worked on "logging" food entries code.](https://cs3398-borgs-f24.atlassian.net/browse/CTP-29?atlOrigin=eyJpIjoiNzQ3OTdkZjUzZTU4NGNjZmJiMjBhZmEyMTc0MzRlYTciLCJwIjoiaiJ9)
+  
+  - [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/CTP-29-3.-implement-functionality-to-add-and-save-food-entries/)
+
+<strong><u>Note:</u> Recognizing my lack of proficiency in Swift, SwiftUI and Xcode, I proactively completed a course and earned a certificate in Swift, while working on these tassks I've been dedicated on improving my skills and have currently made progressive leaps in becoming better at these languages/technologies.</u></strong>
+  
+---
