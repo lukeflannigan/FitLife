@@ -120,6 +120,24 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
   - [CTP-36](https://cs3398-borgs-f24.atlassian.net/browse/CTP-36), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-36-5.-implement-profile-view-screen)
 - `Jira Task: Calculate and Display Total Daily Nutrition`
   - [CTP-30](https://cs3398-borgs-f24.atlassian.net/browse/CTP-30), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-30-4.-calculate-and-display-nutrition)
+  
+  **Jonas**: "Implemented Firebase into app, added functionality for user authentication, and designed/set-up app splash view."
+
+  - `Jira Task: 4 - Design App Folder Navigation)`
+    - [CTP-40](https://cs3398-borgs-f24.atlassian.net/browse/CTP-40),
+    [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/CTP-40-4.-design-app-folder-navigation/)
+  - `Jira Task: 2 - Set Up Firebase Authentication in Project`
+    - [CTP-18](https://cs3398-borgs-f24.atlassian.net/browse/CTP-18),
+    [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/CTP-18-2.-set-up-firebase-authentication/)
+  - `Jira Task: 3 - Implement SplashView Functionality`
+    - [CTP-34](https://cs3398-borgs-f24.atlassian.net/browse/CTP-34),
+    [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/CTP-34-3.-implement-splashview-functiona/)
+  - `Jira Task: 2 - Design SplashView`
+    - [CTP-33](https://cs3398-borgs-f24.atlassian.net/browse/CTP-33),
+    [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/CTP-33-2.-design-splashview/)
+  - `Jira Task: 1 - Implement Sign-in and Login functionality`
+    - [CTP-17](https://cs3398-borgs-f24.atlassian.net/browse/CTP-17),
+    [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/18ab227e68bd305b41fd6444cce00b54d9ebfd27/?at=feature%2FCTP-17-1.-Authentication)
 
 ### Next Steps
 **Thomas**: 
@@ -135,6 +153,11 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
 - Implement functionality in the Profile section to allow users to update and customize their personal profiles.
 - Connect the Progress section to backend services to display real-time user data and achievements.
 
+**Jonas**:
+- Design and implement general app/account settings, such as username/password changes, log out, account deletion, etc.
+- Work with real-time analytics to track user app usage.
+- Set up basic notification functionality; test various effective ways to work notifications into the app via location, daily progress, etc.
+- Study and implement ways to test new features on the app.
 
 
 ---
