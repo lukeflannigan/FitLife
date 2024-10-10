@@ -105,3 +105,12 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
   - [CTP-92](https://cs3398-borgs-f24.atlassian.net/browse/CTP-92?atlOrigin=eyJpIjoiYWYzMzNlYTA0YTNmNDRlYmExYWQ0YjlmZjJiODdjZGQiLCJwIjoiaiJ9), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/CTP-92-create-xcode-project-in-team-bitb)
 - `Jira Task: 3. Implement Functionality to Add and Save Workouts`
   - [CTP-24](https://cs3398-borgs-f24.atlassian.net/browse/CTP-24?atlOrigin=eyJpIjoiOGRiNDgyMTkwZjBmNDhmZGFiYjRiMDcwZTdiMzJhYWMiLCJwIjoiaiJ9), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/feature/CTP-24-3.-implement-functionality-to-add)
+
+### Next Steps
+**Thomas**: 
+- Implement workout API to have prexisting exercises to simplify input process
+  - [Workout API](https://www.api-ninjas.com/api/exercises)
+- Design reports UI
+- Use user workout data to generate customized reports
+- Implement daily AI-powered workout suggestions from user data
+  - pull suggestions from goals and existing workouts
