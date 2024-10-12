@@ -138,6 +138,17 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
   - `Jira Task: 1 - Implement Sign-in and Login functionality`
     - [CTP-17](https://cs3398-borgs-f24.atlassian.net/browse/CTP-17),
     [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/feature/CTP-17-1.-Authentication)
+  
+  **Gabriel**: "Implemented goal setting data models to keep track of all user data for progress over time, as well as the views associated with goals."
+
+  - `Jira Task: 1. Design Goal Setting UI`
+    - [CTP-37](https://cs3398-borgs-f24.atlassian.net/browse/CTP-37)
+  - `Jira Task: 2. Implement Functionality to set User Basic Info`
+    - [CTP-38](https://cs3398-borgs-f24.atlassian.net/browse/CTP-38)
+  - `Jira Task: 3. Implement Progress Tracking on Dashboard`
+      - [CTP-39](https://cs3398-borgs-f24.atlassian.net/browse/CTP-39)
+
+      
 
 ### Next Steps
 **Thomas**: 
@@ -159,6 +170,10 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
 - Set up basic notification functionality; test various effective ways to work notifications into the app via location, daily progress, etc.
 - Study and implement ways to test new features on the app.
 
+**Gabriel**:
+- Integrate goal tracking with workouts and calorie counter.
+- Implement day-to-day, week-to-week, etc. goals on dashboard.
+- Integrate SwiftData with Firebase authentication.
 
 ---
 
