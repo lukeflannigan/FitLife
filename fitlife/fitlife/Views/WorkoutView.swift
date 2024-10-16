@@ -58,6 +58,49 @@ struct WorkoutInfoCell: View {
     }
 }
 
+// MARK: - WorkoutDetailView
+struct WorkoutDetailView: View {
+    var workout: Workout
+
+    var body: some View {
+        VStack(spacing: 30) {
+            Text(workout.exercise.name)
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .padding(.top)
+
+            HStack(spacing: 20) {
+                DetailStatView(title: "Sets", value: "\(workout.sets)")
+                DetailStatView(title: "Reps", value: "\(workout.reps)")
+                DetailStatView(title: "Weight", value: "\(String(format: "%.1f", workout.weight)) lbs")
+            }
+            .padding(.horizontal)
+
+            Spacer()
+        }
+        .navigationTitle("Workout Details")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+// MARK: - DetailStatView
+struct DetailStatView: View {
+    var title: String
+    var value: String
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Text(title)
+                .font(.headline)
+                .foregroundColor(.secondary)
+            Text(value)
+                .font(.title)
+                .fontWeight(.semibold)
+                .foregroundColor(.primary)
+        }
+    }
+}
+
 // MARK: - NewWorkoutForm
 struct NewWorkoutForm: View {
     @Environment(\.presentationMode) var presentationMode
@@ -138,7 +181,10 @@ struct WorkoutsView: View {
                 Spacer()
                 List {
                     ForEach(workouts) { workout in
-                        WorkoutCardView(workout: workout)
+                        NavigationLink(destination: WorkoutDetailView(workout: workout)) {
+                            WorkoutCardView(workout: workout)
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
                     .onDelete(perform: deleteWorkouts)
 
@@ -173,4 +219,3 @@ struct WorkoutsView: View {
 #Preview {
     WorkoutsView()
 }
-
