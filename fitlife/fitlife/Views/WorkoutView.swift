@@ -167,20 +167,85 @@ struct NewWorkoutForm: View {
     }
 }
 
+// MARK: - SearchBar
+struct SearchBar: View {
+    @Binding var text: String
+    @State private var isEditing = false
+
+    var body: some View {
+        HStack {
+            HStack(spacing: 5) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
+
+                TextField("Search", text: $text)
+                    .foregroundColor(.primary)
+
+                if !text.isEmpty {
+                    Button(action: {
+                        self.text = ""
+                    }) {
+                        Image(systemName: "multiply.circle.fill")
+                            .foregroundColor(.gray)
+                    }
+                }
+            }
+            .padding(8)
+            .background(Color(UIColor.systemGray5))
+            .cornerRadius(8)
+            .onTapGesture {
+                self.isEditing = true
+            }
+
+            if isEditing {
+                Button(action: {
+                    self.isEditing = false
+                    self.text = ""
+                    hideKeyboard()
+                }) {
+                    Text("Cancel")
+                        .foregroundColor(.blue)
+                }
+                .padding(.leading, 5)
+                .transition(.move(edge: .trailing))
+                .animation(.default, value: isEditing)
+            }
+        }
+    }
+
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+
 // MARK: - WorkoutsView
 struct WorkoutsView: View {
     @State private var workouts: [Workout] = []
     @State private var showingNewWorkoutForm = false
+    @State private var searchText: String = ""
     @Environment(\.modelContext) private var modelContext
+
+    var filteredWorkouts: [Workout] {
+        if searchText.isEmpty {
+            return workouts
+        } else {
+            return workouts.filter { $0.exercise.name.localizedCaseInsensitiveContains(searchText) }
+        }
+    }
 
     var body: some View {
         NavigationView {
             VStack(alignment: .leading, spacing: 4) {
+                // Title
                 Text("My Daily Split")
                     .font(.custom("Poppins-Bold", size: 28))
-                Spacer()
+
+                // Search Bar
+                SearchBar(text: $searchText)
+                    .padding(.vertical)
+
                 List {
-                    ForEach(workouts) { workout in
+                    ForEach(filteredWorkouts) { workout in
                         NavigationLink(destination: WorkoutDetailView(workout: workout)) {
                             WorkoutCardView(workout: workout)
                         }
