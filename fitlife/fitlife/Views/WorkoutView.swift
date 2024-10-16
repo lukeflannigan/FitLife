@@ -1,5 +1,5 @@
 //
-//  WorkoutListView.swift
+//  WorkoutView.swift
 //  fitlife
 //
 //  Created by Thomas Mendoza on 10/1/24.
@@ -8,17 +8,57 @@
 import SwiftUI
 import SwiftData
 
-struct WorkoutItem: View {
-    var workout: Workout // passing in workout object
+// MARK: - WorkoutCardView
+struct WorkoutCardView: View {
+    var workout: Workout
+    
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 12) {
+            // Title
             Text(workout.exercise.name)
-            Text("Sets: \(workout.sets), Reps: \(workout.reps), Weight: \(String(format: "%.1f", workout.weight)) lbs")
+                .font(.title3)
+                .fontWeight(.bold)
+                .foregroundColor(.primary)
+            
+            // Info
+            HStack {
+                WorkoutInfoCell(title: "Sets", value: "\(workout.sets)")
+                Spacer()
+                WorkoutInfoCell(title: "Reps", value: "\(workout.reps)")
+                Spacer()
+                WorkoutInfoCell(title: "Weight", value: "\(String(format: "%.1f", workout.weight)) lbs")
+            }
+        }
+        .padding(.vertical, 16)
+        .padding(.horizontal, 20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color(UIColor.secondarySystemBackground))
+        )
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+    }
+}
+
+// MARK: - WorkoutInfoCell
+struct WorkoutInfoCell: View {
+    var title: String
+    var value: String
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Text(value)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .foregroundColor(.primary)
         }
     }
 }
 
-
+// MARK: - NewWorkoutForm
 struct NewWorkoutForm: View {
     @Environment(\.presentationMode) var presentationMode
     @Binding var workouts: [Workout]
@@ -38,7 +78,7 @@ struct NewWorkoutForm: View {
                     Stepper(value: Binding(
                         get: { inputSetCount ?? 0 },
                         set: { inputSetCount = $0 }
-                    ),in: 0...10) {
+                    ), in: 0...10) {
                         TextField("Sets", value: $inputSetCount, format: .number)
                             .keyboardType(.numberPad)
                     }
@@ -46,7 +86,7 @@ struct NewWorkoutForm: View {
                     Stepper(value: Binding(
                         get: { inputRepCount ?? 0 },
                         set: { inputRepCount = $0 }
-                    ),in: 0...10) {
+                    ), in: 0...10) {
                         TextField("Reps", value: $inputRepCount, format: .number)
                             .keyboardType(.numberPad)
                     }
@@ -61,7 +101,7 @@ struct NewWorkoutForm: View {
                 }
             }
             .navigationBarTitle("Add Exercise")
-            .toolbar{
+            .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
                         presentationMode.wrappedValue.dismiss()
@@ -69,7 +109,12 @@ struct NewWorkoutForm: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Add") {
-                        let newWorkout = Workout(exercise: currExercise, sets: inputSetCount ?? 0, reps: inputRepCount ?? 0, weight: inputWeight ?? 0.0)
+                        let newWorkout = Workout(
+                            exercise: currExercise,
+                            sets: inputSetCount ?? 0,
+                            reps: inputRepCount ?? 0,
+                            weight: inputWeight ?? 0.0
+                        )
                         workouts.append(newWorkout)
                         presentationMode.wrappedValue.dismiss()
                     }
@@ -79,7 +124,7 @@ struct NewWorkoutForm: View {
     }
 }
 
-
+// MARK: - WorkoutsView
 struct WorkoutsView: View {
     @State private var workouts: [Workout] = []
     @State private var showingNewWorkoutForm = false
@@ -93,7 +138,7 @@ struct WorkoutsView: View {
                 Spacer()
                 List {
                     ForEach(workouts) { workout in
-                        WorkoutItem(workout: workout)
+                        WorkoutCardView(workout: workout)
                     }
                     .onDelete(perform: deleteWorkouts)
 
@@ -122,9 +167,10 @@ struct WorkoutsView: View {
     private func deleteWorkouts(at offsets: IndexSet) {
         workouts.remove(atOffsets: offsets)
     }
-    
 }
 
+// MARK: - Preview
 #Preview {
     WorkoutsView()
 }
+
