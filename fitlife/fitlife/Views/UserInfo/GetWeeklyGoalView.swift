@@ -105,11 +105,11 @@ struct GetWeeklyGoalView: View {
         }
     }
     
-    // Helper function to replace the current view with HomeView
+    // Helper function to replace the current view with MainView
     private func navigateToHome() {
-        // Replace the view with HomeView as a new root
-        let homeView = HomeView()
-        let rootView = UIHostingController(rootView: homeView)
+        // Replace the view with MainView as a new root
+        let mainView = MainView()
+        let rootView = UIHostingController(rootView: mainView)
         
         if let window = UIApplication.shared.windows.first {
             window.rootViewController = rootView

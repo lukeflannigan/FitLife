@@ -23,20 +23,41 @@ struct NewWorkoutForm: View {
     @Environment(\.presentationMode) var presentationMode
     @Binding var workouts: [Workout]
     @State private var currExercise = Exercise()
-    @State private var inputSetCount: Int = 0
-    @State private var inputRepCount: Int = 0
-    @State private var inputWeight: Double = 0
+    @State private var inputSetCount: Int? = nil
+    @State private var inputRepCount: Int? = nil
+    @State private var inputWeight: Double? = nil
     
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Select Exercise")) {
+                Section(header: Text("Input Exercise")) {
                     TextField("Exercise Name", text: $currExercise.name)
                 }
                 Section(header: Text("Details")) {
-                    Stepper("Sets: \(inputSetCount)", value: $inputSetCount, in: 0...10)
-                    Stepper("Reps: \(inputRepCount)", value: $inputRepCount, in: 0...10)
-                    Stepper("Weight: \(String(format: "%.1f",inputWeight)) lbs", value: $inputWeight, in: 0...100)
+                    // sets
+                    Stepper(value: Binding(
+                        get: { inputSetCount ?? 0 },
+                        set: { inputSetCount = $0 }
+                    ),in: 0...10) {
+                        TextField("Sets", value: $inputSetCount, format: .number)
+                            .keyboardType(.numberPad)
+                    }
+                    // reps
+                    Stepper(value: Binding(
+                        get: { inputRepCount ?? 0 },
+                        set: { inputRepCount = $0 }
+                    ),in: 0...10) {
+                        TextField("Reps", value: $inputRepCount, format: .number)
+                            .keyboardType(.numberPad)
+                    }
+                    // weight
+                    Stepper(value: Binding(
+                        get: { inputWeight ?? 0 },
+                        set: { inputWeight = $0 }
+                    ), in: 0...100, step: 2.5) {
+                        TextField("Weight", value: $inputWeight, format: .number)
+                            .keyboardType(.decimalPad)
+                    }
                 }
             }
             .navigationBarTitle("Add Exercise")
@@ -48,7 +69,7 @@ struct NewWorkoutForm: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Add") {
-                        let newWorkout = Workout(exercise: currExercise, sets: inputSetCount, reps: inputRepCount, weight: inputWeight)
+                        let newWorkout = Workout(exercise: currExercise, sets: inputSetCount ?? 0, reps: inputRepCount ?? 0, weight: inputWeight ?? 0.0)
                         workouts.append(newWorkout)
                         presentationMode.wrappedValue.dismiss()
                     }
@@ -59,14 +80,17 @@ struct NewWorkoutForm: View {
 }
 
 
-struct WorkoutListView: View {
+struct WorkoutsView: View {
     @State private var workouts: [Workout] = []
     @State private var showingNewWorkoutForm = false
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         NavigationView {
-            VStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("My Daily Split")
+                    .font(.custom("Poppins-Bold", size: 28))
+                Spacer()
                 List {
                     ForEach(workouts) { workout in
                         WorkoutItem(workout: workout)
@@ -77,6 +101,7 @@ struct WorkoutListView: View {
                         HStack {
                             Image(systemName: "plus.circle.fill")
                             Text("Add New Exercise")
+                                .font(.custom("Poppins-Bold", size: 16))
                         }
                         .frame(maxWidth: 300)
                         .padding()
@@ -88,14 +113,6 @@ struct WorkoutListView: View {
                 .listStyle(PlainListStyle())
             }
             .padding()
-            .navigationTitle("My Daily Split")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    NavigationLink(destination: MainView()) {
-                        Image(systemName: "house")
-                    }
-                }
-            }
             .sheet(isPresented: $showingNewWorkoutForm) {
                 NewWorkoutForm(workouts: $workouts)
             }
@@ -109,5 +126,5 @@ struct WorkoutListView: View {
 }
 
 #Preview {
-    WorkoutListView()
+    WorkoutsView()
 }

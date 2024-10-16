@@ -88,4 +88,113 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
 - **Corresponding User Story**:  
   As a user, I would like to set basic fitness goals (e.g., daily calorie intake, workout frequency) so that I have targets to motivate my fitness journey.
 
---- 
+<br />
+
+## Sprint 1
+
+### Burnup Chart
+![Burnupchart](./img/Sprint1-burnupchart.png)
+
+### Contributions
+**Thomas**: "Provided users with a UI and functionality in Swift to create and save custom workouts to their account"
+- `Jira Task: 1. Design Workout Logging UI` 
+    - [CTP-22](https://cs3398-borgs-f24.atlassian.net/browse/CTP-22?atlOrigin=eyJpIjoiMzVhNWE1MWUzNWJhNDBmZWFiMzdlOTVhYTkwMmJmYWIiLCJwIjoiaiJ9), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-22-1.-design-workout-logging-ui)
+- `Jira Task: 2. Create Exercise and Workout Data Models`
+  - [CTP-23](https://cs3398-borgs-f24.atlassian.net/browse/CTP-23?atlOrigin=eyJpIjoiZjA2ZWMwZThiODQ1NDgxM2JmOGVjMGQwYTg2ZGI0MjkiLCJwIjoiaiJ9), [Bitbucket link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-23-2.-create-exercise-and-workout-da)
+- `Jira Subtask: Create Xcode project in team bitbucket for everyone to edit`
+  - [CTP-92](https://cs3398-borgs-f24.atlassian.net/browse/CTP-92?atlOrigin=eyJpIjoiYWYzMzNlYTA0YTNmNDRlYmExYWQ0YjlmZjJiODdjZGQiLCJwIjoiaiJ9), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/CTP-92-create-xcode-project-in-team-bitb)
+- `Jira Task: 3. Implement Functionality to Add and Save Workouts`
+  - [CTP-24](https://cs3398-borgs-f24.atlassian.net/browse/CTP-24?atlOrigin=eyJpIjoiOGRiNDgyMTkwZjBmNDhmZGFiYjRiMDcwZTdiMzJhYWMiLCJwIjoiaiJ9), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/feature/CTP-24-3.-implement-functionality-to-add)
+
+**Luke**: "Designed and implemented key user interface components, including the nutrition view, opening screens, dashboard, and profile page, enhancing user navigation and interaction within the app."
+
+- `Jira Task: Design Nutrition Logging UI`
+  - [CTP-27](https://cs3398-borgs-f24.atlassian.net/browse/CTP-27), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-27-1.-nutrition-ui)
+- `Jira Task: Design Opening Screens`
+  - [CTP-96](https://cs3398-borgs-f24.atlassian.net/browse/CTP-96), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/pull-requests/2/overview)
+- `Jira Task: Implement Opening Screens`
+  - [CTP-98](https://cs3398-borgs-f24.atlassian.net/browse/CTP-98), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-98-implement-opening-screens)
+- `Jira Task: Design Dashboard UI for Daily Summaries`
+  - [CTP-32](https://cs3398-borgs-f24.atlassian.net/browse/CTP-32), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-32-1.-design-dashboard-ui)
+- `Jira Task: Implement Profile View Screen`
+  - [CTP-36](https://cs3398-borgs-f24.atlassian.net/browse/CTP-36), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-36-5.-implement-profile-view-screen)
+- `Jira Task: Calculate and Display Total Daily Nutrition`
+  - [CTP-30](https://cs3398-borgs-f24.atlassian.net/browse/CTP-30), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-30-4.-calculate-and-display-nutrition)
+  
+  **Jonas**: "Implemented Firebase into app, added functionality for user authentication, and designed/set-up app splash view."
+
+  - `Jira Task: 4 - Design App Folder Navigation)`
+    - [CTP-40](https://cs3398-borgs-f24.atlassian.net/browse/CTP-40),
+    [Bitbucket Link]https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-40-4.-design-app-folder-navigation)
+  - `Jira Task: 2 - Set Up Firebase Authentication in Project`
+    - [CTP-18](https://cs3398-borgs-f24.atlassian.net/browse/CTP-18),
+    [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-18-2.-set-up-firebase-authentication)
+  - `Jira Task: 3 - Implement SplashView Functionality`
+    - [CTP-34](https://cs3398-borgs-f24.atlassian.net/browse/CTP-34),
+    [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-34-3.-implement-splashview-functiona)
+  - `Jira Task: 2 - Design SplashView`
+    - [CTP-33](https://cs3398-borgs-f24.atlassian.net/browse/CTP-33),
+    [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/CTP-33-2.-design-splashview)
+  - `Jira Task: 1 - Implement Sign-in and Login functionality`
+    - [CTP-17](https://cs3398-borgs-f24.atlassian.net/browse/CTP-17),
+    [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/feature/CTP-17-1.-Authentication)
+  
+  **Gabriel**: "Implemented goal setting data models to keep track of all user data for progress over time, as well as the views associated with goals."
+
+  - `Jira Task: 1. Design Goal Setting UI`
+    - [CTP-37](https://cs3398-borgs-f24.atlassian.net/browse/CTP-37)
+  - `Jira Task: 2. Implement Functionality to set User Basic Info`
+    - [CTP-38](https://cs3398-borgs-f24.atlassian.net/browse/CTP-38)
+  - `Jira Task: 3. Implement Progress Tracking on Dashboard`
+      - [CTP-39](https://cs3398-borgs-f24.atlassian.net/browse/CTP-39)
+
+      
+
+### Next Steps
+**Thomas**: 
+- Implement workout API to have prexisting exercises to simplify input process
+  - [Workout API](https://www.api-ninjas.com/api/exercises)
+- Design reports UI
+- Use user workout data to generate customized reports
+- Implement daily AI-powered workout suggestions from user data
+  - pull suggestions from goals and existing workouts
+
+**Luke**:
+- Integrate the Nutrition View UI with backend services to enable real-time tracking and input of user data.
+- Implement functionality in the Profile section to allow users to update and customize their personal profiles.
+- Connect the Progress section to backend services to display real-time user data and achievements.
+
+**Jonas**:
+- Design and implement general app/account settings, such as username/password changes, log out, account deletion, etc.
+- Work with real-time analytics to track user app usage.
+- Set up basic notification functionality; test various effective ways to work notifications into the app via location, daily progress, etc.
+- Study and implement ways to test new features on the app.
+
+**Gabriel**:
+- Integrate goal tracking with workouts and calorie counter.
+- Implement day-to-day, week-to-week, etc. goals on dashboard.
+- Integrate SwiftData with Firebase authentication.
+
+---
+
+<br/>
+<strong>Sam Arshad</strong>
+
+-[Worked on the API Recipe Search Feature.](https://cs3398-borgs-f24.atlassian.net/browse/CTP-28?atlOrigin=eyJpIjoiNGZkY2E2N2JjODFlNDc4Y2FlZTI4MzJhNTE0YzdiMWEiLCJwIjoiaiJ9) 
+
+  - [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/CTP-28-2.-integrate-food-database-api/)
+  
+-[Worked on the Create User Feature.](https://cs3398-borgs-f24.atlassian.net/browse/CTP-19?atlOrigin=eyJpIjoiNTIyZTZkZDg1ZDk0NDIzZmFjMDc5YzlkMDFlNzQ0ZDUiLCJwIjoiaiJ9)
+  
+    -Realized that this was a redundant step as all user authentication would be done through Firebase. Provided J.Tuttle boilerplate code for Firebase Authentication.
+  
+   - [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/CTP-19-3.-implement-sign-up-functionality/)
+   
+
+-[Worked on "logging" food entries code.](https://cs3398-borgs-f24.atlassian.net/browse/CTP-29?atlOrigin=eyJpIjoiNzQ3OTdkZjUzZTU4NGNjZmJiMjBhZmEyMTc0MzRlYTciLCJwIjoiaiJ9)
+  
+  - [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/CTP-29-3.-implement-functionality-to-add-and-save-food-entries/)
+
+<strong><u>Note:</u> Recognizing my lack of proficiency in Swift, SwiftUI and Xcode, I proactively completed a course and earned a certificate in Swift, while working on these tassks I've been dedicated on improving my skills and have currently made progressive leaps in becoming better at these languages/technologies.</u></strong>
+  
+---
