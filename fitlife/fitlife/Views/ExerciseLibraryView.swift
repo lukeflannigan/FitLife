@@ -7,7 +7,6 @@ struct ExerciseLibraryView: View {
     @State private var exercises: [Exercise] = []
     @State private var searchText: String = ""
     @State private var selectedExercise: Exercise?
-    @State private var isShowingDetail = false
 
     var filteredExercises: [Exercise] {
         if searchText.isEmpty {
@@ -39,7 +38,6 @@ struct ExerciseLibraryView: View {
                         ForEach(filteredExercises) { exercise in
                             Button(action: {
                                 selectedExercise = exercise
-                                isShowingDetail = true
                                 print("Selected exercise: \(exercise)")
                             }) {
                                 ExerciseCardView(exercise: exercise)
@@ -63,10 +61,8 @@ struct ExerciseLibraryView: View {
         .onAppear {
             loadExercises()
         }
-        .sheet(isPresented: $isShowingDetail) {
-            if let exercise = selectedExercise {
-                ExerciseDetailView(exercise: exercise)
-            }
+        .sheet(item: $selectedExercise) { exercise in
+            ExerciseDetailView(exercise: exercise)
         }
     }
 
@@ -87,5 +83,6 @@ struct ExerciseLibraryView: View {
         }
     }
 }
+
 
 
