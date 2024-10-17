@@ -152,6 +152,14 @@ struct NewWorkoutForm: View {
                         }
                     }
                 }
+                Section(header: Text("Difficulty")) {
+                    Picker("Difficulty", selection: $currExercise.difficulty) {
+                        ForEach(Difficulty.allCases, id: \.self) { difficulty in
+                            Text(difficulty.rawValue).tag(difficulty)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
             }
             .navigationBarTitle("Add Exercise")
             .toolbar {
