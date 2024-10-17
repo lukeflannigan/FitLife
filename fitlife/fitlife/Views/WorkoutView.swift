@@ -258,6 +258,13 @@ struct WorkoutsView: View {
                                     WorkoutCardView(workout: workout)
                                 }
                                 .buttonStyle(PlainButtonStyle())
+                                .contextMenu {
+                                    Button(role: .destructive) {
+                                        deleteWorkout(workout)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                }
                             }
                         }
                         .padding(.top)
@@ -265,6 +272,9 @@ struct WorkoutsView: View {
                     .padding(.horizontal, horizontalPadding)
                 } else {
                     Spacer()
+                    Text("No workouts found.")
+                        .foregroundColor(.gray)
+                        .padding()
                     Spacer()
                 }
             }
@@ -282,8 +292,12 @@ struct WorkoutsView: View {
         }
     }
 
-    private func deleteWorkouts(at offsets: IndexSet) {
-        workouts.remove(atOffsets: offsets)
+    // MARK: - Delete Workout Function
+
+    private func deleteWorkout(_ workout: Workout) {
+        if let index = workouts.firstIndex(where: { $0.id == workout.id }) {
+            workouts.remove(at: index)
+        }
     }
 }
 
