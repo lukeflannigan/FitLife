@@ -106,10 +106,10 @@ struct NewWorkoutForm: View {
     @Environment(\.presentationMode) var presentationMode
     @Binding var workouts: [Workout]
     @State private var currExercise = Exercise()
-    @State private var inputSetCount: Int? = nil
-    @State private var inputRepCount: Int? = nil
-    @State private var inputWeight: Double? = nil
-    
+    @State private var inputSetCount: Int = 0
+    @State private var inputRepCount: Int = 0
+    @State private var inputWeight: Double = 0.0
+
     var body: some View {
         NavigationView {
             Form {
@@ -118,28 +118,28 @@ struct NewWorkoutForm: View {
                 }
                 Section(header: Text("Details")) {
                     // sets
-                    Stepper(value: Binding(
-                        get: { inputSetCount ?? 0 },
-                        set: { inputSetCount = $0 }
-                    ), in: 0...10) {
-                        TextField("Sets", value: $inputSetCount, format: .number)
-                            .keyboardType(.numberPad)
+                    Stepper(value: $inputSetCount, in: 0...10) {
+                        HStack {
+                            Text("Sets")
+                            Spacer()
+                            Text("\(inputSetCount)")
+                        }
                     }
                     // reps
-                    Stepper(value: Binding(
-                        get: { inputRepCount ?? 0 },
-                        set: { inputRepCount = $0 }
-                    ), in: 0...10) {
-                        TextField("Reps", value: $inputRepCount, format: .number)
-                            .keyboardType(.numberPad)
+                    Stepper(value: $inputRepCount, in: 0...50) {
+                        HStack {
+                            Text("Reps")
+                            Spacer()
+                            Text("\(inputRepCount)")
+                        }
                     }
                     // weight
-                    Stepper(value: Binding(
-                        get: { inputWeight ?? 0 },
-                        set: { inputWeight = $0 }
-                    ), in: 0...100, step: 2.5) {
-                        TextField("Weight", value: $inputWeight, format: .number)
-                            .keyboardType(.decimalPad)
+                    Stepper(value: $inputWeight, in: 0...500, step: 2.5) {
+                        HStack {
+                            Text("Weight (lbs)")
+                            Spacer()
+                            Text("\(String(format: "%.1f", inputWeight))")
+                        }
                     }
                 }
             }
@@ -154,9 +154,9 @@ struct NewWorkoutForm: View {
                     Button("Add") {
                         let newWorkout = Workout(
                             exercise: currExercise,
-                            sets: inputSetCount ?? 0,
-                            reps: inputRepCount ?? 0,
-                            weight: inputWeight ?? 0.0
+                            sets: inputSetCount,
+                            reps: inputRepCount,
+                            weight: inputWeight
                         )
                         workouts.append(newWorkout)
                         presentationMode.wrappedValue.dismiss()
@@ -243,13 +243,13 @@ struct WorkoutsView: View {
                     Text("My Daily Split")
                         .font(.custom("Poppins-Bold", size: 28))
                         .padding(.top)
-                    
+
                     // Search Bar
                     SearchBar(text: $searchText)
                         .padding(.bottom, 5)
                 }
                 .padding(.horizontal, horizontalPadding)
-                
+
                 if !filteredWorkouts.isEmpty {
                     ScrollView {
                         LazyVStack(spacing: 20) {
