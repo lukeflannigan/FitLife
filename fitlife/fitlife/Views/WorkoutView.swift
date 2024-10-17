@@ -130,6 +130,7 @@ struct NewWorkoutForm: View {
     @State private var inputSetCount: Int = 0
     @State private var inputRepCount: Int = 0
     @State private var inputWeight: Double = 0.0
+    @State private var showingDifficultyInfoSheet = false
 
     var body: some View {
         NavigationView {
@@ -163,6 +164,7 @@ struct NewWorkoutForm: View {
                         }
                     }
                 }
+                // difficulty
                 Section(header: Text("Difficulty")) {
                     Picker("Difficulty", selection: $currExercise.difficulty) {
                         ForEach(Difficulty.allCases, id: \.self) { difficulty in
@@ -170,6 +172,15 @@ struct NewWorkoutForm: View {
                         }
                     }
                     .pickerStyle(.segmented)
+                    Text("What should I pick? >")
+                        .font(.caption)
+                        .foregroundColor(.blue)
+                        .onTapGesture {
+                            showingDifficultyInfoSheet = true
+                        }
+                        .sheet(isPresented: $showingDifficultyInfoSheet) {
+                            DifficultyInfoView()
+                        }
                 }
             }
             .navigationBarTitle("Add Exercise")
@@ -188,6 +199,39 @@ struct NewWorkoutForm: View {
                             weight: inputWeight
                         )
                         workouts.append(newWorkout)
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Difficulty Info Sheet
+struct DifficultyInfoView: View {
+    @Environment(\.presentationMode) var presentationMode
+    
+    var body: some View {
+        NavigationView(){
+            VStack(alignment: .leading, spacing: 20) {
+                Text("Warmup: A light exercise to get you moving.")
+                Text("Moderate: A difficult exercise that does not cause significant exhaustion beyond a few minutes.")
+                Text("Intense: An exercise that should use most of your physical exertion and should be used sparingly in your workouts.")
+                
+                Text("You can also use your heart rate to determine exercise intensity:")
+                Text("Moderate: 50%-70% of your maximum heart rate.")
+                Text("Intense: 70%-85% of your maximum heart rate.")
+                Text("For more information on measuring your heart rate and determining exercise intensity, you can follow expert guidelines on [exercise intensity ratings](https://www.mayoclinic.org/healthy-lifestyle/fitness/in-depth/exercise-intensity/art-20046887).")
+                
+                Spacer()
+            }
+            .padding(25)
+            .font(.body)
+            .navigationTitle("Choosing Your Difficulty")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Dismiss") {
                         presentationMode.wrappedValue.dismiss()
                     }
                 }
