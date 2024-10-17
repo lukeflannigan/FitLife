@@ -233,48 +233,55 @@ struct WorkoutsView: View {
         }
     }
 
+    private let horizontalPadding: CGFloat = 20
+
     var body: some View {
         NavigationView {
-            VStack(alignment: .leading, spacing: 4) {
-                // Title
-                Text("My Daily Split")
-                    .font(.custom("Poppins-Bold", size: 28))
-
-                // Search Bar
-                SearchBar(text: $searchText)
-                    .padding(.vertical)
-
-                List {
-                    ForEach(filteredWorkouts) { workout in
-                        NavigationLink(destination: WorkoutDetailView(workout: workout)) {
-                            WorkoutCardView(workout: workout)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
-                    .onDelete(perform: deleteWorkouts)
-
-                    Button(action: { showingNewWorkoutForm.toggle() }) {
-                        HStack {
-                            Image(systemName: "plus.circle.fill")
-                            Text("Add New Exercise")
-                                .font(.custom("Poppins-Bold", size: 16))
-                        }
-                        .frame(maxWidth: 300)
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(15)
-                    }
-                    .padding(.vertical)
+            VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 10) {
+                    // Title
+                    Text("My Daily Split")
+                        .font(.custom("Poppins-Bold", size: 28))
+                        .padding(.top)
+                    
+                    // Search Bar
+                    SearchBar(text: $searchText)
+                        .padding(.bottom, 5)
                 }
-                .listStyle(PlainListStyle())
+                .padding(.horizontal, horizontalPadding)
+                
+                if !filteredWorkouts.isEmpty {
+                    ScrollView {
+                        LazyVStack(spacing: 20) {
+                            ForEach(filteredWorkouts) { workout in
+                                NavigationLink(destination: WorkoutDetailView(workout: workout)) {
+                                    WorkoutCardView(workout: workout)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                            }
+                        }
+                        .padding(.top)
+                    }
+                    .padding(.horizontal, horizontalPadding)
+                } else {
+                    Spacer()
+                    Spacer()
+                }
             }
-            .padding()
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(trailing:
+                Button(action: { showingNewWorkoutForm = true }) {
+                    Image(systemName: "plus")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(Color(.darkGray))
+                }
+            )
             .sheet(isPresented: $showingNewWorkoutForm) {
                 NewWorkoutForm(workouts: $workouts)
             }
         }
     }
-    
+
     private func deleteWorkouts(at offsets: IndexSet) {
         workouts.remove(atOffsets: offsets)
     }
@@ -284,3 +291,5 @@ struct WorkoutsView: View {
 #Preview {
     WorkoutsView()
 }
+
+
