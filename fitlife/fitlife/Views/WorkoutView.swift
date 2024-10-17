@@ -15,11 +15,21 @@ struct WorkoutCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Title
-            Text(workout.exercise.name)
-                .font(.title3)
-                .fontWeight(.bold)
-                .foregroundColor(.primary)
-            
+            HStack{
+                Text(workout.exercise.name)
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
+                
+                Spacer()
+                
+                Text("intensity")
+                    .padding(4)
+                    .foregroundStyle(.white)
+                    .font(.system(size: 8))
+                    .background(.blue, in: Capsule())
+            }
+                
             // Info
             HStack {
                 WorkoutInfoCell(title: "Sets", value: "\(workout.sets)")
