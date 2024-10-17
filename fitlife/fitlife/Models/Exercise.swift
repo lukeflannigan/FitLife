@@ -20,13 +20,17 @@ class Exercise: Identifiable, ObservableObject {
     var name: String
     var type: String
     var muscleGroup: String
+    var exerciseDescription: String
+    var imageName: String
     var difficulty: Difficulty
 
-    init(id: UUID = UUID(), name: String = "", type: String = "", muscleGroup: String = "", difficulty: Difficulty = .easy) {
+    init(id: UUID = UUID(), name: String = "", type: String = "", muscleGroup: String = "", difficulty: Difficulty = .easy, exerciseDescription: String = "", imageName: String = "") {
         self.id = id
         self.name = name
         self.type = type
         self.muscleGroup = muscleGroup
+        self.exerciseDescription = exerciseDescription
+        self.imageName = imageName
         self.difficulty = difficulty
     }
 }
