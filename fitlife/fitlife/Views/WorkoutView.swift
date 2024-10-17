@@ -23,10 +23,10 @@ struct WorkoutCardView: View {
                 
                 Spacer()
                 
-                Text("intensity")
-                    .padding(4)
+                Text(workout.exercise.difficulty.rawValue).tag(workout.exercise.difficulty)
+                    .padding(10)
                     .foregroundStyle(.white)
-                    .font(.system(size: 8))
+                    .font(.system(size: 12))
                     .background(.blue, in: Capsule())
             }
                 
