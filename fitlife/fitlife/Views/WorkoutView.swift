@@ -12,6 +12,17 @@ import SwiftData
 struct WorkoutCardView: View {
     var workout: Workout
     
+    func difficultyColor(for difficulty: Difficulty) -> Color {
+            switch difficulty {
+            case .easy:
+                return Color.green
+            case .medium:
+                return Color.yellow
+            case .hard:
+                return Color.red
+            }
+        }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Title
@@ -23,11 +34,11 @@ struct WorkoutCardView: View {
                 
                 Spacer()
                 
-                Text(workout.exercise.difficulty.rawValue).tag(workout.exercise.difficulty)
+                Text(workout.exercise.difficulty.rawValue)
                     .padding(10)
                     .foregroundStyle(.white)
                     .font(.system(size: 12))
-                    .background(.blue, in: Capsule())
+                    .background(difficultyColor(for: workout.exercise.difficulty), in: Capsule())
             }
                 
             // Info
