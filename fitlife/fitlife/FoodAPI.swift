@@ -1,8 +1,7 @@
 //  FoodAPI.swift
 //  fitlife
-//
 //  Created by Sam Arshad on 10/2/24.
-//
+
 
 import SwiftUI
 import Foundation
@@ -30,101 +29,128 @@ struct RecipeResponse: Codable{
 class ViewModel: ObservableObject {
     @Published var recipes: [RecipeObject] = [] // Array to hold fetched recipes
     
-        func fetchData(query: String) {
-            // Replace with your actual App ID and API Key
-//            let appID = Bundle.main.object(forInfoDictionaryKey: "APP_ID") as? String ?? ""
-//            let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? ""
-
-// --------------newest line here----------------------
-            let appID = Bundle.main.path(forResource: "Secrets", ofType: "plist")
+    func fetchData(query: String) {
+        if let path = Bundle.main.path(forResource: "Secrets", ofType: "plist"),
+           let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
+           let id = dict["app_id"] as? String,
+           let key = dict["app_key"] as? String{
             
             // Ensure the query is URL-safe
             let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
             
-            guard let url = URL(string: "https://api.edamam.com/api/recipes/v2?type=public&q=\(encodedQuery)&app_id=\(appID)&app_key=\(apiKey)") else {
-                return print("Invalid URL")
+            // Construct the URL string with credentials
+            let urlString = "https://api.edamam.com/api/recipes/v2?q=\(encodedQuery)&app_key=\(key)&_cont=CHcVQBtNNQphDmgVQntAEX4BYUt6AwAPSmBJAmEVY1FzAQYVX3cUC2YWMFJ6BldUFzBECmUaMl1zUAUEQzYRUmMXYAYlARFqX3cWQT1OcV9xBE4%3D&type=any&app_id=\(id)"
+            
+            
+            //Validate the URL.
+            guard let url = URL(string: urlString) else {
+                print("Error: Invalid Link")  //changed String from from 'URL to 'Link' for improved user comprehension.
+                return
             }
             
             let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                // Handle errors
                 if let error = error {
-                    print("Error: \(error.localizedDescription)")
+                    print("\nError: \(error.localizedDescription)\n!")
                     return
                 }
                 
-                guard let data = data else {
-                    print("No data returned from API")
+                
+                // Check for Valid Data
+                guard let validData = data else{
+                    print("\nError: No data received.\n")
                     return
                 }
                 
-                do {
-                    let decodedResponse = try JSONDecoder().decode(RecipeResponse.self, from: data)
-                    DispatchQueue.main.async {
-                        self.recipes = decodedResponse.hits.map { $0.recipe } // Map hits to RecipeObject
+                do{
+                    let decodedResponse  = try JSONDecoder().decode(RecipeResponse.self, from: validData)
+                    DispatchQueue.main.async{
+                        self.recipes = decodedResponse.hits.map { $0.recipe }
                     }
-                } catch {
+                }catch {
                     print("Failed to decode JSON: \(error.localizedDescription)")
-                    print(String(data: data, encoding: .utf8) ?? "Unable to convert data to string for debugging.")
+                    
+                    // Print out the raw response for debugging purposes
+                    print(String(data: validData, encoding: .utf8) ?? "Unable to convert data to string for debugging.")
+                    
                 }
             }
-            task.resume()
-    }
-}
-
-
-struct RecipeDetailView: View {
-    let recipe: RecipeObject
-    
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                AsyncImage(url: URL(string: recipe.image)) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                } placeholder: {
-                    ProgressView()
-                }
-                .frame(maxWidth: .infinity)
-                
-                Text(recipe.label)
-                    .font(.largeTitle)
-                    .padding(.top)
-                
-                Text("Calories: \(Int(recipe.calories))")
-                    .font(.headline)
-                    .padding(.top, 2)
-                
-                Text("Servings: \(Int(recipe.yield))")
-                    .font(.headline)
-                    .padding(.top, 2)
-                
-                Text("Ingredients:")
-                    .font(.title2)
-                    .padding(.top)
-                
-                ForEach(recipe.ingredientLines, id: \.self) { ingredient in
-                    Text("• \(ingredient)")
-                        .padding(.leading)
-                        .padding(.top, 1)
-                }
-                
-                Link("View Full Recipe", destination: URL(string: recipe.shareAs)!)
-                    .padding(.top)
-                    .foregroundColor(.blue)
-            }
-            .padding()
         }
-        .navigationTitle(recipe.label)
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
-
-//#Preview {
-//    ContentView()
-//}
+            
 //
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
+//
+//                
+//                do {
+//                    let decodedResponse = try JSONDecoder().decode(RecipeResponse.self, from: data)
+//                    DispatchQueue.main.async {
+//                        self.recipes = decodedResponse.hits.map { $0.recipe } // Map hits to RecipeObject
+//                    }
+//                } catch {
+//                    print("Failed to decode JSON: \(error.localizedDescription)")
+//                    print(String(data: data, encoding: .utf8) ?? "Unable to convert data to string for debugging.")
+//                }
+//            }
+//            task.resume()
 //    }
 //}
+//
+//
+//struct RecipeDetailView: View {
+//    let recipe: RecipeObject
+//    
+//    var body: some View {
+//        ScrollView {
+//            VStack(alignment: .leading) {
+//                AsyncImage(url: URL(string: recipe.image)) { image in
+//                    image
+//                        .resizable()
+//                        .aspectRatio(contentMode: .fit)
+//                } placeholder: {
+//                    ProgressView()
+//                }
+//                .frame(maxWidth: .infinity)
+//                
+//                Text(recipe.label)
+//                    .font(.largeTitle)
+//                    .padding(.top)
+//                
+//                Text("Calories: \(Int(recipe.calories))")
+//                    .font(.headline)
+//                    .padding(.top, 2)
+//                
+//                Text("Servings: \(Int(recipe.yield))")
+//                    .font(.headline)
+//                    .padding(.top, 2)
+//                
+//                Text("Ingredients:")
+//                    .font(.title2)
+//                    .padding(.top)
+//                
+//                ForEach(recipe.ingredientLines, id: \.self) { ingredient in
+//                    Text("• \(ingredient)")
+//                        .padding(.leading)
+//                        .padding(.top, 1)
+//                }
+//                
+//                Link("View Full Recipe", destination: URL(string: recipe.shareAs)!)
+//                    .padding(.top)
+//                    .foregroundColor(.blue)
+//            }
+//            .padding()
+//        }
+//        .navigationTitle(recipe.label)
+//        .navigationBarTitleDisplayMode(.inline)
+//    }
+//}
+//
+////#Preview {
+////    ContentView()
+////}
+////
+////struct ContentView_Previews: PreviewProvider {
+////    static var previews: some View {
+////        ContentView()
+////    }
+////}
