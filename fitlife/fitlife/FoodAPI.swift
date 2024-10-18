@@ -79,78 +79,60 @@ class ViewModel: ObservableObject {
     }
 }
             
-//
-//
-//                
-//                do {
-//                    let decodedResponse = try JSONDecoder().decode(RecipeResponse.self, from: data)
-//                    DispatchQueue.main.async {
-//                        self.recipes = decodedResponse.hits.map { $0.recipe } // Map hits to RecipeObject
-//                    }
-//                } catch {
-//                    print("Failed to decode JSON: \(error.localizedDescription)")
-//                    print(String(data: data, encoding: .utf8) ?? "Unable to convert data to string for debugging.")
-//                }
-//            }
-//            task.resume()
-//    }
-//}
-//
-//
-//struct RecipeDetailView: View {
-//    let recipe: RecipeObject
-//    
-//    var body: some View {
-//        ScrollView {
-//            VStack(alignment: .leading) {
-//                AsyncImage(url: URL(string: recipe.image)) { image in
-//                    image
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fit)
-//                } placeholder: {
-//                    ProgressView()
-//                }
-//                .frame(maxWidth: .infinity)
-//                
-//                Text(recipe.label)
-//                    .font(.largeTitle)
-//                    .padding(.top)
-//                
-//                Text("Calories: \(Int(recipe.calories))")
-//                    .font(.headline)
-//                    .padding(.top, 2)
-//                
-//                Text("Servings: \(Int(recipe.yield))")
-//                    .font(.headline)
-//                    .padding(.top, 2)
-//                
-//                Text("Ingredients:")
-//                    .font(.title2)
-//                    .padding(.top)
-//                
-//                ForEach(recipe.ingredientLines, id: \.self) { ingredient in
-//                    Text("• \(ingredient)")
-//                        .padding(.leading)
-//                        .padding(.top, 1)
-//                }
-//                
-//                Link("View Full Recipe", destination: URL(string: recipe.shareAs)!)
-//                    .padding(.top)
-//                    .foregroundColor(.blue)
-//            }
-//            .padding()
-//        }
-//        .navigationTitle(recipe.label)
-//        .navigationBarTitleDisplayMode(.inline)
-//    }
-//}
-//
-////#Preview {
-////    ContentView()
-////}
-////
-////struct ContentView_Previews: PreviewProvider {
-////    static var previews: some View {
-////        ContentView()
-////    }
-////}
+struct RecipeDetailView: View {
+    let recipe: RecipeObject
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading) {
+                AsyncImage(url: URL(string: recipe.image)) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                } placeholder: {
+                    ProgressView()
+                }
+                .frame(maxWidth: .infinity)
+                
+                Text(recipe.label)
+                    .font(.largeTitle)
+                    .padding(.top)
+                
+                Text("Calories: \(Int(recipe.calories))")
+                    .font(.headline)
+                    .padding(.top, 2)
+                
+                Text("Servings: \(Int(recipe.yield))")
+                    .font(.headline)
+                    .padding(.top, 2)
+                
+                Text("Ingredients:")
+                    .font(.title2)
+                    .padding(.top)
+                
+                ForEach(recipe.ingredientLines, id: \.self) { ingredient in
+                    Text("• \(ingredient)")
+                        .padding(.leading)
+                        .padding(.top, 1)
+                }
+                
+                Link("View Full Recipe", destination: URL(string: recipe.shareAs)!)
+                    .padding(.top)
+                    .foregroundColor(.blue)
+            }
+            .padding()
+        }
+        .navigationTitle(recipe.label)
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+#Preview {
+    ContentView()
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
