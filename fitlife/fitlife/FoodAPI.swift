@@ -55,7 +55,6 @@ class ViewModel: ObservableObject {
                     return
                 }
                 
-                
                 // Check for Valid Data
                 guard let validData = data else{
                     print("\nError: No data received.\n")
@@ -67,17 +66,32 @@ class ViewModel: ObservableObject {
                     DispatchQueue.main.async{
                         self.recipes = decodedResponse.hits.map { $0.recipe }
                     }
-                }catch {
+                }catch{
                     print("Failed to decode JSON: \(error.localizedDescription)")
                     
                     // Print out the raw response for debugging purposes
-                    print(String(data: validData, encoding: .utf8) ?? "Unable to convert data to string for debugging.")
+                    //print(String(data: validData, encoding: .utf8) ?? "Unable to convert data to string for debugging.")
                     
+                    
+                    // Pretty-print JSON for debugging purposes
+                    if let jsonObject = try? JSONSerialization.jsonObject(with: validData, options: []),
+                       let prettyData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted),
+                       let prettyPrintedString = String(data: prettyData, encoding: .utf8) {
+                        print("Pretty JSON Response:\n\(prettyPrintedString)")
+                    }
+                    else {
+                        print("Unable to format JSON.")
+                    }
+                    // Print out the raw response in case JSON couldn't be decoded
+                    print(String(data: validData, encoding: .utf8) ?? "Unable to convert data to string for debugging.")
                 }
             }
+            task.resume()
         }
     }
 }
+
+
             
 struct RecipeDetailView: View {
     let recipe: RecipeObject
@@ -129,10 +143,4 @@ struct RecipeDetailView: View {
 
 #Preview {
     ContentView()
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
 }
