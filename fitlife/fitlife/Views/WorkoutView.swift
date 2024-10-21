@@ -33,6 +33,13 @@ struct WorkoutCardView: View {
                     .foregroundColor(.primary)
                 
                 Spacer()
+
+                Button(action: {
+                    workout.isFavorite.toggle()
+                }) {
+                    Image(systemName: workout.isFavorite ? "heart.fill" : "heart")
+                        .foregroundColor(.red)
+                }
                 
                 Text(workout.exercise.difficulty.rawValue)
                     .padding(10)
