@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 // MARK: - WorkoutCardView
 struct WorkoutCardView: View {
@@ -131,6 +132,8 @@ struct NewWorkoutForm: View {
     @State private var inputRepCount: Int = 0
     @State private var inputWeight: Double = 0.0
     @State private var showingDifficultyInfoSheet = false
+    @State private var pickerItem: PhotosPickerItem?
+    @State private var selectedImage: Image?
 
     var body: some View {
         NavigationView {
@@ -182,6 +185,19 @@ struct NewWorkoutForm: View {
                             DifficultyInfoView()
                         }
                 }
+                // image selection
+                Section(header: Text("Exercise Image")){
+                    VStack {
+                        selectedImage?
+                            .resizable()
+                            .scaledToFit()
+                        PhotosPicker("Select a picture", selection: $pickerItem, matching: .images)
+                    }   .onChange(of: pickerItem) {
+                        Task {
+                            selectedImage = try await pickerItem?.loadTransferable(type: Image.self)
+                        }
+                    }
+                }   
             }
             .navigationBarTitle("Add Exercise")
             .toolbar {
