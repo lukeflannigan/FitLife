@@ -61,10 +61,10 @@ struct HomeView: View {
             }
             
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
-                StatCard(title: "Calories", value: "1,200", goal: "\(userGoal?.caloriesGoal ?? 0)g", color: Color("GradientStart"))
-                StatCard(title: "Protein", value: "75g", goal: "\(userGoal?.proteinGoal ?? 0)g", color: Color("GradientEnd"))
-                StatCard(title: "Carbs", value: "150g", goal: "\(userGoal?.carbsGoal ?? 0)g", color: Color("GradientStart"))
-                StatCard(title: "Fats", value: "40g", goal: "\(userGoal?.fatsGoal ?? 0)g", color: Color("GradientEnd"))
+                StatCard(title: "Calories", value: "1,200", goal: userGoal?.caloriesGoal ?? 0, color: Color("GradientStart"))
+                StatCard(title: "Protein", value: "75g", goal: userGoal?.proteinGoal ?? 0, color: Color("GradientEnd"))
+                StatCard(title: "Carbs", value: "150g", goal: userGoal?.carbsGoal ?? 0, color: Color("GradientStart"))
+                StatCard(title: "Fats", value: "40g", goal: userGoal?.fatsGoal ?? 0, color: Color("GradientEnd"))
             }
         }
     }

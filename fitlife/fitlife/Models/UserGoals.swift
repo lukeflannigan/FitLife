@@ -53,38 +53,49 @@ class UserGoals {
         self.caloriesGoal = caloriesGoal
         }
     
-    func calculateTDEE() -> Double {
-            // Calculate BMR
-            let bmr: Double
-            if gender.lowercased() == "male" {
-                bmr = 10 * currentWeight + 6.25 * height - 5 * Double(age) + 5
-            } else {
-                bmr = 10 * currentWeight + 6.25 * height - 5 * Double(age) - 161
-            }
-            
-            // Apply activity level multiplier
-            let activityMultiplier: Double
-            switch activityLevel {
-            case .sedentary: activityMultiplier = 1.2
-            case .lightActivity: activityMultiplier = 1.375
-            case .moderateActivity: activityMultiplier = 1.55
-            case .veryActive: activityMultiplier = 1.725
-            case .superActive: activityMultiplier = 1.9
-            }
-            
-            let tdee = bmr * activityMultiplier
-            
-            // Adjust for weekly goal
-            switch weeklyGoal {
-            case .loseWeightSlow: return tdee - 250
-            case .loseWeightMedium: return tdee - 500
-            case .loseWeightFast: return tdee - 1000
-            case .gainWeightSlow: return tdee + 250
-            case .gainWeightMedium: return tdee + 500
-            case .gainWeightFast: return tdee + 1000
-            default: return tdee
-            }
+    func calculateTDEE(isMetric: Bool = false) -> Double {
+        var weightInKg: Double
+        var heightInCm: Double
+        
+        // Convert weight and height if using imperial units
+        if isMetric {
+            weightInKg = currentWeight // Already in kg if using metric
+            heightInCm = height // Already in cm if using metric
+        } else {
+            weightInKg = currentWeight * 0.453592 // Convert pounds to kg
+            heightInCm = height * 2.54 // Convert inches to cm
         }
+        // Calculate BMR
+        let bmr: Double
+        if gender.lowercased() == "male" {
+            bmr = 10 * weightInKg + 6.25 * heightInCm - 5 * Double(age) + 5
+        } else {
+            bmr = 10 * weightInKg + 6.25 * heightInCm - 5 * Double(age) - 161
+        }
+            
+        // Apply activity level multiplier
+        let activityMultiplier: Double
+        switch activityLevel {
+        case .sedentary: activityMultiplier = 1.2
+        case .lightActivity: activityMultiplier = 1.375
+        case .moderateActivity: activityMultiplier = 1.55
+        case .veryActive: activityMultiplier = 1.725
+        case .superActive: activityMultiplier = 1.9
+        }
+        
+        let tdee = bmr * activityMultiplier
+        
+        // Adjust for weekly goal
+        switch weeklyGoal {
+        case .loseWeightSlow: return tdee - 250
+        case .loseWeightMedium: return tdee - 500
+        case .loseWeightFast: return tdee - 1000
+        case .gainWeightSlow: return tdee + 250
+        case .gainWeightMedium: return tdee + 500
+        case .gainWeightFast: return tdee + 1000
+        default: return tdee
+        }
+    }
     
     func setMacroGoals() {
         // Get the adjusted TDEE

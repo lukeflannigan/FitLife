@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SplashView: View {
+    @Environment(\.modelContext) var modelContext
     @State private var isActive = false  // Flag to track when to navigate
     
     var body: some View {
@@ -15,7 +17,7 @@ struct SplashView: View {
             GradientBackground()  // Use your custom gradient background
             
             if isActive {
-                OpeningView()  // Navigate to OpeningView
+                OpeningView()
             } else {
                 VStack {
                     // Display "FitLife" as the main splash screen text

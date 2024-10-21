@@ -6,7 +6,7 @@ import SwiftUI
 struct StatCard: View {
     let title: String
     let value: String
-    let goal: String
+    let goal: Double
     let color: Color
 
     var body: some View {
@@ -17,7 +17,7 @@ struct StatCard: View {
             Text(value)
                 .font(.custom("Poppins-Bold", size: 24))
                 .foregroundColor(.primary)
-            Text("Goal: \(goal)")
+            Text("Goal: \(goal, format: .number.rounded(increment: 1.0))g")
                 .font(.custom("Poppins-Regular", size: 12))
                 .foregroundColor(.secondary)
         }
