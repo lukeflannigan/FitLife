@@ -320,6 +320,22 @@ struct WorkoutsView: View {
                     // Search Bar
                     SearchBar(text: $searchText)
                         .padding(.bottom, 5)
+
+                    // Browse Exercises Button
+                    NavigationLink(destination: ExerciseLibraryView()) {
+                        HStack {
+                            Image(systemName: "book.fill")
+                                .font(.system(size: 20))
+                                .foregroundColor(.black)
+                            Text("Browse Exercises")
+                                .font(.custom("Poppins-SemiBold", size: 18))
+                                .foregroundColor(.black)
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color(UIColor.systemGray6))
+                        .cornerRadius(10)
+                    }
                 }
                 .padding(.horizontal, horizontalPadding)
 
