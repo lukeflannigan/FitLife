@@ -17,12 +17,12 @@ class UserGoals {
         set { localeIdentifier = newValue.identifier }
     }
     var name: String
-    var height: Double
+    var heightInCm: Double
     var age: Int
     var gender: String
-    var startingWeight: Double
-    var currentWeight: Double
-    var goalWeight: Double
+    var startingWeightInKg: Double
+    var currentWeightInKg: Double
+    var goalWeightInKg: Double
     var activityLevel: ActivityLevel
     var weeklyGoal: WeeklyGoal
     var baseGoals: [BaseGoal]
@@ -32,16 +32,36 @@ class UserGoals {
     var fatsGoal: Double
     var carbsGoal: Double
     var caloriesGoal: Double
-    
-    init(localeIdentifier: LocaleIdentifier = Locale.autoupdatingCurrent.identifier, height: Double = 0, age: Int = 0, gender: String = "", name: String = "", startingWeight: Double = 0, currentWeight: Double = 0, goalWeight: Double = 0, weeklyGoal: WeeklyGoal = .maintainWeight, activityLevel: ActivityLevel = .sedentary, baseGoals: [BaseGoal] = [], nutritionGoals: [NutritionGoal] = [], workoutGoal: Int = 0, proteinGoal: Double = 0, fatsGoal: Double = 0, carbsGoal: Double = 0, caloriesGoal: Double = 0) {
+    var isMetric: Bool // Tracks if the user prefers metric or imperial
+
+    // Initialize the UserGoals object with default values
+    init(localeIdentifier: LocaleIdentifier = Locale.autoupdatingCurrent.identifier,
+         heightInCm: Double = 0,
+         age: Int = 0,
+         gender: String = "",
+         name: String = "",
+         startingWeightInKg: Double = 0,
+         currentWeightInKg: Double = 0,
+         goalWeightInKg: Double = 0,
+         weeklyGoal: WeeklyGoal = .maintainWeight,
+         activityLevel: ActivityLevel = .sedentary,
+         baseGoals: [BaseGoal] = [],
+         nutritionGoals: [NutritionGoal] = [],
+         workoutGoal: Int = 0,
+         proteinGoal: Double = 0,
+         fatsGoal: Double = 0,
+         carbsGoal: Double = 0,
+         caloriesGoal: Double = 0,
+         isMetric: Bool = true) {
+        
         self.localeIdentifier = localeIdentifier
         self.name = name
-        self.height = height
+        self.heightInCm = heightInCm
         self.age = age
         self.gender = gender
-        self.startingWeight = startingWeight
-        self.currentWeight = currentWeight
-        self.goalWeight = goalWeight
+        self.startingWeightInKg = startingWeightInKg
+        self.currentWeightInKg = currentWeightInKg
+        self.goalWeightInKg = goalWeightInKg
         self.weeklyGoal = weeklyGoal
         self.activityLevel = activityLevel
         self.baseGoals = baseGoals
@@ -51,21 +71,47 @@ class UserGoals {
         self.fatsGoal = fatsGoal
         self.carbsGoal = carbsGoal
         self.caloriesGoal = caloriesGoal
-        }
+        self.isMetric = isMetric // Defaults to metric unless specified
+    }
+
+    // Convert height to imperial if needed
+    func heightInFeetAndInches() -> (feet: Int, inches: Int) {
+        let totalInches = heightInCm / 2.54
+        let feet = Int(totalInches / 12)
+        let inches = Int(totalInches.truncatingRemainder(dividingBy: 12))
+        return (feet, inches)
+    }
+
+    // Set height based on feet and inches if using imperial units
+    func setHeightFromImperial(feet: Int, inches: Int) {
+        heightInCm = Double(feet * 12 + inches) * 2.54
+    }
+
+    // Convert current weight to pounds if needed
+    func currentWeightInPounds() -> Double {
+        return currentWeightInKg * 2.20462
+    }
+
+    // Set current weight from pounds if using imperial units
+    func setCurrentWeightFromPounds(pounds: Double) {
+        currentWeightInKg = pounds * 0.453592
+    }
+
+    // Convert goal weight to pounds if needed
+    func goalWeightInPounds() -> Double {
+        return goalWeightInKg * 2.20462
+    }
+
+    // Set goal weight from pounds if using imperial units
+    func setGoalWeightFromPounds(pounds: Double) {
+        goalWeightInKg = pounds * 0.453592
+    }
     
     func calculateTDEE(isMetric: Bool = false) -> Double {
-        var weightInKg: Double
-        var heightInCm: Double
+        let weightInKg = currentWeightInKg
+        let heightInCm = self.heightInCm
         
-        // Convert weight and height if using imperial units
-        if isMetric {
-            weightInKg = currentWeight // Already in kg if using metric
-            heightInCm = height // Already in cm if using metric
-        } else {
-            weightInKg = currentWeight * 0.453592 // Convert pounds to kg
-            heightInCm = height * 2.54 // Convert inches to cm
-        }
-        // Calculate BMR
+        // Calculate BMR based on gender
         let bmr: Double
         if gender.lowercased() == "male" {
             bmr = 10 * weightInKg + 6.25 * heightInCm - 5 * Double(age) + 5
@@ -161,18 +207,17 @@ class UserGoals {
 
 extension UserGoals {
     static var mockUserGoals = UserGoals(
-            height: 175,  // example height in cm
-            age: 25,
-            gender: "Male",
-            name: "John Doe",
-            startingWeight: 75,  // example weight in kg
-            currentWeight: 75,
-            goalWeight: 70,
-            weeklyGoal: .maintainWeight,
-            activityLevel: .sedentary,
-            baseGoals: [.weightLoss, .muscleGain],
-            nutritionGoals: [.eatVegan],
-            workoutGoal: 0
-        )
+        heightInCm: 175,  // example height in cm
+        age: 25,
+        gender: "Male",
+        name: "John Doe",
+        startingWeightInKg: 75,  // example weight in kg
+        currentWeightInKg: 75,
+        goalWeightInKg: 70,
+        weeklyGoal: .maintainWeight,
+        activityLevel: .sedentary,
+        baseGoals: [.weightLoss, .muscleGain],
+        nutritionGoals: [.eatVegan],
+        workoutGoal: 0
+    )
 }
-

@@ -19,9 +19,9 @@ struct GetWeeklyGoalView: View {
     
     // Filter weekly goals based on whether the user wants to lose, gain, or maintain weight
     var filteredGoals: [WeeklyGoal] {
-        if userGoals.goalWeight < userGoals.currentWeight {
+        if userGoals.goalWeightInKg < userGoals.currentWeightInKg {
             return [.loseWeightSlow, .loseWeightMedium, .loseWeightFast]
-        } else if userGoals.goalWeight > userGoals.currentWeight {
+        } else if userGoals.goalWeightInKg > userGoals.currentWeightInKg {
             return [.gainWeightSlow, .gainWeightMedium, .gainWeightFast]
         } else {
             return [.maintainWeight]
