@@ -5,115 +5,73 @@
 //  Created by Jonas Tuttle on 10/4/24.
 //
 
-import Foundation
-import AuthenticationServices
 import SwiftUI
-import Combine
-import CryptoKit
+import AuthenticationServices
 
-class AuthenticationViewModel: NSObject, ObservableObject {
-    // Published properties to bind with the view
-    @Published var errorMessage: String? = nil
-    @Published var userSession: ASAuthorizationAppleIDCredential? = nil // Holds the Apple ID credential
+class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     
-    // Observing the Authorization status
-    var currentNonce: String? // Nonce for authentication
+    @Published var email: String = ""
+    @Published var password: String = ""
+    @Published var confirmPassword: String = ""
+    @Published var userSession: String? = nil  // This tracks user session
+    @Published var errorMessage: String? = nil
     
     override init() {
         super.init()
     }
     
-    // MARK: - Sign In with Apple
+    // Function to initiate Apple Sign-In process
     func signInWithApple() {
         let request = ASAuthorizationAppleIDProvider().createRequest()
-        request.requestedScopes = [.fullName, .email]
+        request.requestedScopes = [.email, .fullName]
         
-        let nonce = randomNonceString()
-        request.nonce = sha256(nonce)
-        currentNonce = nonce
-        
-        let authController = ASAuthorizationController(authorizationRequests: [request])
-        authController.delegate = self
-        authController.presentationContextProvider = self
-        authController.performRequests()
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
     }
     
-    // MARK: - Sign Out
-    func signOut() {
-        // There is no explicit sign-out function for Apple Sign-In, but you can clear any locally saved session
-        self.userSession = nil
-        print("User signed out.")
-    }
-    
-    // MARK: - Helpers for Nonce and SHA256
-    private func randomNonceString(length: Int = 32) -> String {
-        precondition(length > 0)
-        let charset: Array<Character> =
-            Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
-        var result = ""
-        var remainingLength = length
-
-        while remainingLength > 0 {
-            let randoms: [UInt8] = (0..<16).map { _ in
-                var random: UInt8 = 0
-                let errorCode = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
-                if errorCode != errSecSuccess {
-                    fatalError("Unable to generate nonce.")
-                }
-                return random
-            }
-
-            randoms.forEach { random in
-                if remainingLength == 0 {
-                    return
-                }
-
-                if random < charset.count {
-                    result.append(charset[Int(random)])
-                    remainingLength -= 1
-                }
-            }
-        }
-
-        return result
-    }
-
-    private func sha256(_ input: String) -> String {
-        let inputData = Data(input.utf8)
-        let hashedData = SHA256.hash(data: inputData)
-        let hashString = hashedData.compactMap { String(format: "%02x", $0) }.joined()
-
-        return hashString
-    }
-}
-
-// MARK: - ASAuthorizationControllerDelegate and ASAuthorizationControllerPresentationContextProviding
-
-extension AuthenticationViewModel: ASAuthorizationControllerDelegate {
+    // ASAuthorizationControllerDelegate methods
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             let userIdentifier = appleIDCredential.user
-            let fullName = appleIDCredential.fullName
-            let email = appleIDCredential.email
+            self.userSession = userIdentifier  // Save user session
             
-            // Successfully authenticated
-            self.userSession = appleIDCredential
-            print("Successfully signed in with Apple ID: \(userIdentifier)")
-            
-            // Optionally, store userIdentifier, fullName, email locally or in iCloud Keychain
+            if let email = appleIDCredential.email {
+                self.email = email
+            }
         }
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        // Handle the error
-        self.errorMessage = "Failed to sign in: \(error.localizedDescription)"
-        print("Error occurred during Apple Sign-In: \(error.localizedDescription)")
+        self.errorMessage = error.localizedDescription
     }
-}
-
-extension AuthenticationViewModel: ASAuthorizationControllerPresentationContextProviding {
+    
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        // Return the main window for presentation context
         return UIApplication.shared.windows.first!
+    }
+    
+    // Existing email/password methods (you can adjust as needed)
+    func signIn() {
+        // Implement email/password sign-in logic here
+        if email == "test@test.com" && password == "password" {  // Example
+            self.userSession = "exampleSession"
+        } else {
+            self.errorMessage = "Invalid email or password"
+        }
+    }
+    
+    func signUp() {
+        // Implement sign-up logic
+        if password == confirmPassword {
+            self.userSession = "newUserSession"
+        } else {
+            self.errorMessage = "Passwords do not match"
+        }
+    }
+    
+    func sendPasswordReset() {
+        // Implement password reset functionality
+        self.errorMessage = "Password reset functionality not implemented yet"
     }
 }
