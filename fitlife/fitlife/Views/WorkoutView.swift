@@ -380,6 +380,14 @@ struct WorkoutsView: View {
                 }
                 .padding(.horizontal, horizontalPadding)
 
+                Picker("Filter", selection: $selectedFilter) {
+                    Text("All").tag(WorkoutFilter.all)
+                    Text("Favorites").tag(WorkoutFilter.favorites)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding(.horizontal, horizontalPadding)
+                .padding(.vertical, 10)
+
                 if !filteredWorkouts.isEmpty {
                     ScrollView {
                         LazyVStack(spacing: 20) {
@@ -402,7 +410,7 @@ struct WorkoutsView: View {
                     .padding(.horizontal, horizontalPadding)
                 } else {
                     Spacer()
-                    Text("No workouts found.")
+                    Text(selectedFilter == .favorites ? "No favorite workouts found." : "No workouts found.")
                         .foregroundColor(.gray)
                         .padding()
                     Spacer()
