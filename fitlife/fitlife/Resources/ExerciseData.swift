@@ -3,24 +3,32 @@
 
 import Foundation
 
-struct ExerciseData: Identifiable, Codable {
-    let id: UUID
+struct ExerciseData: Codable {
+    let id: String
     let name: String
-    let type: String
-    let muscleGroup: String
-    let exerciseDescription: String
-    let imageName: String
-    let difficulty: Difficulty
-
+    let force: String?
+    let level: String
+    let mechanic: String?
+    let equipment: String?
+    let primaryMuscles: [String]
+    let secondaryMuscles: [String]
+    let instructions: [String]
+    let category: String
+    let images: [String]
+    
     func toExercise() -> Exercise {
         return Exercise(
             id: id,
             name: name,
-            type: type,
-            muscleGroup: muscleGroup,
-            difficulty: difficulty,
-            exerciseDescription: exerciseDescription,
-            imageName: imageName
+            category: category,
+            force: force,
+            level: level,
+            mechanic: mechanic,
+            equipment: equipment,
+            primaryMuscles: primaryMuscles,
+            secondaryMuscles: secondaryMuscles,
+            instructions: instructions,
+            images: images
         )
     }
 }
