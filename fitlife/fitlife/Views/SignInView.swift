@@ -2,9 +2,10 @@
 // Created by Luke Flannigan on 9/26/24
 
 import SwiftUI
+import AuthenticationServices
 
 struct SignInView: View {
-//    @StateObject private var viewModel = AuthenticationViewModel()
+    @StateObject private var viewModel = AuthenticationViewModel()
     @State private var navigateToMain = false  // Navigation flag
     
     var body: some View {
@@ -14,16 +15,13 @@ struct SignInView: View {
             ScrollView {
                 VStack(spacing: 30) {
                     headerSection
-                    formSection
-                    forgotPasswordButton
-                    signInButton
+                    signInWithAppleButton
                     signUpSection
                 }
                 .padding(.horizontal, 30)
                 .padding(.top, 50)
             }
             
-            // Use FullScreenCover to navigate to MainView, removing SignInView from the view hierarchy
             .fullScreenCover(isPresented: $navigateToMain) {
                 MainView()
             }
@@ -34,45 +32,40 @@ struct SignInView: View {
         VStack(spacing: 10) {
             Text("Welcome Back")
                 .font(.system(size: 32, weight: .bold))
-            Text("Sign in to continue")
+            Text("Sign in with Apple to continue")
                 .font(.system(size: 16))
                 .foregroundColor(.white.opacity(0.7))
         }
         .foregroundColor(.white)
     }
     
-    private var formSection: some View {
-        VStack(spacing: 20) {
-            CustomTextField(text: $viewModel.email, placeholder: "Email", imageName: "envelope")
-            CustomTextField(text: $viewModel.password, placeholder: "Password", imageName: "lock", isSecure: true)
-        }
-    }
     
-    private var forgotPasswordButton: some View {
-        Button("Forgot Password?") {
-            viewModel.sendPasswordReset()
-        }
-        .font(.system(size: 14))
-        .foregroundColor(.white)
-    }
-    
-    private var signInButton: some View {
-        VStack {
-            Button(action: {
-                viewModel.signIn()
-                if viewModel.userSession != nil {
-                    navigateToMain = true  // Trigger navigation to MainView
+    private var signInWithAppleButton: some View {
+        VStack { // Wrap the button in a container like VStack to ensure consistent return
+            SignInWithAppleButton(
+                .signIn,
+                onRequest: { request in
+                    // Optional: Customize request if needed
+                },
+                onCompletion: { result in
+                    switch result {
+                    case .success(let authorization):
+                        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+                            // Handle successful authorization
+                            viewModel.userSession = appleIDCredential
+                            navigateToMain = true
+                        }
+                    case .failure(let error):
+                        // Handle error
+                        viewModel.errorMessage = error.localizedDescription
+                    }
                 }
-            }) {
-                Text("Sign In")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 56)
-                    .background(Color.white)
-                    .cornerRadius(12)
-            }
-            
+            )
+            .frame(width: 280, height: 50)
+            .signInWithAppleButtonStyle(.black)
+            .padding()
+
+            // Conditionally show error message if it exists
             if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
