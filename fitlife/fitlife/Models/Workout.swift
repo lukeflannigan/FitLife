@@ -16,14 +16,16 @@ class Workout: Identifiable, ObservableObject {
     var reps: Int
     var weight: Double
     var date: Date
+    var isFavorite: Bool
 
-    init(id: UUID = UUID(), exercise: Exercise, sets: Int = 0, reps: Int = 0, weight: Double = 0.0, date: Date = Date()) {
+    init(id: UUID = UUID(), exercise: Exercise, sets: Int = 0, reps: Int = 0, weight: Double = 0.0, date: Date = Date(), isFavorite: Bool = false) {
         self.id = id
         self.exercise = exercise
         self.sets = sets
         self.reps = reps
         self.weight = weight
         self.date = date
+        self.isFavorite = isFavorite
     }
 }
 

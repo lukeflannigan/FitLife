@@ -33,6 +33,13 @@ struct WorkoutCardView: View {
                     .foregroundColor(.primary)
                 
                 Spacer()
+
+                Button(action: {
+                    workout.isFavorite.toggle()
+                }) {
+                    Image(systemName: workout.isFavorite ? "heart.fill" : "heart")
+                        .foregroundColor(.red)
+                }
                 
                 Text(workout.exercise.difficulty.rawValue)
                     .padding(10)
@@ -81,14 +88,29 @@ struct WorkoutInfoCell: View {
 
 // MARK: - WorkoutDetailView
 struct WorkoutDetailView: View {
-    var workout: Workout
+    @Bindable var workout: Workout
 
     var body: some View {
         VStack(spacing: 30) {
-            Text(workout.exercise.name)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding(.top)
+            HStack {
+                Text(workout.exercise.name)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+
+                Spacer()
+
+                Button(action: {
+                    workout.isFavorite.toggle()
+                }) {
+                    Image(systemName: workout.isFavorite ? "heart.fill" : "heart")
+                        .font(.title)
+                        .foregroundColor(workout.isFavorite ? .red : .gray)
+                }
+            }
+
+            .padding(.top)
+
+            Spacer()
 
             HStack(spacing: 20) {
                 DetailStatView(title: "Sets", value: "\(workout.sets)")
@@ -99,6 +121,7 @@ struct WorkoutDetailView: View {
 
             Spacer()
         }
+        .padding(.horizontal)
         .navigationTitle("Workout Details")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -131,6 +154,7 @@ struct NewWorkoutForm: View {
     @State private var inputRepCount: Int = 0
     @State private var inputWeight: Double = 0.0
     @State private var showingDifficultyInfoSheet = false
+    @State private var inputIsFavorite: Bool = false
 
     var body: some View {
         NavigationView {
@@ -182,6 +206,10 @@ struct NewWorkoutForm: View {
                             DifficultyInfoView()
                         }
                 }
+                // favorite
+                Section(header: Text("Favorite")) {
+                    Toggle("Mark as Favorite", isOn: $inputIsFavorite)
+                }
             }
             .navigationBarTitle("Add Exercise")
             .toolbar {
@@ -196,7 +224,8 @@ struct NewWorkoutForm: View {
                             exercise: currExercise,
                             sets: inputSetCount,
                             reps: inputRepCount,
-                            weight: inputWeight
+                            weight: inputWeight,
+                            isFavorite: inputIsFavorite
                         )
                         workouts.append(newWorkout)
                         presentationMode.wrappedValue.dismiss()
@@ -298,13 +327,25 @@ struct WorkoutsView: View {
     @State private var searchText: String = ""
     @Environment(\.modelContext) private var modelContext
 
+    enum WorkoutFilter {
+        case all, favorites
+    }
+
+    @State private var selectedFilter: WorkoutFilter = .all
+
     var filteredWorkouts: [Workout] {
-        if searchText.isEmpty {
-            return workouts
-        } else {
-            return workouts.filter { $0.exercise.name.localizedCaseInsensitiveContains(searchText) }
+        let searchFiltered = workouts.filter { workout in
+            searchText.isEmpty || workout.exercise.name.localizedCaseInsensitiveContains(searchText)
+        }
+        
+        switch selectedFilter {
+        case .all:
+            return searchFiltered
+        case .favorites:
+            return searchFiltered.filter { $0.isFavorite }
         }
     }
+
 
     private let horizontalPadding: CGFloat = 20
 
@@ -339,6 +380,14 @@ struct WorkoutsView: View {
                 }
                 .padding(.horizontal, horizontalPadding)
 
+                Picker("Filter", selection: $selectedFilter) {
+                    Text("All").tag(WorkoutFilter.all)
+                    Text("Favorites").tag(WorkoutFilter.favorites)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding(.horizontal, horizontalPadding)
+                .padding(.vertical, 10)
+
                 if !filteredWorkouts.isEmpty {
                     ScrollView {
                         LazyVStack(spacing: 20) {
@@ -348,6 +397,12 @@ struct WorkoutsView: View {
                                 }
                                 .buttonStyle(PlainButtonStyle())
                                 .contextMenu {
+
+                                    Button {
+                                        workout.isFavorite.toggle()
+                                    } label: {
+                                        Label(workout.isFavorite ? "Remove from Favorites" : "Add to Favorites", systemImage: workout.isFavorite ? "heart.slash" : "heart")
+                                    }
                                     Button(role: .destructive) {
                                         deleteWorkout(workout)
                                     } label: {
@@ -361,7 +416,7 @@ struct WorkoutsView: View {
                     .padding(.horizontal, horizontalPadding)
                 } else {
                     Spacer()
-                    Text("No workouts found.")
+                    Text(selectedFilter == .favorites ? "No favorite workouts found." : "No workouts found.")
                         .foregroundColor(.gray)
                         .padding()
                     Spacer()
