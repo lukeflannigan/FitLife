@@ -154,6 +154,7 @@ struct NewWorkoutForm: View {
     @State private var inputRepCount: Int = 0
     @State private var inputWeight: Double = 0.0
     @State private var showingDifficultyInfoSheet = false
+    @State private var inputIsFavorite: Bool = false
 
     var body: some View {
         NavigationView {
@@ -205,6 +206,10 @@ struct NewWorkoutForm: View {
                             DifficultyInfoView()
                         }
                 }
+                // favorite
+                Section(header: Text("Favorite")) {
+                    Toggle("Mark as Favorite", isOn: $inputIsFavorite)
+                }
             }
             .navigationBarTitle("Add Exercise")
             .toolbar {
@@ -219,7 +224,8 @@ struct NewWorkoutForm: View {
                             exercise: currExercise,
                             sets: inputSetCount,
                             reps: inputRepCount,
-                            weight: inputWeight
+                            weight: inputWeight,
+                            isFavorite: inputIsFavorite
                         )
                         workouts.append(newWorkout)
                         presentationMode.wrappedValue.dismiss()
