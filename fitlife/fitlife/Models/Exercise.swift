@@ -17,7 +17,7 @@ enum Difficulty: String, CaseIterable, Codable{
 
 @Model
 class Exercise: Identifiable, ObservableObject {
-    var id: UUID
+    var id: String  
     var name: String
     var type: String
     var muscleGroup: String
