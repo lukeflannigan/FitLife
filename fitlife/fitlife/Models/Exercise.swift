@@ -16,22 +16,42 @@ enum Difficulty: String, CaseIterable, Codable{
 
 @Model
 class Exercise: Identifiable, ObservableObject {
-    var id: UUID
+    var id: String  
     var name: String
-    var type: String
-    var muscleGroup: String
-    var exerciseDescription: String
-    var imageName: String
-    var difficulty: Difficulty
-
-    init(id: UUID = UUID(), name: String = "", type: String = "", muscleGroup: String = "", difficulty: Difficulty = .easy, exerciseDescription: String = "", imageName: String = "") {
+    var category: String  
+    var force: String?
+    var level: String
+    var mechanic: String?
+    var equipment: String?
+    var primaryMuscles: [String]
+    var secondaryMuscles: [String]
+    var instructions: [String]
+    var images: [String]
+    
+    init(
+        id: String = "",
+        name: String = "",
+        category: String = "",
+        force: String? = nil,
+        level: String = "beginner",
+        mechanic: String? = nil,
+        equipment: String? = nil,
+        primaryMuscles: [String] = [],
+        secondaryMuscles: [String] = [],
+        instructions: [String] = [],
+        images: [String] = []
+    ) {
         self.id = id
         self.name = name
-        self.type = type
-        self.muscleGroup = muscleGroup
-        self.exerciseDescription = exerciseDescription
-        self.imageName = imageName
-        self.difficulty = difficulty
+        self.category = category
+        self.force = force
+        self.level = level
+        self.mechanic = mechanic
+        self.equipment = equipment
+        self.primaryMuscles = primaryMuscles
+        self.secondaryMuscles = secondaryMuscles
+        self.instructions = instructions
+        self.images = images
     }
 }
 
