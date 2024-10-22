@@ -88,14 +88,29 @@ struct WorkoutInfoCell: View {
 
 // MARK: - WorkoutDetailView
 struct WorkoutDetailView: View {
-    var workout: Workout
+    @Bindable var workout: Workout
 
     var body: some View {
         VStack(spacing: 30) {
-            Text(workout.exercise.name)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding(.top)
+            HStack {
+                Text(workout.exercise.name)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+
+                Spacer()
+
+                Button(action: {
+                    workout.isFavorite.toggle()
+                }) {
+                    Image(systemName: workout.isFavorite ? "heart.fill" : "heart")
+                        .font(.title)
+                        .foregroundColor(workout.isFavorite ? .red : .gray)
+                }
+            }
+
+            .padding(.top)
+
+            Spacer()
 
             HStack(spacing: 20) {
                 DetailStatView(title: "Sets", value: "\(workout.sets)")
@@ -106,6 +121,7 @@ struct WorkoutDetailView: View {
 
             Spacer()
         }
+        .padding(.horizontal)
         .navigationTitle("Workout Details")
         .navigationBarTitleDisplayMode(.inline)
     }
