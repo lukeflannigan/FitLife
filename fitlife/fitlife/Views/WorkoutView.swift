@@ -327,13 +327,25 @@ struct WorkoutsView: View {
     @State private var searchText: String = ""
     @Environment(\.modelContext) private var modelContext
 
+    enum WorkoutFilter {
+        case all, favorites
+    }
+
+    @State private var selectedFilter: WorkoutFilter = .all
+
     var filteredWorkouts: [Workout] {
-        if searchText.isEmpty {
-            return workouts
-        } else {
-            return workouts.filter { $0.exercise.name.localizedCaseInsensitiveContains(searchText) }
+        let searchFiltered = workouts.filter { workout in
+            searchText.isEmpty || workout.exercise.name.localizedCaseInsensitiveContains(searchText)
+        }
+        
+        switch selectedFilter {
+        case .all:
+            return searchFiltered
+        case .favorites:
+            return searchFiltered.filter { $0.isFavorite }
         }
     }
+
 
     private let horizontalPadding: CGFloat = 20
 
