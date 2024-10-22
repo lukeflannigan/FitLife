@@ -10,17 +10,13 @@ import AuthenticationServices
 
 class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     
-    @Published var email: String = ""
-    @Published var password: String = ""
-    @Published var confirmPassword: String = ""
-    @Published var userSession: String? = nil  // This tracks user session
+    @Published var userSession: String? = nil
     @Published var errorMessage: String? = nil
     
     override init() {
         super.init()
     }
     
-    // Function to initiate Apple Sign-In process
     func signInWithApple() {
         let request = ASAuthorizationAppleIDProvider().createRequest()
         request.requestedScopes = [.email, .fullName]
@@ -31,16 +27,37 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
         authorizationController.performRequests()
     }
     
-    // ASAuthorizationControllerDelegate methods
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+    func processAppleSignIn(_ authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             let userIdentifier = appleIDCredential.user
             self.userSession = userIdentifier  // Save user session
             
-            if let email = appleIDCredential.email {
-                self.email = email
+            // Store session in UserDefaults for future use
+            UserDefaults.standard.set(userIdentifier, forKey: "userSession")
+            
+            // Navigate to WelcomeView on first sign-in
+            DispatchQueue.main.async {
+                // Navigate to WelcomeView
             }
         }
+    }
+    
+    func skipSignIn() {
+        // Mark user as having skipped sign-in
+        UserDefaults.standard.set(true, forKey: "skippedSignIn")
+        
+        // Check if first time or returning user
+        if UserDefaults.standard.bool(forKey: "firstTimeUser") == false {
+            UserDefaults.standard.set(true, forKey: "firstTimeUser")
+            // Navigate to WelcomeView
+        } else {
+            // Navigate to MainView
+        }
+    }
+    
+    // Apple Sign In Delegate methods
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        processAppleSignIn(authorization)
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
@@ -49,29 +66,5 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
     
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return UIApplication.shared.windows.first!
-    }
-    
-    // Existing email/password methods (you can adjust as needed)
-    func signIn() {
-        // Implement email/password sign-in logic here
-        if email == "test@test.com" && password == "password" {  // Example
-            self.userSession = "exampleSession"
-        } else {
-            self.errorMessage = "Invalid email or password"
-        }
-    }
-    
-    func signUp() {
-        // Implement sign-up logic
-        if password == confirmPassword {
-            self.userSession = "newUserSession"
-        } else {
-            self.errorMessage = "Passwords do not match"
-        }
-    }
-    
-    func sendPasswordReset() {
-        // Implement password reset functionality
-        self.errorMessage = "Password reset functionality not implemented yet"
     }
 }
