@@ -9,30 +9,45 @@ import SwiftUI
 
 struct SplashView: View {
     @State private var isActive = false  // Flag to track when to navigate
+    @State private var destination: AnyView? = nil  // Dynamic destination
     
     var body: some View {
         ZStack {
-            GradientBackground()  // Use your custom gradient background
+            GradientBackground()  // Custom gradient background
             
-            if isActive {
-                OpeningView()  // Navigate to OpeningView
+            if isActive, let destination = destination {
+                destination
             } else {
                 VStack {
-                    // Display "FitLife" as the main splash screen text
                     Text("FitLife")
-                        .font(.system(size: 48, weight: .bold))  // Large, bold text
-                        .foregroundColor(.white)  // Ensure text is visible on gradient
+                        .font(.system(size: 48, weight: .bold))
+                        .foregroundColor(.white)
                         .padding()
                 }
             }
         }
         .onAppear {
-            // Simulate a brief delay for the splash screen
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                withAnimation {
-                    self.isActive = true
-                }
+                checkUserStatus()
             }
+        }
+    }
+    
+    // Check user status: Signed in, skipped, or first time
+    private func checkUserStatus() {
+        if let _ = UserDefaults.standard.string(forKey: "userSession") {
+            // User has signed in before
+            self.destination = AnyView(MainView())
+        } else if UserDefaults.standard.bool(forKey: "skippedSignIn") {
+            // User has skipped sign-in before
+            self.destination = AnyView(MainView())
+        } else {
+            // First time user, show OpeningView
+            self.destination = AnyView(OpeningView())
+        }
+        
+        withAnimation {
+            self.isActive = true
         }
     }
 }
