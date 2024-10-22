@@ -3,8 +3,10 @@
 // Created by Luke Flannigan on 9/26/24.
 //
 import SwiftUI
+import SwiftData
 
 struct OpeningView: View {
+    @Environment(\.modelContext) var modelContext
     var body: some View {
         NavigationView {
             ZStack {

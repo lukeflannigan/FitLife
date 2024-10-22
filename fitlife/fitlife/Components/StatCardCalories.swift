@@ -3,7 +3,7 @@
 
 import SwiftUI
 
-struct StatCard: View {
+struct StatCardCalories: View {
     let title: String
     let value: String
     let goal: Double
@@ -17,7 +17,7 @@ struct StatCard: View {
             Text(value)
                 .font(.custom("Poppins-Bold", size: 24))
                 .foregroundColor(.primary)
-            Text("Goal: \(goal, format: .number.rounded(increment: 1.0))g")
+            Text("Goal: \(goal, format: .number.rounded(increment: 1.0))cal")
                 .font(.custom("Poppins-Regular", size: 12))
                 .foregroundColor(.secondary)
         }

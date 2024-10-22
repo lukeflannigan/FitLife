@@ -19,9 +19,9 @@ struct GetWeeklyGoalView: View {
     
     // Filter weekly goals based on whether the user wants to lose, gain, or maintain weight
     var filteredGoals: [WeeklyGoal] {
-        if userGoals.goalWeight < userGoals.currentWeight {
+        if userGoals.goalWeightInKg < userGoals.currentWeightInKg {
             return [.loseWeightSlow, .loseWeightMedium, .loseWeightFast]
-        } else if userGoals.goalWeight > userGoals.currentWeight {
+        } else if userGoals.goalWeightInKg > userGoals.currentWeightInKg {
             return [.gainWeightSlow, .gainWeightMedium, .gainWeightFast]
         } else {
             return [.maintainWeight]
@@ -81,6 +81,8 @@ struct GetWeeklyGoalView: View {
                 Button(action: {
                     if let selectedGoal = selectedWeeklyGoal {
                         userGoals.weeklyGoal = selectedGoal
+                        userGoals.setMacroGoals()
+                        modelContext.insert(userGoals)
                         // Navigate permanently to HomeView
                         navigateToHome()
                     }
@@ -109,6 +111,7 @@ struct GetWeeklyGoalView: View {
     private func navigateToHome() {
         // Replace the view with MainView as a new root
         let mainView = MainView()
+            .environment(\.modelContext, modelContext)
         let rootView = UIHostingController(rootView: mainView)
         
         if let window = UIApplication.shared.windows.first {

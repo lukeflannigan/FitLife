@@ -2,8 +2,10 @@
 // Created by Luke Flannigan on 9/26/24
 
 import SwiftUI
+import SwiftData
 
 struct SignUpView: View {
+    @Environment(\.modelContext) var modelContext
     @StateObject private var viewModel = AuthenticationViewModel()
     @State private var userGoals = UserGoals(name: "")
     @State private var showWelcomeView = false  // Flag for showing WelcomeView

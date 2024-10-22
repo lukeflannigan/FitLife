@@ -162,17 +162,28 @@ struct GetHeightWeightView: View {
                         .cornerRadius(12)
                 }
                 .simultaneousGesture(TapGesture().onEnded {
-                    // Save height and weight to userGoals before navigating
+                    // Save height based on metric/imperial system
                     if useMetric {
-                        userGoals.height = Double(heightCentimeters)
+                        userGoals.heightInCm = Double(heightCentimeters) // Use height in cm directly
                     } else {
-                        userGoals.height = Double((heightFeet * 12) + heightInches) * 2.54 // Convert feet/inches to cm
+                        userGoals.setHeightFromImperial(feet: heightFeet, inches: heightInches) // Convert and set height
                     }
+
+                    // Save weight based on metric/imperial system
                     if let currentWeightValue = Double(currentWeight) {
-                        userGoals.currentWeight = currentWeightValue
+                        if useMetric {
+                            userGoals.currentWeightInKg = currentWeightValue // Already in kg
+                        } else {
+                            userGoals.setCurrentWeightFromPounds(pounds: currentWeightValue) // Convert and set current weight
+                        }
                     }
+                    
                     if let goalWeightValue = Double(goalWeight) {
-                        userGoals.goalWeight = goalWeightValue
+                        if useMetric {
+                            userGoals.goalWeightInKg = goalWeightValue // Already in kg
+                        } else {
+                            userGoals.setGoalWeightFromPounds(pounds: goalWeightValue) // Convert and set goal weight
+                        }
                     }
                 })
                 .disabled(currentWeight.isEmpty || goalWeight.isEmpty) // Disable if no weight entered

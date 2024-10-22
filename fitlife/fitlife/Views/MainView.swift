@@ -2,7 +2,7 @@
 // Created by Luke Flannigan on 10/1/24.
 
 import SwiftUI
-
+import SwiftData
 enum Tab {
     case profile
     case nutrition
@@ -13,7 +13,8 @@ enum Tab {
 
 struct MainView: View {
     @State private var selectedTab: Tab = .home
-
+    @Environment(\.modelContext) var modelContext
+    
     var body: some View {
         ZStack {
             switch selectedTab {
