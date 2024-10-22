@@ -397,6 +397,12 @@ struct WorkoutsView: View {
                                 }
                                 .buttonStyle(PlainButtonStyle())
                                 .contextMenu {
+
+                                    Button {
+                                        workout.isFavorite.toggle()
+                                    } label: {
+                                        Label(workout.isFavorite ? "Remove from Favorites" : "Add to Favorites", systemImage: workout.isFavorite ? "heart.slash" : "heart")
+                                    }
                                     Button(role: .destructive) {
                                         deleteWorkout(workout)
                                     } label: {
