@@ -33,4 +33,24 @@ class BodyMetrics {
     func adjustGoalsBasedOnWeight() {
         // Placeholder: Adjust other goals based on weight change
     }
+    
+    // Convert current weight to pounds if needed
+    func currentWeightInPounds() -> Double {
+        return currentWeightInKg * 2.20462
+    }
+
+    // Set current weight from pounds if using imperial units
+    func setCurrentWeightFromPounds(pounds: Double) {
+        currentWeightInKg = pounds * 0.453592
+    }
+
+    // Convert goal weight to pounds if needed
+    func goalWeightInPounds() -> Double {
+        return goalWeightInKg * 2.20462
+    }
+
+    // Set goal weight from pounds if using imperial units
+    func setGoalWeightFromPounds(pounds: Double) {
+        goalWeightInKg = pounds * 0.453592
+    }
 }

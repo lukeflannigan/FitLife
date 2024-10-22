@@ -78,39 +78,6 @@ class UserGoals {
         self.caloriesGoal = caloriesGoal
         self.isMetric = isMetric // Defaults to metric unless specified
     }
-
-    // Convert height to imperial if needed
-    func heightInFeetAndInches() -> (feet: Int, inches: Int) {
-        let totalInches = heightInCm / 2.54
-        let feet = Int(totalInches / 12)
-        let inches = Int(totalInches.truncatingRemainder(dividingBy: 12))
-        return (feet, inches)
-    }
-
-    // Set height based on feet and inches if using imperial units
-    func setHeightFromImperial(feet: Int, inches: Int) {
-        heightInCm = Double(feet * 12 + inches) * 2.54
-    }
-
-    // Convert current weight to pounds if needed
-    func currentWeightInPounds() -> Double {
-        return currentWeightInKg * 2.20462
-    }
-
-    // Set current weight from pounds if using imperial units
-    func setCurrentWeightFromPounds(pounds: Double) {
-        currentWeightInKg = pounds * 0.453592
-    }
-
-    // Convert goal weight to pounds if needed
-    func goalWeightInPounds() -> Double {
-        return goalWeightInKg * 2.20462
-    }
-
-    // Set goal weight from pounds if using imperial units
-    func setGoalWeightFromPounds(pounds: Double) {
-        goalWeightInKg = pounds * 0.453592
-    }
     
     func calculateTDEE(isMetric: Bool = false) -> Double {
         let weightInKg = currentWeightInKg
@@ -122,16 +89,6 @@ class UserGoals {
             bmr = 10 * weightInKg + 6.25 * heightInCm - 5 * Double(age) + 5
         } else {
             bmr = 10 * weightInKg + 6.25 * heightInCm - 5 * Double(age) - 161
-        }
-            
-        // Apply activity level multiplier
-        let activityMultiplier: Double
-        switch activityLevel {
-        case .sedentary: activityMultiplier = 1.2
-        case .lightActivity: activityMultiplier = 1.375
-        case .moderateActivity: activityMultiplier = 1.55
-        case .veryActive: activityMultiplier = 1.725
-        case .superActive: activityMultiplier = 1.9
         }
         
         let tdee = bmr * activityMultiplier

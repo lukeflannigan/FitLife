@@ -31,5 +31,16 @@ class UserProfile {
             self.localeIdentifier = localeIdentifier
             self.isMetric = isMetric
         }
-    
+    // Convert height to imperial if needed
+    func heightInFeetAndInches() -> (feet: Int, inches: Int) {
+        let totalInches = heightInCm / 2.54
+        let feet = Int(totalInches / 12)
+        let inches = Int(totalInches.truncatingRemainder(dividingBy: 12))
+        return (feet, inches)
+    }
+
+    // Set height based on feet and inches if using imperial units
+    func setHeightFromImperial(feet: Int, inches: Int) {
+        heightInCm = Double(feet * 12 + inches) * 2.54
+    }
 }
