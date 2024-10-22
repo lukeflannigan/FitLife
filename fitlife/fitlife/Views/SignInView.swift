@@ -4,7 +4,7 @@
 import SwiftUI
 
 struct SignInView: View {
-    @StateObject private var viewModel = AuthenticationViewModel()
+//    @StateObject private var viewModel = AuthenticationViewModel()
     @State private var navigateToMain = false  // Navigation flag
     
     var body: some View {

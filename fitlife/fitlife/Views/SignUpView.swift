@@ -4,7 +4,7 @@
 import SwiftUI
 
 struct SignUpView: View {
-    @StateObject private var viewModel = AuthenticationViewModel()
+//    @StateObject private var viewModel = AuthenticationViewModel()
     @State private var userGoals = UserGoals(name: "")
     @State private var showWelcomeView = false  // Flag for showing WelcomeView
     
