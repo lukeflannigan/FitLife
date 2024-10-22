@@ -7,10 +7,13 @@
 
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 // MARK: - WorkoutCardView
 struct WorkoutCardView: View {
     var workout: Workout
+    @State private var selectedImage: UIImage? = nil
+    @State private var selectedItem: PhotosPickerItem? = nil
     
     func difficultyColor(for difficulty: Difficulty) -> Color {
             switch difficulty {
@@ -25,6 +28,23 @@ struct WorkoutCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
+            if let imageData = workout.exercise.imageData,
+               let uiImage = UIImage(data: imageData) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 20)
+                    .cornerRadius(2)
+            } else {
+                // Fallback case where no image is available
+                Image(systemName: "heart")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 20)
+                    .cornerRadius(2)
+                    .foregroundColor(.gray)
+            }
+
             // Title
             HStack{
                 Text(workout.exercise.name)
@@ -154,7 +174,12 @@ struct NewWorkoutForm: View {
     @State private var inputRepCount: Int = 0
     @State private var inputWeight: Double = 0.0
     @State private var showingDifficultyInfoSheet = false
+<<<<<<< HEAD
     @State private var inputIsFavorite: Bool = false
+=======
+    @State private var pickerItem: PhotosPickerItem?
+    @State private var selectedImage: Image?
+>>>>>>> SCRUM-54-3.-integrate-instructional-imag
 
     var body: some View {
         NavigationView {
@@ -206,9 +231,46 @@ struct NewWorkoutForm: View {
                             DifficultyInfoView()
                         }
                 }
+<<<<<<< HEAD
                 // favorite
                 Section(header: Text("Favorite")) {
                     Toggle("Mark as Favorite", isOn: $inputIsFavorite)
+=======
+                // image selection
+                Section(header: Text("Exercise Image")){
+                    PhotosPicker(selection: $pickerItem, matching: .images, photoLibrary: .shared()) {
+                            Text("Select an Image")
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                        .onChange(of: pickerItem) { newItem in
+                            Task {
+                                if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                                    currExercise.imageData = data // Save the image data in the current exercise
+                                    if let uiImage = UIImage(data: data) {
+                                        selectedImage = Image(uiImage: uiImage) // Display the image
+                                    }
+                                }
+                            }
+                        }
+
+
+
+
+                        // Display the selected image if available
+                        if let selectedImage = selectedImage {
+                            selectedImage
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 150)
+                                .cornerRadius(10)
+                        } else {
+                            Text("No image selected")
+                                .foregroundColor(.gray)
+                        }
+>>>>>>> SCRUM-54-3.-integrate-instructional-imag
                 }
             }
             .navigationBarTitle("Add Exercise")

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 enum Difficulty: String, CaseIterable, Codable{
     case easy = "Warmup"
@@ -23,8 +24,9 @@ class Exercise: Identifiable, ObservableObject {
     var exerciseDescription: String
     var imageName: String
     var difficulty: Difficulty
+    var imageData: Data?
 
-    init(id: UUID = UUID(), name: String = "", type: String = "", muscleGroup: String = "", difficulty: Difficulty = .easy, exerciseDescription: String = "", imageName: String = "") {
+    init(id: UUID = UUID(), name: String = "", type: String = "", muscleGroup: String = "", difficulty: Difficulty = .easy, imageData: Data? = nil) {
         self.id = id
         self.name = name
         self.type = type
@@ -32,6 +34,7 @@ class Exercise: Identifiable, ObservableObject {
         self.exerciseDescription = exerciseDescription
         self.imageName = imageName
         self.difficulty = difficulty
+        self.imageData = imageData
     }
 }
 
