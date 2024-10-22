@@ -12,6 +12,8 @@ import PhotosUI
 // MARK: - WorkoutCardView
 struct WorkoutCardView: View {
     var workout: Workout
+    @State private var selectedImage: UIImage? = nil
+    @State private var selectedItem: PhotosPickerItem? = nil
     
     func difficultyColor(for difficulty: Difficulty) -> Color {
             switch difficulty {
@@ -26,6 +28,23 @@ struct WorkoutCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
+            if let imageData = workout.exercise.imageData,
+               let uiImage = UIImage(data: imageData) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 20)
+                    .cornerRadius(2)
+            } else {
+                // Fallback case where no image is available
+                Image(systemName: "heart")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 20)
+                    .cornerRadius(2)
+                    .foregroundColor(.gray)
+            }
+
             // Title
             HStack{
                 Text(workout.exercise.name)
@@ -187,17 +206,39 @@ struct NewWorkoutForm: View {
                 }
                 // image selection
                 Section(header: Text("Exercise Image")){
-                    VStack {
-                        selectedImage?
-                            .resizable()
-                            .scaledToFit()
-                        PhotosPicker("Select a picture", selection: $pickerItem, matching: .images)
-                    }   .onChange(of: pickerItem) {
-                        Task {
-                            selectedImage = try await pickerItem?.loadTransferable(type: Image.self)
+                    PhotosPicker(selection: $pickerItem, matching: .images, photoLibrary: .shared()) {
+                            Text("Select an Image")
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
                         }
-                    }
-                }   
+                        .onChange(of: pickerItem) { newItem in
+                            Task {
+                                if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                                    currExercise.imageData = data // Save the image data in the current exercise
+                                    if let uiImage = UIImage(data: data) {
+                                        selectedImage = Image(uiImage: uiImage) // Display the image
+                                    }
+                                }
+                            }
+                        }
+
+
+
+
+                        // Display the selected image if available
+                        if let selectedImage = selectedImage {
+                            selectedImage
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 150)
+                                .cornerRadius(10)
+                        } else {
+                            Text("No image selected")
+                                .foregroundColor(.gray)
+                        }
+                }
             }
             .navigationBarTitle("Add Exercise")
             .toolbar {
