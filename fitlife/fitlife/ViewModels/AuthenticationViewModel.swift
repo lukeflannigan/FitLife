@@ -5,93 +5,115 @@
 //  Created by Jonas Tuttle on 10/4/24.
 //
 
-//import Foundation
-//
-//class AuthenticationViewModel: ObservableObject {
-//    // Published properties to bind with the view
-//    @Published var email = ""
-//    @Published var password = ""
-//    @Published var confirmPassword = ""
-//    @Published var errorMessage: String? = nil
-//    @Published var userSession: User? = nil  // Firebase User session
-//    
-//    // Firebase Auth instance
-//    private let auth = Auth.auth()
-//    
-//    // MARK: - Sign In
-//    func signIn() {
-//        // Clear previous error message
-//        errorMessage = nil
-//        
-//        auth.signIn(withEmail: email, password: password) { [weak self] result, error in
-//            guard let self = self else { return }
-//            if let error = error {
-//                // Set error message for view to display
-//                self.errorMessage = "Failed to sign in: \(error.localizedDescription)"
-//                return
-//            }
-//            
-//            // User signed in successfully
-//            self.userSession = result?.user
-//            print("Successfully signed in with user: \(self.userSession?.uid ?? "")")
-//        }
-//    }
-//    
-//    // MARK: - Sign Up
-//    func signUp() {
-//        // Clear previous error message
-//        errorMessage = nil
-//        
-//        // Validate inputs
-//        guard !email.isEmpty, !password.isEmpty, !confirmPassword.isEmpty else {
-//            self.errorMessage = "Email, password, and confirm password fields cannot be empty."
-//            return
-//        }
-//        
-//        guard password == confirmPassword else {
-//            self.errorMessage = "Passwords do not match."
-//            return
-//        }
-//        
-//        // Sign up user
-//        auth.createUser(withEmail: email, password: password) { [weak self] result, error in
-//            guard let self = self else { return }
-//            if let error = error {
-//                // Set error message for view to display
-//                self.errorMessage = "Failed to sign up: \(error.localizedDescription)"
-//                return
-//            }
-//            
-//            // User signed up successfully
-//            self.userSession = result?.user
-//            print("Successfully signed up with user: \(self.userSession?.uid ?? "")")
-//        }
-//    }
-//    
-//    // MARK: - Sign Out
-//    func signOut() {
-//        do {
-//            try auth.signOut()
-//            self.userSession = nil
-//            print("User signed out.")
-//        } catch {
-//            self.errorMessage = "Failed to sign out: \(error.localizedDescription)"
-//        }
-//    }
-//    
-//    // MARK: - Forgot Password
-//    func sendPasswordReset() {
-//        guard !email.isEmpty else {
-//            self.errorMessage = "Please enter your email."
-//            return
-//        }
-//        
-//        auth.sendPasswordReset(withEmail: email) { error in
-//            if let error = error {
-//                self.errorMessage = "Error sending reset link: \(error.localizedDescription)"
-//            } else {
-//                print("Password reset email sent.")
-//            }
-//        }
-//    }
-//}
+import Foundation
+import AuthenticationServices
+import SwiftUI
+import Combine
+import CryptoKit
+
+class AuthenticationViewModel: NSObject, ObservableObject {
+    // Published properties to bind with the view
+    @Published var errorMessage: String? = nil
+    @Published var userSession: ASAuthorizationAppleIDCredential? = nil // Holds the Apple ID credential
+    
+    // Observing the Authorization status
+    var currentNonce: String? // Nonce for authentication
+    
+    override init() {
+        super.init()
+    }
+    
+    // MARK: - Sign In with Apple
+    func signInWithApple() {
+        let request = ASAuthorizationAppleIDProvider().createRequest()
+        request.requestedScopes = [.fullName, .email]
+        
+        let nonce = randomNonceString()
+        request.nonce = sha256(nonce)
+        currentNonce = nonce
+        
+        let authController = ASAuthorizationController(authorizationRequests: [request])
+        authController.delegate = self
+        authController.presentationContextProvider = self
+        authController.performRequests()
+    }
+    
+    // MARK: - Sign Out
+    func signOut() {
+        // There is no explicit sign-out function for Apple Sign-In, but you can clear any locally saved session
+        self.userSession = nil
+        print("User signed out.")
+    }
+    
+    // MARK: - Helpers for Nonce and SHA256
+    private func randomNonceString(length: Int = 32) -> String {
+        precondition(length > 0)
+        let charset: Array<Character> =
+            Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+        var result = ""
+        var remainingLength = length
+
+        while remainingLength > 0 {
+            let randoms: [UInt8] = (0..<16).map { _ in
+                var random: UInt8 = 0
+                let errorCode = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
+                if errorCode != errSecSuccess {
+                    fatalError("Unable to generate nonce.")
+                }
+                return random
+            }
+
+            randoms.forEach { random in
+                if remainingLength == 0 {
+                    return
+                }
+
+                if random < charset.count {
+                    result.append(charset[Int(random)])
+                    remainingLength -= 1
+                }
+            }
+        }
+
+        return result
+    }
+
+    private func sha256(_ input: String) -> String {
+        let inputData = Data(input.utf8)
+        let hashedData = SHA256.hash(data: inputData)
+        let hashString = hashedData.compactMap { String(format: "%02x", $0) }.joined()
+
+        return hashString
+    }
+}
+
+// MARK: - ASAuthorizationControllerDelegate and ASAuthorizationControllerPresentationContextProviding
+
+extension AuthenticationViewModel: ASAuthorizationControllerDelegate {
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            let userIdentifier = appleIDCredential.user
+            let fullName = appleIDCredential.fullName
+            let email = appleIDCredential.email
+            
+            // Successfully authenticated
+            self.userSession = appleIDCredential
+            print("Successfully signed in with Apple ID: \(userIdentifier)")
+            
+            // Optionally, store userIdentifier, fullName, email locally or in iCloud Keychain
+        }
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        // Handle the error
+        self.errorMessage = "Failed to sign in: \(error.localizedDescription)"
+        print("Error occurred during Apple Sign-In: \(error.localizedDescription)")
+    }
+}
+
+extension AuthenticationViewModel: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        // Return the main window for presentation context
+        return UIApplication.shared.windows.first!
+    }
+}
