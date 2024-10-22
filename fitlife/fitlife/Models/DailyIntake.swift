@@ -8,7 +8,8 @@
 import Foundation
 import SwiftData
 
-struct DailyIntake: Identifiable {
+@Model
+class DailyIntake: Identifiable {
     var id: UUID
     var date: Date
     var calories: Double

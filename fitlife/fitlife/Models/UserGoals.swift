@@ -37,7 +37,8 @@ class UserGoals {
     // Add properties to store current progress
     var currentDailyIntake: [DailyIntake] // Track daily macros
     var weeklySummaries: [WeeklySummary] // Track progress on a week-by-week basis
-
+    var bodyWeightLog: [BodyWeightEntry]
+    
     // Initialize the UserGoals object with default values
     init(localeIdentifier: LocaleIdentifier = Locale.autoupdatingCurrent.identifier,
          heightInCm: Double = 0,
