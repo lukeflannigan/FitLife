@@ -26,7 +26,7 @@ class Exercise: Identifiable, ObservableObject {
     var difficulty: Difficulty
     var imageData: Data?
 
-    init(id: UUID = UUID(), name: String = "", type: String = "", muscleGroup: String = "", difficulty: Difficulty = .easy, imageData: Data? = nil) {
+    init(id: UUID = UUID(), name: String = "", type: String = "", muscleGroup: String = "",exerciseDescription: String = "", imageName: String = "",  difficulty: Difficulty = .easy, imageData: Data? = nil) {
         self.id = id
         self.name = name
         self.type = type

@@ -18,9 +18,9 @@ struct ExerciseData: Identifiable, Codable {
             name: name,
             type: type,
             muscleGroup: muscleGroup,
-            difficulty: difficulty,
             exerciseDescription: exerciseDescription,
-            imageName: imageName
+            imageName: imageName,
+            difficulty: difficulty
         )
     }
 }

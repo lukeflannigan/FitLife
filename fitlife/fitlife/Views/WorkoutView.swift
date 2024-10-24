@@ -174,12 +174,9 @@ struct NewWorkoutForm: View {
     @State private var inputRepCount: Int = 0
     @State private var inputWeight: Double = 0.0
     @State private var showingDifficultyInfoSheet = false
-<<<<<<< HEAD
     @State private var inputIsFavorite: Bool = false
-=======
     @State private var pickerItem: PhotosPickerItem?
     @State private var selectedImage: Image?
->>>>>>> SCRUM-54-3.-integrate-instructional-imag
 
     var body: some View {
         NavigationView {
@@ -231,11 +228,10 @@ struct NewWorkoutForm: View {
                             DifficultyInfoView()
                         }
                 }
-<<<<<<< HEAD
                 // favorite
                 Section(header: Text("Favorite")) {
                     Toggle("Mark as Favorite", isOn: $inputIsFavorite)
-=======
+                }
                 // image selection
                 Section(header: Text("Exercise Image")){
                     PhotosPicker(selection: $pickerItem, matching: .images, photoLibrary: .shared()) {
@@ -270,7 +266,7 @@ struct NewWorkoutForm: View {
                             Text("No image selected")
                                 .foregroundColor(.gray)
                         }
->>>>>>> SCRUM-54-3.-integrate-instructional-imag
+
                 }
             }
             .navigationBarTitle("Add Exercise")
