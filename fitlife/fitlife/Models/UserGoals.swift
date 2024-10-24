@@ -56,7 +56,9 @@ class UserGoals {
          fatsGoal: Double = 0,
          carbsGoal: Double = 0,
          caloriesGoal: Double = 0,
-         isMetric: Bool = true) {
+         isMetric: Bool = true,
+         currentDailyIntake: [DailyIntake] = [],
+         weeklySummaries: [WeeklySummary] = []) {
         
         self.localeIdentifier = localeIdentifier
         self.name = name
@@ -75,8 +77,11 @@ class UserGoals {
         self.fatsGoal = fatsGoal
         self.carbsGoal = carbsGoal
         self.caloriesGoal = caloriesGoal
-        self.isMetric = isMetric // Defaults to metric unless specified
+        self.isMetric = isMetric
+        self.currentDailyIntake = currentDailyIntake
+        self.weeklySummaries = weeklySummaries
     }
+
 
     // Convert height to imperial if needed
     func heightInFeetAndInches() -> (feet: Int, inches: Int) {
