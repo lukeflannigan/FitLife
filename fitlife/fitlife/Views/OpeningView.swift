@@ -25,7 +25,6 @@ struct OpeningView: View {
                 
                 Spacer()
                 
-                // Sign In with Apple Button
                 SignInWithAppleButton(
                     onRequest: { request in
                         viewModel.signInWithApple()
@@ -35,26 +34,27 @@ struct OpeningView: View {
                     }
                 )
                 .signInWithAppleButtonStyle(.white)
-                .frame(height: 56)
-                .cornerRadius(12)
-                .padding(.horizontal, 30)
+                .frame(height: 70)
+                .cornerRadius(16)
+                .padding(.horizontal, 40)
+//                .shadow(color: Color.white.opacity(0.6), radius: 10, x: 0, y: 5)
                 
-                // Continue without sign-in Button
+                // Continue without sign-in Button (more subtle)
                 Button(action: {
                     viewModel.skipSignIn()
                 }) {
                     Text("Continue without sign in")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.black)
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundColor(.black.opacity(0.6))
                         .frame(maxWidth: .infinity)
-                        .frame(height: 56)
-                        .background(Color.white)
-                        .cornerRadius(12)
+                        .frame(height: 48)
+                        .background(Color.white.opacity(0.8))
+                        .cornerRadius(8)
                 }
-                .padding(.horizontal, 30)
-                .padding(.bottom, 50)
+                .padding(.horizontal, 60)
+                .padding(.bottom, 160)
                 
-                Spacer()
+//                Spacer()
             }
         }
         .navigationBarHidden(true)
@@ -75,4 +75,3 @@ struct OpeningView_Previews: PreviewProvider {
         OpeningView()
     }
 }
-
