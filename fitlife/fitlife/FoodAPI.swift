@@ -227,7 +227,7 @@ struct RecipeDetailView: View {
 
                 // Macros section
                 Group {
-                            Text("Macros: ")
+                            Text("Macronutrient Information: ")
                                      .font(.headline)
                                      .padding(.top, 5)
                                  
