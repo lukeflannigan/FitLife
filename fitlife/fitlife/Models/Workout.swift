@@ -11,7 +11,7 @@ import SwiftData
 @Model
 class Workout: Identifiable, ObservableObject {
     var id: UUID
-    var exercise: [Exercise]
+    var exercises: [Exercise]
     var sets: Int
     var reps: Int
     var weight: Double
@@ -20,7 +20,7 @@ class Workout: Identifiable, ObservableObject {
 
     init(id: UUID = UUID(), exercises: [Exercise], sets: Int = 0, reps: Int = 0, weight: Double = 0.0, date: Date = Date(), isFavorite: Bool = false) {
         self.id = id
-        self.exercise = exercises
+        self.exercises = exercises
         self.sets = sets
         self.reps = reps
         self.weight = weight
