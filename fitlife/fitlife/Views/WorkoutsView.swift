@@ -1,5 +1,5 @@
 //
-//  WorkoutView.swift
+//  WorkoutsView.swift
 //  fitlife
 //
 //  Created by Thomas Mendoza on 10/1/24.
