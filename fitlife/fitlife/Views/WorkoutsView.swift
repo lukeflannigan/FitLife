@@ -14,44 +14,52 @@ struct WorkoutCardView: View {
     var workout: Workout
     @State private var selectedImage: UIImage? = nil
     @State private var selectedItem: PhotosPickerItem? = nil
-    
+
     func difficultyColor(for difficulty: Difficulty) -> Color {
-            switch difficulty {
-            case .easy:
-                return Color.green
-            case .medium:
-                return Color.yellow
-            case .hard:
-                return Color.red
-            }
+        switch difficulty {
+        case .easy:
+            return Color.green
+        case .medium:
+            return Color.yellow
+        case .hard:
+            return Color.red
         }
-    
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            if let imageData = workout.exercise.imageData,
-               let uiImage = UIImage(data: imageData) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 20)
-                    .cornerRadius(2)
-            } else {
-                // Fallback case where no image is available
-                Image(systemName: "heart")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 20)
-                    .cornerRadius(2)
-                    .foregroundColor(.gray)
+            // Display images for all exercises
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 10) {
+                    ForEach(workout.exercises, id: \.id) { exercise in
+                        if let imageData = exercise.imageData,
+                           let uiImage = UIImage(data: imageData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 60)
+                                .cornerRadius(5)
+                        } else {
+                            Image(systemName: "photo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 60)
+                                .cornerRadius(5)
+                                .foregroundColor(.gray)
+                        }
+                    }
+                }
             }
 
-            // Title
-            HStack{
-                Text(workout.exercise.name)
+            // Display names of all exercises
+            HStack {
+                Text(workout.exercises.map { $0.name }.joined(separator: ", "))
                     .font(.title3)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
-                
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+
                 Spacer()
 
                 Button(action: {
@@ -60,14 +68,7 @@ struct WorkoutCardView: View {
                     Image(systemName: workout.isFavorite ? "heart.fill" : "heart")
                         .foregroundColor(.red)
                 }
-                
-                Text(workout.exercise.difficulty.rawValue)
-                    .padding(10)
-                    .foregroundStyle(.white)
-                    .font(.system(size: 12))
-                    .background(difficultyColor(for: workout.exercise.difficulty), in: Capsule())
             }
-                
             // Info
             HStack {
                 WorkoutInfoCell(title: "Sets", value: "\(workout.sets)")
@@ -111,33 +112,69 @@ struct WorkoutDetailView: View {
     @Bindable var workout: Workout
 
     var body: some View {
-        VStack(spacing: 30) {
-            HStack {
-                Text(workout.exercise.name)
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
+        VStack(spacing: 20) {
+            // Display names of all exercises
+            Text("Workout Details")
+                .font(.largeTitle)
+                .fontWeight(.bold)
 
-                Spacer()
+            ScrollView {
+                ForEach(workout.exercises, id: \.id) { exercise in
+                    VStack(alignment: .leading, spacing: 10) {
+                        // Exercise Image
+                        if let imageData = exercise.imageData,
+                           let uiImage = UIImage(data: imageData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 150)
+                                .cornerRadius(10)
+                        } else {
+                            Image(systemName: "photo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 150)
+                                .cornerRadius(10)
+                                .foregroundColor(.gray)
+                        }
 
-                Button(action: {
-                    workout.isFavorite.toggle()
-                }) {
-                    Image(systemName: workout.isFavorite ? "heart.fill" : "heart")
-                        .font(.title)
-                        .foregroundColor(workout.isFavorite ? .red : .gray)
+                        // Exercise Details
+                        Text(exercise.name)
+                            .font(.title2)
+                            .fontWeight(.bold)
+
+                        HStack {
+                            Text("Type:")
+                                .fontWeight(.semibold)
+                            Text(exercise.type)
+                        }
+
+                        HStack {
+                            Text("Muscle Group:")
+                                .fontWeight(.semibold)
+                            Text(exercise.muscleGroup)
+                        }
+
+                        HStack {
+                            Text("Difficulty:")
+                                .fontWeight(.semibold)
+                            Text(exercise.difficulty.rawValue.capitalized)
+                        }
+                    }
+                    .padding()
+                    .background(Color(UIColor.systemGray6))
+                    .cornerRadius(10)
+                    .padding(.vertical, 5)
                 }
+
+                // Workout Stats
+                HStack(spacing: 20) {
+                    DetailStatView(title: "Sets", value: "\(workout.sets)")
+                    DetailStatView(title: "Reps", value: "\(workout.reps)")
+                    DetailStatView(title: "Weight", value: "\(String(format: "%.1f", workout.weight)) lbs")
+                }
+                .padding(.top)
             }
-
-            .padding(.top)
-
-            Spacer()
-
-            HStack(spacing: 20) {
-                DetailStatView(title: "Sets", value: "\(workout.sets)")
-                DetailStatView(title: "Reps", value: "\(workout.reps)")
-                DetailStatView(title: "Weight", value: "\(String(format: "%.1f", workout.weight)) lbs")
-            }
-            .padding(.horizontal)
 
             Spacer()
         }
@@ -146,6 +183,7 @@ struct WorkoutDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
+
 
 // MARK: - DetailStatView
 struct DetailStatView: View {
@@ -169,21 +207,32 @@ struct DetailStatView: View {
 struct NewWorkoutForm: View {
     @Environment(\.presentationMode) var presentationMode
     @Binding var workouts: [Workout]
-    @State private var currExercise = Exercise()
+    @State private var selectedExercises: [Exercise] = []
     @State private var inputSetCount: Int = 0
     @State private var inputRepCount: Int = 0
     @State private var inputWeight: Double = 0.0
     @State private var showingDifficultyInfoSheet = false
     @State private var inputIsFavorite: Bool = false
-    @State private var pickerItem: PhotosPickerItem?
-    @State private var selectedImage: Image?
+
+    // Assuming you have a list of all available exercises
+    @State private var allAvailableExercises: [Exercise] = Workout.mockWorkoutEntries[0].exercises
 
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Input Exercise")) {
-                    TextField("Exercise Name", text: $currExercise.name)
+                // Section to select exercises
+                Section(header: Text("Select Exercises")) {
+                    ForEach(allAvailableExercises, id: \.id) { exercise in
+                        MultipleSelectionRow(exercise: exercise, isSelected: selectedExercises.contains(where: { $0.id == exercise.id })) {
+                            if selectedExercises.contains(where: { $0.id == exercise.id }) {
+                                selectedExercises.removeAll(where: { $0.id == exercise.id })
+                            } else {
+                                selectedExercises.append(exercise)
+                            }
+                        }
+                    }
                 }
+
                 Section(header: Text("Details")) {
                     // sets
                     Stepper(value: $inputSetCount, in: 0...10) {
@@ -210,66 +259,13 @@ struct NewWorkoutForm: View {
                         }
                     }
                 }
-                // difficulty
-                Section(header: Text("Difficulty")) {
-                    Picker("Difficulty", selection: $currExercise.difficulty) {
-                        ForEach(Difficulty.allCases, id: \.self) { difficulty in
-                            Text(difficulty.rawValue).tag(difficulty)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    Text("What should I pick? >")
-                        .font(.caption)
-                        .foregroundColor(.blue)
-                        .onTapGesture {
-                            showingDifficultyInfoSheet = true
-                        }
-                        .sheet(isPresented: $showingDifficultyInfoSheet) {
-                            DifficultyInfoView()
-                        }
-                }
+
                 // favorite
                 Section(header: Text("Favorite")) {
                     Toggle("Mark as Favorite", isOn: $inputIsFavorite)
                 }
-                // image selection
-                Section(header: Text("Exercise Image")){
-                    PhotosPicker(selection: $pickerItem, matching: .images, photoLibrary: .shared()) {
-                            Text("Select an Image")
-                                .padding()
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                        }
-                        .onChange(of: pickerItem) { newItem in
-                            Task {
-                                if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                    currExercise.imageData = data // Save the image data in the current exercise
-                                    if let uiImage = UIImage(data: data) {
-                                        selectedImage = Image(uiImage: uiImage) // Display the image
-                                    }
-                                }
-                            }
-                        }
-
-
-
-
-                        // Display the selected image if available
-                        if let selectedImage = selectedImage {
-                            selectedImage
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 150)
-                                .cornerRadius(10)
-                        } else {
-                            Text("No image selected")
-                                .foregroundColor(.gray)
-                        }
-
-                }
             }
-            .navigationBarTitle("Add Exercise")
+            .navigationBarTitle("Add Workout")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
@@ -279,7 +275,7 @@ struct NewWorkoutForm: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Add") {
                         let newWorkout = Workout(
-                            exercise: currExercise,
+                            exercises: selectedExercises,
                             sets: inputSetCount,
                             reps: inputRepCount,
                             weight: inputWeight,
@@ -288,11 +284,35 @@ struct NewWorkoutForm: View {
                         workouts.append(newWorkout)
                         presentationMode.wrappedValue.dismiss()
                     }
+                    .disabled(selectedExercises.isEmpty)
                 }
             }
         }
     }
 }
+
+// Helper view for multiple selection
+struct MultipleSelectionRow: View {
+    var exercise: Exercise
+    var isSelected: Bool
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: {
+            self.action()
+        }) {
+            HStack {
+                Text(exercise.name)
+                Spacer()
+                if self.isSelected {
+                    Image(systemName: "checkmark")
+                        .foregroundColor(.blue)
+                }
+            }
+        }
+    }
+}
+
 
 // MARK: - Difficulty Info Sheet
 struct DifficultyInfoView: View {
@@ -380,7 +400,7 @@ struct SearchBar: View {
 
 // MARK: - WorkoutsView
 struct WorkoutsView: View {
-    @State private var workouts: [Workout] = []
+    @State private var workouts: [Workout] = Workout.mockWorkoutEntries
     @State private var showingNewWorkoutForm = false
     @State private var searchText: String = ""
     @Environment(\.modelContext) private var modelContext
@@ -393,9 +413,9 @@ struct WorkoutsView: View {
 
     var filteredWorkouts: [Workout] {
         let searchFiltered = workouts.filter { workout in
-            searchText.isEmpty || workout.exercise.name.localizedCaseInsensitiveContains(searchText)
+            searchText.isEmpty || workout.exercises.contains(where: { $0.name.localizedCaseInsensitiveContains(searchText) })
         }
-        
+
         switch selectedFilter {
         case .all:
             return searchFiltered
@@ -403,7 +423,6 @@ struct WorkoutsView: View {
             return searchFiltered.filter { $0.isFavorite }
         }
     }
-
 
     private let horizontalPadding: CGFloat = 20
 
@@ -455,7 +474,6 @@ struct WorkoutsView: View {
                                 }
                                 .buttonStyle(PlainButtonStyle())
                                 .contextMenu {
-
                                     Button {
                                         workout.isFavorite.toggle()
                                     } label: {
@@ -502,6 +520,7 @@ struct WorkoutsView: View {
         }
     }
 }
+
 
 // MARK: - Preview
 #Preview {
