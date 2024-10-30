@@ -454,6 +454,7 @@ struct SearchBar: View {
 
 // MARK: - WorkoutsView
 struct WorkoutsView: View {
+    var workout: Workout?
     @State private var workouts: [Workout] = Workout.mockWorkoutEntries
     @State private var showingNewWorkoutForm = false
     @State private var searchText: String = ""
