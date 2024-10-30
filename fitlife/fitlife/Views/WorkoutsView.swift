@@ -207,34 +207,26 @@ struct DetailStatView: View {
 struct NewWorkoutForm: View {
     @Environment(\.presentationMode) var presentationMode
     @Binding var workouts: [Workout]
+    @State private var currExercise = Exercise()
     @State private var selectedExercises: [Exercise] = []
     @State private var inputSetCount: Int = 0
     @State private var inputRepCount: Int = 0
     @State private var inputWeight: Double = 0.0
     @State private var showingDifficultyInfoSheet = false
     @State private var inputIsFavorite: Bool = false
-
-    // Assuming you have a list of all available exercises
-    @State private var allAvailableExercises: [Exercise] = Workout.mockWorkoutEntries[0].exercises
+    @State private var pickerItem: PhotosPickerItem?
+    @State private var selectedImage: Image?
 
     var body: some View {
         NavigationView {
             Form {
-                // Section to select exercises
-                Section(header: Text("Select Exercises")) {
-                    ForEach(allAvailableExercises, id: \.id) { exercise in
-                        MultipleSelectionRow(exercise: exercise, isSelected: selectedExercises.contains(where: { $0.id == exercise.id })) {
-                            if selectedExercises.contains(where: { $0.id == exercise.id }) {
-                                selectedExercises.removeAll(where: { $0.id == exercise.id })
-                            } else {
-                                selectedExercises.append(exercise)
-                            }
-                        }
-                    }
+                // Section to input an exercise name
+                Section(header: Text("Input Exercise")) {
+                    TextField("Exercise Name", text: $currExercise.name)
                 }
 
+                // Section to set workout details
                 Section(header: Text("Details")) {
-                    // sets
                     Stepper(value: $inputSetCount, in: 0...10) {
                         HStack {
                             Text("Sets")
@@ -242,7 +234,6 @@ struct NewWorkoutForm: View {
                             Text("\(inputSetCount)")
                         }
                     }
-                    // reps
                     Stepper(value: $inputRepCount, in: 0...50) {
                         HStack {
                             Text("Reps")
@@ -250,7 +241,6 @@ struct NewWorkoutForm: View {
                             Text("\(inputRepCount)")
                         }
                     }
-                    // weight
                     Stepper(value: $inputWeight, in: 0...500, step: 2.5) {
                         HStack {
                             Text("Weight (lbs)")
@@ -260,9 +250,55 @@ struct NewWorkoutForm: View {
                     }
                 }
 
-                // favorite
+                // Section to select difficulty level with Info button in header
+                Section(header: DifficultySectionHeader(showingInfoSheet: $showingDifficultyInfoSheet)) {
+                    Picker("Difficulty", selection: $currExercise.difficulty) {
+                        ForEach(Difficulty.allCases, id: \.self) { difficulty in
+                            Text(difficulty.rawValue.capitalized).tag(difficulty)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+                .sheet(isPresented: $showingDifficultyInfoSheet) {
+                    DifficultyInfoView()
+                }
+
+                // Section to mark as favorite
                 Section(header: Text("Favorite")) {
                     Toggle("Mark as Favorite", isOn: $inputIsFavorite)
+                }
+
+                // Section for image selection
+                Section(header: Text("Exercise Image")) {
+                    PhotosPicker(selection: $pickerItem, matching: .images, photoLibrary: .shared()) {
+                        Text("Select an Image")
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .onChange(of: pickerItem) { newItem in
+                        Task {
+                            if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                                currExercise.imageData = data // Save the image data in the current exercise
+                                if let uiImage = UIImage(data: data) {
+                                    selectedImage = Image(uiImage: uiImage) // Display the image
+                                }
+                            }
+                        }
+                    }
+
+                    // Display the selected image if available
+                    if let selectedImage = selectedImage {
+                        selectedImage
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 150)
+                            .cornerRadius(10)
+                    } else {
+                        Text("No image selected")
+                            .foregroundColor(.gray)
+                    }
                 }
             }
             .navigationBarTitle("Add Workout")
@@ -291,6 +327,25 @@ struct NewWorkoutForm: View {
     }
 }
 
+// Custom section header for difficulty with info button
+struct DifficultySectionHeader: View {
+    @Binding var showingInfoSheet: Bool
+
+    var body: some View {
+        HStack {
+            Text("Difficulty")
+            Spacer()
+            Button(action: {
+                showingInfoSheet = true
+            }) {
+                Image(systemName: "info.circle")
+                    .foregroundColor(.blue)
+            }
+            .buttonStyle(PlainButtonStyle()) // Removes the default button style
+        }
+    }
+}
+
 // Helper view for multiple selection
 struct MultipleSelectionRow: View {
     var exercise: Exercise
@@ -304,7 +359,7 @@ struct MultipleSelectionRow: View {
             HStack {
                 Text(exercise.name)
                 Spacer()
-                if self.isSelected {
+                if isSelected {
                     Image(systemName: "checkmark")
                         .foregroundColor(.blue)
                 }
@@ -312,7 +367,6 @@ struct MultipleSelectionRow: View {
         }
     }
 }
-
 
 // MARK: - Difficulty Info Sheet
 struct DifficultyInfoView: View {
