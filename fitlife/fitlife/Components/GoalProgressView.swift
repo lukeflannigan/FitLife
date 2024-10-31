@@ -8,6 +8,13 @@ struct GoalProgressView: View {
     let goal: String
     let current: String
     let target: String
+    
+    private var progressPercentage: Int {
+        if progress.isFinite {
+            return Int((progress * 100).rounded())
+        }
+        return 0
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -15,7 +22,7 @@ struct GoalProgressView: View {
                 .font(.custom("Poppins-SemiBold", size: 16))
                 .foregroundColor(.primary)
 
-            ProgressBar(progress: progress)
+            ProgressBar(progress: progress.isFinite ? progress : 0)
                 .frame(height: 8)
 
             HStack {
@@ -23,7 +30,7 @@ struct GoalProgressView: View {
                     .font(.custom("Poppins-Medium", size: 14))
                     .foregroundColor(.secondary)
                 Spacer()
-                Text("\(Int(progress * 100))%")
+                Text("\(progressPercentage)%")
                     .font(.custom("Poppins-Bold", size: 14))
                     .foregroundColor(.primary)
             }
