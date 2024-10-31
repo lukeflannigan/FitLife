@@ -12,7 +12,9 @@ struct ExerciseCardView: View {
                 AsyncImage(url: URL(string: exercise.imageName)) { phase in
                     switch phase {
                     case .empty:
-                        ProgressView()
+                        Image(systemName: "dumbbell.fill")
+                            .font(.system(size: 40))
+                            .foregroundColor(.gray)
                             .frame(height: 200)
                             .frame(maxWidth: .infinity)
                             .background(Color.gray.opacity(0.1))
