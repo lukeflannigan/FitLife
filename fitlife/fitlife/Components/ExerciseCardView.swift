@@ -12,9 +12,10 @@ struct ExerciseCardView: View {
                 AsyncImage(url: URL(string: exercise.imageName)) { phase in
                     switch phase {
                     case .empty:
-                        Rectangle()
-                            .fill(Color.gray.opacity(0.2))
+                        ProgressView()
                             .frame(height: 200)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.gray.opacity(0.1))
                     case .success(let image):
                         image
                             .resizable()
@@ -22,13 +23,12 @@ struct ExerciseCardView: View {
                             .frame(height: 200)
                             .clipped()
                     case .failure(_):
-                        Rectangle()
-                            .fill(Color.gray.opacity(0.2))
+                        Image(systemName: "photo")
+                            .font(.system(size: 40))
+                            .foregroundColor(.gray)
                             .frame(height: 200)
-                            .overlay(
-                                Image(systemName: "photo")
-                                    .foregroundColor(.gray)
-                            )
+                            .frame(maxWidth: .infinity)
+                            .background(Color.gray.opacity(0.1))
                     @unknown default:
                         EmptyView()
                     }
@@ -37,9 +37,13 @@ struct ExerciseCardView: View {
             }
 
             VStack(alignment: .leading, spacing: 8) {
-                Text(exercise.name)
-                    .font(.custom("Poppins-SemiBold", size: 18))
-                    .foregroundColor(.primary)
+                HStack {
+                    Text(exercise.name)
+                        .font(.custom("Poppins-SemiBold", size: 18))
+                        .foregroundColor(.primary)
+                    Spacer()
+                    DifficultyBadge(difficulty: exercise.difficulty)
+                }
 
                 if !exercise.primaryMuscles.isEmpty {
                     Text(exercise.primaryMuscles.joined(separator: ", "))
@@ -47,17 +51,49 @@ struct ExerciseCardView: View {
                         .foregroundColor(.secondary)
                 }
 
-                if let equipment = exercise.equipment {
-                    Text("Equipment: \(equipment)")
+                HStack(spacing: 16) {
+                    if let equipment = exercise.equipment {
+                        Label(equipment.capitalized, systemImage: "dumbbell.fill")
+                            .font(.custom("Poppins-Regular", size: 14))
+                            .foregroundColor(.secondary)
+                    }
+
+                    Text(exercise.type.capitalized)
                         .font(.custom("Poppins-Regular", size: 14))
                         .foregroundColor(.secondary)
                 }
             }
-            .padding(.vertical, 8)
+            .padding(.vertical, 12)
+            .padding(.horizontal, 8)
         }
         .background(Color(.systemBackground))
         .cornerRadius(15)
-        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 5)
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+    }
+}
+
+struct DifficultyBadge: View {
+    let difficulty: Difficulty
+
+    var color: Color {
+        switch difficulty {
+        case .easy:
+            return .green
+        case .medium:
+            return .orange
+        case .hard:
+            return .red
+        }
+    }
+
+    var body: some View {
+        Text(difficulty.rawValue)
+            .font(.custom("Poppins-Medium", size: 12))
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(color.opacity(0.2))
+            .foregroundColor(color)
+            .cornerRadius(8)
     }
 }
 
