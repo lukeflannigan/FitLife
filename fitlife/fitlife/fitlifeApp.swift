@@ -7,10 +7,12 @@
 
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 @main
 struct YourApp: App {
     let modelContainer: ModelContainer
+    @Environment(\.scenePhase) var scenePhase
 
     init() {
         do {
@@ -25,6 +27,24 @@ struct YourApp: App {
             NavigationView {
                 SplashView()
                     .modelContainer(modelContainer)
+            }
+        }
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active {
+                requestNotificationPermissions()
+            }
+        }
+    }
+    
+    // Request notification permissions
+    func requestNotificationPermissions() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if granted {
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+            } else {
+                print("User denied notification permissions: \(String(describing: error))")
             }
         }
     }
