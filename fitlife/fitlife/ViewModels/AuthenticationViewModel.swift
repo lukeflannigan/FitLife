@@ -12,6 +12,7 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
     
     @Published var userSession: String? = nil
     @Published var errorMessage: String? = nil
+    @Published var isSignedIn = false  // Track sign-in status
     
     override init() {
         super.init()
@@ -35,9 +36,9 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
             // Store session in UserDefaults for future use
             UserDefaults.standard.set(userIdentifier, forKey: "userSession")
             
-            // Navigate to WelcomeView on first sign-in
+            // Set isSignedIn to true to trigger navigation
             DispatchQueue.main.async {
-                // Navigate to WelcomeView
+                self.isSignedIn = true
             }
         }
     }
@@ -46,12 +47,9 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
         // Mark user as having skipped sign-in
         UserDefaults.standard.set(true, forKey: "skippedSignIn")
         
-        // Check if first time or returning user
-        if UserDefaults.standard.bool(forKey: "firstTimeUser") == false {
-            UserDefaults.standard.set(true, forKey: "firstTimeUser")
-            // Navigate to WelcomeView
-        } else {
-            // Navigate to MainView
+        // Directly set isSignedIn to true to trigger navigation to MainView
+        DispatchQueue.main.async {
+            self.isSignedIn = true
         }
     }
     
