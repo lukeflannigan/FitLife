@@ -9,24 +9,51 @@ struct ExerciseCardView: View {
     var body: some View {
         VStack(alignment: .leading) {
             if !exercise.imageName.isEmpty {
-                Image(exercise.imageName)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: 200)
-                    .clipped()
-                    .cornerRadius(15)
+                AsyncImage(url: URL(string: exercise.imageName)) { phase in
+                    switch phase {
+                    case .empty:
+                        Rectangle()
+                            .fill(Color.gray.opacity(0.2))
+                            .frame(height: 200)
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+                            .frame(height: 200)
+                            .clipped()
+                    case .failure(_):
+                        Rectangle()
+                            .fill(Color.gray.opacity(0.2))
+                            .frame(height: 200)
+                            .overlay(
+                                Image(systemName: "photo")
+                                    .foregroundColor(.gray)
+                            )
+                    @unknown default:
+                        EmptyView()
+                    }
+                }
+                .cornerRadius(15)
             }
 
-            Text(exercise.name)
-                .font(.custom("Poppins-SemiBold", size: 18))
-                .foregroundColor(.primary)
-                .padding(.top, 5)
+            VStack(alignment: .leading, spacing: 8) {
+                Text(exercise.name)
+                    .font(.custom("Poppins-SemiBold", size: 18))
+                    .foregroundColor(.primary)
 
-            Text(exercise.exerciseDescription)
-                .font(.custom("Poppins-Regular", size: 14))
-                .foregroundColor(.secondary)
-                .lineLimit(2)
-                .padding(.bottom, 5)
+                if !exercise.primaryMuscles.isEmpty {
+                    Text(exercise.primaryMuscles.joined(separator: ", "))
+                        .font(.custom("Poppins-Regular", size: 14))
+                        .foregroundColor(.secondary)
+                }
+
+                if let equipment = exercise.equipment {
+                    Text("Equipment: \(equipment)")
+                        .font(.custom("Poppins-Regular", size: 14))
+                        .foregroundColor(.secondary)
+                }
+            }
+            .padding(.vertical, 8)
         }
         .background(Color(.systemBackground))
         .cornerRadius(15)
