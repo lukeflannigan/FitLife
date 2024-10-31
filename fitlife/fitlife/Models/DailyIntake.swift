@@ -16,13 +16,15 @@ class DailyIntake: Identifiable {
     var protein: Double
     var carbs: Double
     var fats: Double
+    var name: String // Added name so that User can enter name of what food they ate.
     
-    init(id: UUID = UUID(), date: Date = Date(), calories: Double, protein: Double, carbs: Double, fats: Double) {
+    init(id: UUID = UUID(), date: Date = Date(), calories: Double, protein: Double, carbs: Double, fats: Double, name: String = "") {
         self.id = id
         self.date = date
         self.calories = calories
         self.protein = protein
         self.carbs = carbs
         self.fats = fats
+        self.name = name   //Modifeid this to match the change above. 
     }
 }
