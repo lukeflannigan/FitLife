@@ -11,7 +11,7 @@ struct OpeningView: View {
     @State private var isNavigatingToMainView = false  // State for navigation
     
     var body: some View {
-        NavigationView {  // Embed in a NavigationView
+        NavigationView {
             ZStack {
                 GradientBackground()  // Custom background
                 
@@ -40,10 +40,10 @@ struct OpeningView: View {
                     .cornerRadius(16)
                     .padding(.horizontal, 40)
                     
-                    // Continue without sign-in Button (more subtle)
+                    // Continue without sign-in Button
                     Button(action: {
                         viewModel.skipSignIn()
-                        isNavigatingToMainView = true  // Trigger navigation
+                        isNavigatingToMainView = true
                     }) {
                         Text("Continue without sign in")
                             .font(.system(size: 14, weight: .regular))
@@ -56,12 +56,18 @@ struct OpeningView: View {
                     .padding(.horizontal, 60)
                     .padding(.bottom, 160)
                     
+                    // NavigationLink to MainView
                     NavigationLink(destination: MainView(), isActive: $isNavigatingToMainView) {
                         EmptyView()
                     }
                 }
             }
             .navigationBarHidden(true)
+            .onChange(of: viewModel.isSignedIn) { isSignedIn in
+                if isSignedIn {
+                    isNavigatingToMainView = true
+                }
+            }
         }
     }
     
