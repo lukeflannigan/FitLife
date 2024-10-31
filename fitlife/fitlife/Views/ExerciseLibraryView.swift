@@ -7,6 +7,8 @@ struct ExerciseLibraryView: View {
     @State private var exercises: [Exercise] = []
     @State private var searchText: String = ""
     @State private var selectedExercise: Exercise?
+    @State private var isLoading = true
+    @State private var errorMessage: String?
 
     var filteredExercises: [Exercise] {
         if searchText.isEmpty {
@@ -32,13 +34,28 @@ struct ExerciseLibraryView: View {
                 .padding(.horizontal, 20)
                 .padding(.vertical, 8)
 
-            if !filteredExercises.isEmpty {
+            if isLoading {
+                Spacer()
+                ProgressView()
+                Spacer()
+            } else if let error = errorMessage {
+                Spacer()
+                Text(error)
+                    .foregroundColor(.red)
+                    .padding()
+                Spacer()
+            } else if filteredExercises.isEmpty {
+                Spacer()
+                Text("No exercises found.")
+                    .foregroundColor(.gray)
+                    .padding()
+                Spacer()
+            } else {
                 ScrollView {
                     LazyVStack(spacing: 20) {
                         ForEach(filteredExercises) { exercise in
                             Button(action: {
                                 selectedExercise = exercise
-                                print("Selected exercise: \(exercise)")
                             }) {
                                 ExerciseCardView(exercise: exercise)
                             }
@@ -48,12 +65,6 @@ struct ExerciseLibraryView: View {
                     .padding(.top)
                 }
                 .padding(.horizontal, 20)
-            } else {
-                Spacer()
-                Text("No exercises found.")
-                    .foregroundColor(.gray)
-                    .padding()
-                Spacer()
             }
         }
         .navigationTitle("Exercise Library")
@@ -68,18 +79,17 @@ struct ExerciseLibraryView: View {
 
     // MARK: - Load Exercises
     private func loadExercises() {
-        if let url = Bundle.main.url(forResource: "exercises", withExtension: "json") {
+        isLoading = true
+        errorMessage = nil
+
+        Task {
             do {
-                let data = try Data(contentsOf: url)
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let decodedExerciseData = try decoder.decode([ExerciseData].self, from: data)
-                exercises = decodedExerciseData.map { $0.toExercise() }
+                exercises = try await ExerciseAPIClient.shared.fetchExercises()
+                isLoading = false
             } catch {
-                print("Error loading exercises: \(error)")
+                errorMessage = "Failed to load exercises. Please try again later."
+                isLoading = false
             }
-        } else {
-            print("Could not find exercises.json")
         }
     }
 }
