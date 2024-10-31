@@ -1,5 +1,5 @@
 //  ExerciseData.swift
-// Created by Luke Flannigan on 10/17/24.
+// Created by Luke Flannigan on 10/17/24..
 
 import Foundation
 

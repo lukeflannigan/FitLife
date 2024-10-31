@@ -2,7 +2,7 @@
 //  Exercise.swift
 //  fitlife
 //
-//  Created by Thomas Mendoza on 9/30/24.
+//  Created by Thomas Mendoza on 9/30/24..
 //
 
 import Foundation
