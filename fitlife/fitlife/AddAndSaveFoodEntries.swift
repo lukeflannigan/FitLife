@@ -18,53 +18,57 @@ struct AddFoodEntryView: View{
     
     
     var body: some View{
-        var body: some View {
-            Form {
-                Section(header: Text("Log Your Food Intake").font(.title3)
-                    .fontWeight(.bold)
-                    .padding(.bottom, 10)) {
-                        TextField("What did you eat?", text: $name)
-                        TextField("Calories", text: $calories)
-                            .keyboardType(.decimalPad)
-                        TextField("Protein (g)", text: $protein)
-                            .keyboardType(.decimalPad)
-                        TextField("Carbohydrates (g)", text: $carbs)
-                            .keyboardType(.decimalPad)
-                        TextField("Fats (g)", text: $fats)
-                            .keyboardType(.decimalPad)
-                    }
-                
-                Section {
-                    Button(action: {
-                        addFoodEntry()
-                    }) {
-                        HStack {
-                            Image(systemName: "plus")
-                            Text("Add Entry")
-                                .fontWeight(.semibold)
-                                .padding(.leading, 5)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(20)
-                    }
-                    .buttonStyle(.plain)
-                    .listRowBackground(Color.clear) // Remove extra styling
+        Form {
+            Section(header: Text("Log Your Food Intake").font(.title3)
+                .fontWeight(.bold)
+                .padding(.bottom, 10)) {
+                    TextField("What did you eat?", text: $name)
+                    TextField("Calories", text: $calories)
+                        .keyboardType(.decimalPad)
+                    TextField("Protein (g)", text: $protein)
+                        .keyboardType(.decimalPad)
+                    TextField("Carbohydrates (g)", text: $carbs)
+                        .keyboardType(.decimalPad)
+                    TextField("Fats (g)", text: $fats)
+                        .keyboardType(.decimalPad)
                 }
+            
+            Section {
+                Button(action: {
+                    addFoodEntry()
+                }) {
+                    HStack {
+                        Image(systemName: "plus")
+                        Text("Add Entry")
+                            .fontWeight(.semibold)
+                            .padding(.leading, 5)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(20)
+                }
+                .buttonStyle(.plain)
+                .listRowBackground(Color.clear) // Remove extra styling
             }
-            .navigationTitle("Add Food Entry")
         }
+        .navigationTitle("Add Food Entry")
     }
     
     
-    
-    
-    
-    
-    
+    func addFoodEntry() {
+        guard var caloriesDouble = Double(calories),
+              var proteinDouble = Double(protein),
+              var carbsDouble = Double(carbs),
+              var fatsDouble = Double(fats) else {
+            print("Invalid input")
+            return
+        }
+    }
 }
+
+
         
     
 
