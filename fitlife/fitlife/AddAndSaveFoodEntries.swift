@@ -139,8 +139,78 @@ struct AddFoodEntryView: View{
      */
 }
 
+
+//------------------------
+
+
+struct LogHomeView: View {
+    var body: some View {
+            NavigationView {
+                ZStack {
+                    // Background gradient
+                    LinearGradient(gradient: Gradient(colors: [Color.blue, Color.green]),
+                                   startPoint: .topLeading,
+                                   endPoint: .bottomTrailing)
+                        .ignoresSafeArea()
+                    
+                    // Main content
+                    VStack(spacing: 20) {
+                        Text("Food Tracker")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(.bottom, 40)
+
+                        //Added/Log Food Entries
+                        NavigationLink(destination: AddFoodEntryView()) {
+                            Text("Log Food")
+                                .font(.title2)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.blue.opacity(0.8))
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                                .padding(.horizontal)
+                        }
+                        
+                        NavigationLink(destination:   SearchView()) {
+                            Text("Search Food")
+                                .font(.title2)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.green.opacity(0.8))
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                                .padding(.horizontal)
+                        }
+                        
+                        
+                        //Saved/Logged Food Entry Not Implemented Yet
+                        Button(action: {
+                            print("Logged Food button tapped")
+                        }) {
+                            Text("Logged Food")
+                                .font(.title2)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.gray.opacity(0.8))
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                                .padding(.horizontal)
+                        }
+                    }
+                    .padding()
+                }
+                
+            }
+        }
+}
+
+
+
 struct LogFoodView: PreviewProvider {
     static var previews: some View {
+        LogHomeView()
         AddFoodEntryView()
     }
 }
