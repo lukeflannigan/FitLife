@@ -17,45 +17,81 @@ struct AddFoodEntryView: View{
     
     
     
-    var body: some View{
-        Form {
-            Section(header: Text("Log Your Food Intake").font(.title3)
-                .fontWeight(.bold)
-                .padding(.bottom, 10)) {
-                    TextField("What did you eat?", text: $name)
-                    TextField("Calories", text: $calories)
-                        .keyboardType(.decimalPad)
-                    TextField("Protein (g)", text: $protein)
-                        .keyboardType(.decimalPad)
-                    TextField("Carbohydrates (g)", text: $carbs)
-                        .keyboardType(.decimalPad)
-                    TextField("Fats (g)", text: $fats)
-                        .keyboardType(.decimalPad)
-                }
+    var body: some View {
+        ZStack {
+            // Gradient background for the entire screen
+            LinearGradient(gradient: Gradient(colors: [Color.blue, Color.green]),
+                           startPoint: .topLeading,
+                           endPoint: .bottomTrailing)
+                .ignoresSafeArea() // Covers the entire screen with gradient
             
-            Section {
-                Button(action: {
-                    addFoodEntry()
-                }) {
-                    HStack {
-                        Image(systemName: "plus")
-                        Text("Add Entry")
-                            .fontWeight(.semibold)
-                            .padding(.leading, 5)
-                    }
-                    .frame(maxWidth: .infinity)
+            VStack {
+                Text("Log Your Food Intake")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.black)
                     .padding()
-                    .background(Color.green)
-                    .foregroundColor(.white)
-                    .cornerRadius(20)
+                
+                Form {
+                    Section(header: Text("Food Details")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .padding(.bottom, 10)
+                        .foregroundColor(.white))
+                                            {
+                            
+                            TextField("What did you eat?", text: $name) .padding()
+                                .background(Color.white.opacity(0.8)) // Light background for contrast
+                                .cornerRadius(10)
+                            TextField("Calories", text: $calories) .keyboardType(.decimalPad)
+                                .padding()
+                                .background(Color.white.opacity(0.8))
+                                .cornerRadius(10)
+                                .keyboardType(.decimalPad)
+                            TextField("Protein (g)", text: $protein)
+                                .keyboardType(.decimalPad).keyboardType(.decimalPad)
+                                .padding()
+                                .background(Color.white.opacity(0.8))
+                                .cornerRadius(10)
+                            TextField("Carbohydrates (g)", text: $carbs)
+                                .keyboardType(.decimalPad)
+                                .padding()
+                                .background(Color.white.opacity(0.8))
+                                .cornerRadius(10)
+                            TextField("Fats (g)", text: $fats)
+                                .keyboardType(.decimalPad)
+                                .padding()
+                                .background(Color.white.opacity(0.8))
+                                .cornerRadius(10)
+                    }
+                    .listRowBackground(Color.clear) // Make each row background transparent
+                    
+                    Section {
+                        Button(action: {
+                            addFoodEntry()
+                        }) {
+                            HStack {
+                                Image(systemName: "plus")
+                                Text("Add Entry")
+                                    .fontWeight(.semibold)
+                                    .padding(.leading, 5)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(20)
+                        }
+                        .buttonStyle(.plain)
+                        .listRowBackground(Color.clear) // Remove extra styling
+                    }
                 }
-                .buttonStyle(.plain)
-                .listRowBackground(Color.clear) // Remove extra styling
+                .scrollContentBackground(.hidden) // Removes form background
             }
+            .padding()
         }
-        .navigationTitle("Add Food Entry")
     }
-    
+
     
     func addFoodEntry() {
         guard var caloriesDouble = Double(calories),
