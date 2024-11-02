@@ -66,9 +66,46 @@ struct AddFoodEntryView: View{
             return
         }
     }
+    
+    /* This is for when DataPersistence is added in.
+     private func addFoodEntry() {
+             // Convert input strings to Double
+             guard let caloriesDouble = Double(calories),
+                   let proteinDouble = Double(protein),
+                   let carbsDouble = Double(carbs),
+                   let fatsDouble = Double(fats),
+                   !name.isEmpty else {
+                 print("Invalid input") // Optional: add user feedback for invalid inputs
+                 return
+             }
+     
+     // Create a new DailyIntake object
+             let newEntry = DailyIntake(
+                 calories: caloriesDouble,
+                 protein: proteinDouble,
+                 carbs: carbsDouble,
+                 fats: fatsDouble,
+                 name: name
+             )
+     
+     // Add to model context
+             modelContext.insert(newEntry)
+     
+     
+     // Save the context
+             do {
+                 try modelContext.save()
+                 print("Food entry saved successfully!")
+             } catch {
+                 print("Failed to save food entry: \(error.localizedDescription)")
+             }
+     
+     */
 }
 
-
-        
-    
+struct LogFoodView: PreviewProvider {
+    static var previews: some View {
+        AddFoodEntryView()
+    }
+}
 

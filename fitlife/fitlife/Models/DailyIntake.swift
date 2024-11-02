@@ -25,6 +25,6 @@ class DailyIntake: Identifiable {
         self.protein = protein
         self.carbs = carbs
         self.fats = fats
-        self.name = name   //Modifeid this to match the change above. 
+        self.name = name   //Modified this to match the change above. 
     }
 }
