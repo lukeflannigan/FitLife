@@ -47,7 +47,15 @@ class UserGoals {
          fatsGoal: Double = 0,
          carbsGoal: Double = 0,
          caloriesGoal: Double = 0,
-         isMetric: Bool = true) {
+         isMetric: Bool = true,
+         userProfile: UserProfile = UserProfile(name: "",
+                                                age: 0,
+                                                heightInCm: 160,
+                                                gender: "male",
+                                                isMetric: true),
+         bodyMetrics: BodyMetrics = BodyMetrics(),
+         currentDailyIntake: [DailyIntake] = [],
+         weeklySummaries: [WeeklySummary] = []) {
         
         self.localeIdentifier = localeIdentifier
         self.weeklyGoal = weeklyGoal
@@ -60,39 +68,11 @@ class UserGoals {
         self.carbsGoal = carbsGoal
         self.caloriesGoal = caloriesGoal
         self.isMetric = isMetric // Defaults to metric unless specified
-    }
-
-    // Convert height to imperial if needed
-    func heightInFeetAndInches() -> (feet: Int, inches: Int) {
-        let totalInches = heightInCm / 2.54
-        let feet = Int(totalInches / 12)
-        let inches = Int(totalInches.truncatingRemainder(dividingBy: 12))
-        return (feet, inches)
-    }
-
-    // Set height based on feet and inches if using imperial units
-    func setHeightFromImperial(feet: Int, inches: Int) {
-        heightInCm = Double(feet * 12 + inches) * 2.54
-    }
-
-    // Convert current weight to pounds if needed
-    func currentWeightInPounds() -> Double {
-        return currentWeightInKg * 2.20462
-    }
-
-    // Set current weight from pounds if using imperial units
-    func setCurrentWeightFromPounds(pounds: Double) {
-        currentWeightInKg = pounds * 0.453592
-    }
-
-    // Convert goal weight to pounds if needed
-    func goalWeightInPounds() -> Double {
-        return goalWeightInKg * 2.20462
-    }
-
-    // Set goal weight from pounds if using imperial units
-    func setGoalWeightFromPounds(pounds: Double) {
-        goalWeightInKg = pounds * 0.453592
+        
+        self.userProfile = userProfile
+        self.bodyMetrics = bodyMetrics
+        self.currentDailyIntake = currentDailyIntake
+        self.weeklySummaries = weeklySummaries
     }
     
     func calculateTDEE(isMetric: Bool = false) -> Double {

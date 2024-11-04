@@ -3,6 +3,7 @@ import SwiftData
 import PhotosUI
 
 struct EditProfileView: View {
+    @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) private var dismiss
     @Bindable var userGoals: UserGoals
     @State private var editedName: String = ""
@@ -91,7 +92,7 @@ struct EditProfileView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
-                        userGoals.name = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
+                        userGoals.userProfile.name = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
                         dismiss()
                     }
                     .bold()
@@ -100,7 +101,7 @@ struct EditProfileView: View {
             }
         }
         .onAppear {
-            editedName = userGoals.name
+            editedName = userGoals.userProfile.name
         }
         .onChange(of: selectedItem) { newItem in
             Task {

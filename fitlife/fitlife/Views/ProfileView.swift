@@ -5,7 +5,9 @@ import SwiftUI
 import SwiftData
 
 struct ProfileView: View {
+    @Environment(\.modelContext) var modelContext
     @Query private var userGoals: [UserGoals]
+    var userGoal: UserGoals? { userGoals.first }
     
     // Will need to connect this to real data later
     // Just using this to test view works
@@ -32,7 +34,7 @@ struct ProfileView: View {
     // Header Section
     private var headerSection: some View {
         VStack(spacing: 15) {
-            if let profilePicture = userGoals.first?.profilePicture,
+            if let profilePicture = userGoal?.profilePicture,
                let uiImage = UIImage(data: profilePicture) {
                 Image(uiImage: uiImage)
                     .resizable()
@@ -70,7 +72,7 @@ struct ProfileView: View {
             }
             
             // Username
-            Text(userGoals.first?.name ?? "")
+            Text(userGoal?.userProfile.name ?? "")
                 .font(.custom("Poppins-Bold", size: 28))
                 .foregroundColor(.primary)
             

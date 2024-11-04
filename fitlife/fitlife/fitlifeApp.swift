@@ -16,11 +16,10 @@ struct YourApp: App {
     @Environment(\.scenePhase) var scenePhase
 
     init() {
-            do {
-                modelContainer = try ModelContainer(for: UserGoals.self, UserProfile.self, BodyMetrics.self)
-            } catch {
-                fatalError("Could not initialize ModelContainer")
-            }
+        do {
+            modelContainer = try ModelContainer(for: UserGoals.self, BodyMetrics.self, UserProfile.self)
+        } catch {
+            fatalError("Could not initialize ModelContainer")
         }
     }
     
@@ -51,3 +50,4 @@ struct YourApp: App {
         }
     }
 }
+
