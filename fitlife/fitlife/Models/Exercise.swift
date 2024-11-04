@@ -30,6 +30,9 @@ class Exercise: Identifiable, ObservableObject {
     var equipment: String?
     var force: String?
     var mechanic: String?
+    var sets: Int
+    var reps: Int
+    var weight: Double
 
     init(
         id: String = UUID().uuidString,
@@ -44,7 +47,10 @@ class Exercise: Identifiable, ObservableObject {
         secondaryMuscles: [String] = [],
         equipment: String? = nil,
         force: String? = nil,
-        mechanic: String? = nil
+        mechanic: String? = nil,
+        sets: Int = 0,
+        reps: Int = 0,
+        weight: Double = 0
     ) {
         self.id = id
         self.name = name
@@ -59,6 +65,9 @@ class Exercise: Identifiable, ObservableObject {
         self.equipment = equipment
         self.force = force
         self.mechanic = mechanic
+        self.sets = sets
+        self.reps = reps
+        self.weight = weight
     }
 }
 
