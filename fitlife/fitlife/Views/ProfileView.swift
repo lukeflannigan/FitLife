@@ -10,6 +10,8 @@ struct ProfileView: View {
     @State private var userEmail: String = "email@email.com"
     @State private var userPhone: String = "+1 (123) 456-7890"
     
+    @State private var showEditProfile: Bool = false
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -53,10 +55,14 @@ struct ProfileView: View {
             
             // Edit Profile Button
             Button(action: {
+                showEditProfile.toggle()
             }) {
                 Text("Edit Profile")
                     .font(.custom("Poppins-Medium", size: 16))
                     .foregroundColor(Color("GradientStart"))
+            }
+            .sheet(isPresented: $showEditProfile) {
+                EditProfileView(userName: $userName)
             }
         }
     }
