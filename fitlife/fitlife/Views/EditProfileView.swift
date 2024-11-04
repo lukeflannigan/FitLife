@@ -9,6 +9,8 @@ struct EditProfileView: View {
     @State private var selectedItem: PhotosPickerItem?
     @State private var displayedImage: Image?
     
+    private let maxNameLength = 30
+    
     var body: some View {
         NavigationView {
             ScrollView {
@@ -63,6 +65,16 @@ struct EditProfileView: View {
                                 RoundedRectangle(cornerRadius: 12)
                                     .fill(Color(.systemGray6))
                             )
+                            .onChange(of: editedName) { newValue in
+                                if newValue.count > maxNameLength {
+                                    editedName = String(newValue.prefix(maxNameLength))
+                                }
+                            }
+                        
+                        Text("\(editedName.count)/\(maxNameLength)")
+                            .font(.caption)
+                            .foregroundColor(editedName.count >= maxNameLength ? .red : .gray)
+                            .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                     .padding(.horizontal)
                 }
@@ -79,7 +91,7 @@ struct EditProfileView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
-                        userGoals.name = editedName
+                        userGoals.name = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
                         dismiss()
                     }
                     .bold()
