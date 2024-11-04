@@ -16,7 +16,7 @@ struct SplashView: View {
         ZStack {
             GradientBackground()
             
-            if isActive, let destination = destination {
+            if isActive, let destination = destination { destination
             } else {
                 VStack {
                     Text("FitLife")
