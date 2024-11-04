@@ -2,11 +2,13 @@
 // Created by Luke Flannigan on 10/1/24.
 
 import SwiftUI
+import SwiftData
 
 struct ProfileView: View {
+    @Query private var userGoals: [UserGoals]
+    
     // Will need to connect this to real data later
     // Just using this to test view works
-    @State private var userName: String = "Dr. Lehr"
     @State private var userEmail: String = "email@email.com"
     @State private var userPhone: String = "+1 (123) 456-7890"
     
@@ -68,7 +70,7 @@ struct ProfileView: View {
             }
             
             // Username
-            Text(userName)
+            Text(userGoals.first?.name ?? "")
                 .font(.custom("Poppins-Bold", size: 28))
                 .foregroundColor(.primary)
             
@@ -81,7 +83,9 @@ struct ProfileView: View {
                     .foregroundColor(Color("GradientStart"))
             }
             .sheet(isPresented: $showEditProfile) {
-                EditProfileView(userName: $userName)
+                if let userGoal = userGoals.first {
+                    EditProfileView(userGoals: userGoal)
+                }
             }
         }
     }
