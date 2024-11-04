@@ -7,7 +7,7 @@
 
 import SwiftUI
 import SwiftData
-import FirebaseCore
+import UserNotifications
 
 
 @main
