@@ -19,9 +19,9 @@ struct GetWeeklyGoalView: View {
     
     // Filter weekly goals based on whether the user wants to lose, gain, or maintain weight
     var filteredGoals: [WeeklyGoal] {
-        if userGoals.goalWeightInKg < userGoals.currentWeightInKg {
+        if userGoals.bodyMetrics.goalWeightInKg < userGoals.bodyMetrics.currentWeightInKg {
             return [.loseWeightSlow, .loseWeightMedium, .loseWeightFast]
-        } else if userGoals.goalWeightInKg > userGoals.currentWeightInKg {
+        } else if userGoals.bodyMetrics.goalWeightInKg > userGoals.bodyMetrics.currentWeightInKg {
             return [.gainWeightSlow, .gainWeightMedium, .gainWeightFast]
         } else {
             return [.maintainWeight]
@@ -32,7 +32,7 @@ struct GetWeeklyGoalView: View {
         NavigationStack {
             VStack(alignment: .center, spacing: 20) {
                 // Title
-                Text("What is your weekly goal, \(userGoals.name)?")
+                Text("What is your weekly goal, \(userGoals.userProfile.name)?")
                     .font(.title)
                     .bold()
                     .padding(.top)
@@ -121,6 +121,6 @@ struct GetWeeklyGoalView: View {
     }
 }
 
-#Preview {
-    GetWeeklyGoalView(userGoals: .constant(UserGoals.mockUserGoals))
-}
+//#Preview {
+//    GetWeeklyGoalView(userGoals: .constant(UserGoals.mockUserGoals))
+//}

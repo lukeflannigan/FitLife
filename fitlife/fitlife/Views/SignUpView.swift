@@ -7,7 +7,7 @@ import SwiftData
 struct SignUpView: View {
     @Environment(\.modelContext) var modelContext
     @StateObject private var viewModel = AuthenticationViewModel()
-    @State private var userGoals = UserGoals(name: "")
+    @State private var userGoals = UserGoals()
     @State private var showWelcomeView = false  // Flag for showing WelcomeView
     
     var body: some View {

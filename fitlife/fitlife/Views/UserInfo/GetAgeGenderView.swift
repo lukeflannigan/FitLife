@@ -87,8 +87,8 @@ struct GetAgeGenderView: View {
                 .onTapGesture {
                     // Save selected data to userGoals before navigation
                     if let validAge = Int(ageInput) {
-                        userGoals.gender = selectedGender
-                        userGoals.age = validAge
+                        userGoals.userProfile.gender = selectedGender
+                        userGoals.userProfile.age = validAge
                         // modelContext.save() or any other action
                     }
                 }
@@ -99,6 +99,6 @@ struct GetAgeGenderView: View {
     }
 }
 
-#Preview {
-    GetAgeGenderView(userGoals: .constant(UserGoals.mockUserGoals))
-}
+//#Preview {
+//    GetAgeGenderView(userGoals: .constant(UserGoals.mockUserGoals))
+//}

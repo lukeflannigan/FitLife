@@ -32,7 +32,7 @@ struct HomeView: View {
                 Text("Welcome back,")
                     .font(.custom("Poppins-Regular", size: 16))
                     .foregroundColor(.secondary)
-                Text("\(userGoal?.name ?? "Ted Lehr")")
+                Text("\(userGoal?.userProfile.name ?? "Ted Lehr")")
                     .font(.custom("Poppins-Bold", size: 28))
                     .foregroundColor(.primary)
             }

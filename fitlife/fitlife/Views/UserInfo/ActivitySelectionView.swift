@@ -28,7 +28,7 @@ struct ActivitySelectionView: View {
         NavigationStack {
             VStack(alignment: .center, spacing: 20) {
                 // Title
-                Text("Select your activity level, \(userGoals.name)")
+                Text("Select your activity level, \(userGoals.userProfile.name)")
                     .font(.title)
                     .bold()
                     .padding(.top)
@@ -116,6 +116,6 @@ struct ActivitySelectionView: View {
     }
 }
 
-#Preview {
-    ActivitySelectionView(userGoals: .constant(UserGoals.mockUserGoals))
-}
+//#Preview {
+//    ActivitySelectionView(userGoals: .constant(UserGoals.mockUserGoals))
+//}

@@ -19,7 +19,7 @@ struct WelcomeView: View {
                     .font(.title2)
                     .bold()
                 HStack {
-                    TextField("Name", text: $userGoals.name)
+                    TextField("Name", text: $userGoals.userProfile.name)
                         .padding()
                         .background(Color(.systemGray6))  // Optional background for clarity
                         .cornerRadius(12)
@@ -53,6 +53,6 @@ struct WelcomeView: View {
     }
 }
 
-#Preview {
-    WelcomeView(userGoals: .constant(UserGoals.mockUserGoals))
-}
+//#Preview {
+//    WelcomeView(userGoals: .constant(UserGoals.mockUserGoals))
+//}

@@ -22,15 +22,18 @@ class UserProfile {
     var age: Int
     var gender: String
     var isMetric: Bool // Tracks if the user prefers metric or imperial
+    var userGoals: UserGoals?
 
-    init(name: String = "", age: Int = 0, heightInCm: Double = 0, gender: String = "", localeIdentifier: String = Locale.autoupdatingCurrent.identifier, isMetric: Bool = true) {
-            self.name = name
-            self.age = age
-            self.heightInCm = heightInCm
-            self.gender = gender
-            self.localeIdentifier = localeIdentifier
-            self.isMetric = isMetric
-        }
+    init(name: String, age: Int , heightInCm: Double, gender: String, localeIdentifier: String = Locale.autoupdatingCurrent.identifier, isMetric: Bool) {
+        self.name = name
+        self.age = age
+        self.heightInCm = heightInCm
+        self.gender = gender
+        self.localeIdentifier = localeIdentifier
+        self.isMetric = isMetric
+    }
+    
+    
     // Convert height to imperial if needed
     func heightInFeetAndInches() -> (feet: Int, inches: Int) {
         let totalInches = heightInCm / 2.54
@@ -44,3 +47,15 @@ class UserProfile {
         heightInCm = Double(feet * 12 + inches) * 2.54
     }
 }
+
+//extension UserProfile {
+//    static var mockUserProfile = UserProfile(
+//        name: "Ted",
+//        age: 20,
+//        heightInCm: 170,
+//        gender: "male",
+//        localeIdentifier: Locale.autoupdatingCurrent.identifier,
+//        isMetric: true,
+//        userGoals: userGoals
+//    )
+//}

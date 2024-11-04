@@ -16,12 +16,12 @@ enum ActivityLevel: String, Codable {
     case superActive = "Super Active"
     
     func calorieMultiplier() -> Double {
-            switch self {
-            case .sedentary: return 1.2
-            case .lightActivity: return 1.375
-            case .moderateActivity: return 1.55
-            case .veryActive: return 1.725
-            case .superActive: return 1.9
-            }
+        switch self {
+        case .sedentary: return 1.2
+        case .lightActivity: return 1.375
+        case .moderateActivity: return 1.55
+        case .veryActive: return 1.725
+        case .superActive: return 1.9
         }
+    }
 }

@@ -26,7 +26,7 @@ struct YourApp: App {
 
     init() {
             do {
-                modelContainer = try ModelContainer(for: UserGoals.self)
+                modelContainer = try ModelContainer(for: UserGoals.self, UserProfile.self, BodyMetrics.self)
             } catch {
                 fatalError("Could not initialize ModelContainer")
             }
