@@ -38,6 +38,8 @@ class UserGoals {
     var currentDailyIntake: [DailyIntake] // Track daily macros
     var weeklySummaries: [WeeklySummary] // Track progress on a week-by-week basis
 
+    var profilePicture: Data?
+    
     // Initialize the UserGoals object with default values
     init(localeIdentifier: LocaleIdentifier = Locale.autoupdatingCurrent.identifier,
          heightInCm: Double = 0,
@@ -58,7 +60,8 @@ class UserGoals {
          caloriesGoal: Double = 0,
          isMetric: Bool = true,
          currentDailyIntake: [DailyIntake] = [],
-         weeklySummaries: [WeeklySummary] = []) {
+         weeklySummaries: [WeeklySummary] = [],
+         profilePicture: Data? = nil) {
         
         self.localeIdentifier = localeIdentifier
         self.name = name
@@ -80,6 +83,7 @@ class UserGoals {
         self.isMetric = isMetric
         self.currentDailyIntake = currentDailyIntake
         self.weeklySummaries = weeklySummaries
+        self.profilePicture = profilePicture
     }
 
 

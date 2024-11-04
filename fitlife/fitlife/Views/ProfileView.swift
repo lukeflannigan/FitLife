@@ -30,23 +30,42 @@ struct ProfileView: View {
     // Header Section
     private var headerSection: some View {
         VStack(spacing: 15) {
-            // Profile Picture
-            Image("profile_picture")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 120, height: 120)
-                .clipShape(Circle())
-                .overlay(
-                    Circle().stroke(
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color("GradientStart"), Color("GradientEnd")]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 4
+            if let profilePicture = userGoals.first?.profilePicture,
+               let uiImage = UIImage(data: profilePicture) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 120, height: 120)
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle().stroke(
+                            LinearGradient(
+                                gradient: Gradient(colors: [Color("GradientStart"), Color("GradientEnd")]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 4
+                        )
                     )
-                )
-                .shadow(radius: 10)
+                    .shadow(radius: 10)
+            } else {
+                Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 120, height: 120)
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle().stroke(
+                            LinearGradient(
+                                gradient: Gradient(colors: [Color("GradientStart"), Color("GradientEnd")]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 4
+                        )
+                    )
+                    .shadow(radius: 10)
+            }
             
             // Username
             Text(userName)
