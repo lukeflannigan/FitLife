@@ -2,13 +2,17 @@
 // Created by Luke Flannigan on 10/1/24.
 
 import SwiftUI
+import SwiftData
 
 struct ProfileView: View {
+    @Query private var userGoals: [UserGoals]
+    
     // Will need to connect this to real data later
     // Just using this to test view works
-    @State private var userName: String = "Dr. Lehr"
     @State private var userEmail: String = "email@email.com"
     @State private var userPhone: String = "+1 (123) 456-7890"
+    
+    @State private var showEditProfile: Bool = false
     
     var body: some View {
         ScrollView {
@@ -28,35 +32,60 @@ struct ProfileView: View {
     // Header Section
     private var headerSection: some View {
         VStack(spacing: 15) {
-            // Profile Picture
-            Image("profile_picture")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 120, height: 120)
-                .clipShape(Circle())
-                .overlay(
-                    Circle().stroke(
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color("GradientStart"), Color("GradientEnd")]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 4
+            if let profilePicture = userGoals.first?.profilePicture,
+               let uiImage = UIImage(data: profilePicture) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 120, height: 120)
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle().stroke(
+                            LinearGradient(
+                                gradient: Gradient(colors: [Color("GradientStart"), Color("GradientEnd")]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 4
+                        )
                     )
-                )
-                .shadow(radius: 10)
+                    .shadow(radius: 10)
+            } else {
+                Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 120, height: 120)
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle().stroke(
+                            LinearGradient(
+                                gradient: Gradient(colors: [Color("GradientStart"), Color("GradientEnd")]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 4
+                        )
+                    )
+                    .shadow(radius: 10)
+            }
             
             // Username
-            Text(userName)
+            Text(userGoals.first?.name ?? "")
                 .font(.custom("Poppins-Bold", size: 28))
                 .foregroundColor(.primary)
             
             // Edit Profile Button
             Button(action: {
+                showEditProfile.toggle()
             }) {
                 Text("Edit Profile")
                     .font(.custom("Poppins-Medium", size: 16))
                     .foregroundColor(Color("GradientStart"))
+            }
+            .sheet(isPresented: $showEditProfile) {
+                if let userGoal = userGoals.first {
+                    EditProfileView(userGoals: userGoal)
+                }
             }
         }
     }
