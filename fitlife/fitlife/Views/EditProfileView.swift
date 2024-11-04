@@ -11,54 +11,60 @@ struct EditProfileView: View {
     
     var body: some View {
         NavigationView {
-            Form {
-                Section {
-                    VStack(alignment: .center) {
-                        if let displayedImage {
-                            displayedImage
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 120, height: 120)
-                                .clipShape(Circle())
-                                .overlay(
-                                    Circle().stroke(
-                                        LinearGradient(
-                                            gradient: Gradient(colors: [Color("GradientStart"), Color("GradientEnd")]),
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        ),
-                                        lineWidth: 4
-                                    )
-                                )
-                        } else if let profilePicture = userGoals.profilePicture,
-                                  let uiImage = UIImage(data: profilePicture) {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 120, height: 120)
-                                .clipShape(Circle())
-                                .overlay(
-                                    Circle().stroke(
-                                        LinearGradient(
-                                            gradient: Gradient(colors: [Color("GradientStart"), Color("GradientEnd")]),
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        ),
-                                        lineWidth: 4
-                                    )
-                                )
-                        }
-                        
-                        PhotosPicker(selection: $selectedItem,
-                                   matching: .images) {
-                            Text("Change Photo")
-                                .foregroundStyle(.blue)
+            ScrollView {
+                VStack(spacing: 32) {
+                    // Profile Picture Section
+                    VStack(spacing: 16) {
+                        ZStack(alignment: .bottomTrailing) {
+                            if let displayedImage {
+                                displayedImage
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 140, height: 140)
+                                    .clipShape(Circle())
+                            } else if let profilePicture = userGoals.profilePicture,
+                                      let uiImage = UIImage(data: profilePicture) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 140, height: 140)
+                                    .clipShape(Circle())
+                            } else {
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 140, height: 140)
+                                    .foregroundColor(.gray.opacity(0.5))
+                            }
+                            
+                            PhotosPicker(selection: $selectedItem,
+                                       matching: .images) {
+                                Image(systemName: "camera.circle.fill")
+                                    .font(.system(size: 44))
+                                    .foregroundStyle(.white)
+                                    .background(Circle().fill(Color("GradientStart")))
+                            }
+                            .offset(x: 6, y: 6)
                         }
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical)
+                    .padding(.top, 20)
                     
-                    TextField("Name", text: $editedName)
+                    // Name Section
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Your Name")
+                            .font(.headline)
+                            .foregroundColor(.gray)
+                        
+                        TextField("Name", text: $editedName)
+                            .textFieldStyle(.plain)
+                            .font(.title3)
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color(.systemGray6))
+                            )
+                    }
+                    .padding(.horizontal)
                 }
             }
             .navigationTitle("Edit Profile")
@@ -68,6 +74,7 @@ struct EditProfileView: View {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .foregroundColor(.gray)
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -75,6 +82,8 @@ struct EditProfileView: View {
                         userGoals.name = editedName
                         dismiss()
                     }
+                    .bold()
+                    .foregroundColor(Color("GradientStart"))
                 }
             }
         }
