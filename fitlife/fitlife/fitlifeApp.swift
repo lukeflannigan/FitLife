@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftData
 import UserNotifications
 
-
 @main
 struct YourApp: App {
     let modelContainer: ModelContainer
