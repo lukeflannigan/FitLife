@@ -16,13 +16,7 @@ class UserGoals {
         get { Locale(identifier: localeIdentifier) }
         set { localeIdentifier = newValue.identifier }
     }
-    var name: String
-    var heightInCm: Double
-    var age: Int
-    var gender: String
-    var startingWeightInKg: Double
-    var currentWeightInKg: Double
-    var goalWeightInKg: Double
+    
     var activityLevel: ActivityLevel
     var weeklyGoal: WeeklyGoal
     var baseGoals: [BaseGoal]
@@ -34,7 +28,9 @@ class UserGoals {
     var caloriesGoal: Double
     var isMetric: Bool // Tracks if the user prefers metric or imperial
     
-    // Add properties to store current progress
+    @Relationship(deleteRule: .cascade, inverse: \BodyMetrics.userGoals) var bodyMetrics: BodyMetrics
+    @Relationship(deleteRule: .cascade, inverse: \UserProfile.userGoals) var userProfile: UserProfile
+
     var currentDailyIntake: [DailyIntake] // Track daily macros
     var weeklySummaries: [WeeklySummary] // Track progress on a week-by-week basis
 
@@ -42,13 +38,6 @@ class UserGoals {
     
     // Initialize the UserGoals object with default values
     init(localeIdentifier: LocaleIdentifier = Locale.autoupdatingCurrent.identifier,
-         heightInCm: Double = 0,
-         age: Int = 0,
-         gender: String = "",
-         name: String = "",
-         startingWeightInKg: Double = 0,
-         currentWeightInKg: Double = 0,
-         goalWeightInKg: Double = 0,
          weeklyGoal: WeeklyGoal = .maintainWeight,
          activityLevel: ActivityLevel = .sedentary,
          baseGoals: [BaseGoal] = [],
@@ -58,19 +47,9 @@ class UserGoals {
          fatsGoal: Double = 0,
          carbsGoal: Double = 0,
          caloriesGoal: Double = 0,
-         isMetric: Bool = true,
-         currentDailyIntake: [DailyIntake] = [],
-         weeklySummaries: [WeeklySummary] = [],
-         profilePicture: Data? = nil) {
+         isMetric: Bool = true) {
         
         self.localeIdentifier = localeIdentifier
-        self.name = name
-        self.heightInCm = heightInCm
-        self.age = age
-        self.gender = gender
-        self.startingWeightInKg = startingWeightInKg
-        self.currentWeightInKg = currentWeightInKg
-        self.goalWeightInKg = goalWeightInKg
         self.weeklyGoal = weeklyGoal
         self.activityLevel = activityLevel
         self.baseGoals = baseGoals
@@ -80,12 +59,8 @@ class UserGoals {
         self.fatsGoal = fatsGoal
         self.carbsGoal = carbsGoal
         self.caloriesGoal = caloriesGoal
-        self.isMetric = isMetric
-        self.currentDailyIntake = currentDailyIntake
-        self.weeklySummaries = weeklySummaries
-        self.profilePicture = profilePicture
+        self.isMetric = isMetric // Defaults to metric unless specified
     }
-
 
     // Convert height to imperial if needed
     func heightInFeetAndInches() -> (feet: Int, inches: Int) {
@@ -121,28 +96,8 @@ class UserGoals {
     }
     
     func calculateTDEE(isMetric: Bool = false) -> Double {
-        let weightInKg = currentWeightInKg
-        let heightInCm = self.heightInCm
-        
-        // Calculate BMR based on gender
-        let bmr: Double
-        if gender.lowercased() == "male" {
-            bmr = 10 * weightInKg + 6.25 * heightInCm - 5 * Double(age) + 5
-        } else {
-            bmr = 10 * weightInKg + 6.25 * heightInCm - 5 * Double(age) - 161
-        }
-            
-        // Apply activity level multiplier
-        let activityMultiplier: Double
-        switch activityLevel {
-        case .sedentary: activityMultiplier = 1.2
-        case .lightActivity: activityMultiplier = 1.375
-        case .moderateActivity: activityMultiplier = 1.55
-        case .veryActive: activityMultiplier = 1.725
-        case .superActive: activityMultiplier = 1.9
-        }
-        
-        let tdee = bmr * activityMultiplier
+        let bmr = bodyMetrics.calculateBMR()
+        let tdee = bmr * activityLevel.calorieMultiplier()
         
         // Adjust for weekly goal
         switch weeklyGoal {
@@ -218,19 +173,15 @@ class UserGoals {
     }
 }
 
-extension UserGoals {
-    static var mockUserGoals = UserGoals(
-        heightInCm: 175,  // example height in cm
-        age: 25,
-        gender: "Male",
-        name: "John Doe",
-        startingWeightInKg: 75,  // example weight in kg
-        currentWeightInKg: 75,
-        goalWeightInKg: 70,
-        weeklyGoal: .maintainWeight,
-        activityLevel: .sedentary,
-        baseGoals: [.weightLoss, .muscleGain],
-        nutritionGoals: [.eatVegan],
-        workoutGoal: 0
-    )
-}
+//extension UserGoals {
+//    static var mockUserGoals = UserGoals(
+//        weeklyGoal: .maintainWeight,
+//        activityLevel: .sedentary,
+//        baseGoals: [.weightLoss, .muscleGain],
+//        nutritionGoals: [.eatVegan],
+//        workoutGoal: 0,
+//        userProfile: UserProfile?,
+//        bodyMetrics: BodyMetrics?,
+//        currentDailyIntake: [DailyIntake],
+//        weeklySummaries: [WeeklySummary])
+//}

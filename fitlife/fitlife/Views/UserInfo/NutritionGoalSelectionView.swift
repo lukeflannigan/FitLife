@@ -36,7 +36,7 @@ struct NutritionGoalSelectionView: View {
         NavigationStack {
             VStack(alignment: .center, spacing: 20) {
                 // Title
-                Text("Select your nutrition goals, \(userGoals.name)")
+                Text("Select your nutrition goals, \(userGoals.userProfile.name)")
                     .font(.title)
                     .bold()
                     .padding(.top)
@@ -105,6 +105,6 @@ struct NutritionGoalSelectionView: View {
     }
 }
 
-#Preview {
-    NutritionGoalSelectionView(userGoals: .constant(UserGoals.mockUserGoals))
-}
+//#Preview {
+//    NutritionGoalSelectionView(userGoals: .constant(UserGoals.mockUserGoals))
+//}

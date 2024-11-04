@@ -164,25 +164,25 @@ struct GetHeightWeightView: View {
                 .simultaneousGesture(TapGesture().onEnded {
                     // Save height based on metric/imperial system
                     if useMetric {
-                        userGoals.heightInCm = Double(heightCentimeters) // Use height in cm directly
+                        userGoals.userProfile.heightInCm = Double(heightCentimeters) // Use height in cm directly
                     } else {
-                        userGoals.setHeightFromImperial(feet: heightFeet, inches: heightInches) // Convert and set height
+                        userGoals.userProfile.setHeightFromImperial(feet: heightFeet, inches: heightInches) // Convert and set height
                     }
 
                     // Save weight based on metric/imperial system
                     if let currentWeightValue = Double(currentWeight) {
                         if useMetric {
-                            userGoals.currentWeightInKg = currentWeightValue // Already in kg
+                            userGoals.bodyMetrics.currentWeightInKg = currentWeightValue // Already in kg
                         } else {
-                            userGoals.setCurrentWeightFromPounds(pounds: currentWeightValue) // Convert and set current weight
+                            userGoals.bodyMetrics.setCurrentWeightFromPounds(pounds: currentWeightValue) // Convert and set current weight
                         }
                     }
                     
                     if let goalWeightValue = Double(goalWeight) {
                         if useMetric {
-                            userGoals.goalWeightInKg = goalWeightValue // Already in kg
+                            userGoals.bodyMetrics.goalWeightInKg = goalWeightValue // Already in kg
                         } else {
-                            userGoals.setGoalWeightFromPounds(pounds: goalWeightValue) // Convert and set goal weight
+                            userGoals.bodyMetrics.setGoalWeightFromPounds(pounds: goalWeightValue) // Convert and set goal weight
                         }
                     }
                 })
@@ -197,6 +197,8 @@ struct GetHeightWeightView: View {
     }
 }
 
-#Preview {
-    GetHeightWeightView(userGoals: .constant(UserGoals.mockUserGoals))
-}
+//#Preview {
+//    GetHeightWeightView(userGoals: .constant(UserGoals.mockUserGoals))
+//}
+
+
