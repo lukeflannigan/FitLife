@@ -33,6 +33,7 @@ class Exercise: Identifiable, ObservableObject {
     var sets: Int
     var reps: Int
     var weight: Double
+    var isFavorite: Bool
 
     init(
         id: String = UUID().uuidString,
@@ -50,7 +51,8 @@ class Exercise: Identifiable, ObservableObject {
         mechanic: String? = nil,
         sets: Int = 0,
         reps: Int = 0,
-        weight: Double = 0
+        weight: Double = 0,
+        isFavorite: Bool = false
     ) {
         self.id = id
         self.name = name
@@ -68,6 +70,7 @@ class Exercise: Identifiable, ObservableObject {
         self.sets = sets
         self.reps = reps
         self.weight = weight
+        self.isFavorite = isFavorite
     }
 }
 

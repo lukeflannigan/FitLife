@@ -14,19 +14,17 @@ class Workout: Identifiable, ObservableObject {
     var name: String
     var exercises: [Exercise]
     var date: Date
-    var isFavorite: Bool
 
     init(id: UUID = UUID(), name: String = "defaultworkoutname", exercises: [Exercise], date: Date = Date(), isFavorite: Bool = false) {
         self.id = id
         self.name = name
         self.exercises = exercises
         self.date = date
-        self.isFavorite = isFavorite
     }
 }
 
 extension Workout {
-    static var mockWorkoutEntries = [
+    static var mockWorkoutEntry =
         Workout(
             name: "Chest and Legs Workout",
             exercises: [
@@ -60,7 +58,6 @@ extension Workout {
                 )
             ]
         )
-    ]
 }
 
 
