@@ -10,6 +10,7 @@ import SwiftData
 import UserNotifications
 
 struct SplashView: View {
+    @Environment(\.modelContext) var modelContext
     @State private var isActive = false  // Flag to track when to navigate
     @State private var destination: AnyView? = nil
     var body: some View {
@@ -64,11 +65,11 @@ struct SplashView: View {
 
     private func checkUserStatus() {
         if let _ = UserDefaults.standard.string(forKey: "userSession") {
-            self.destination = AnyView(MainView())
+            self.destination = AnyView(MainView().environment(\.modelContext, modelContext))
         } else if UserDefaults.standard.bool(forKey: "skippedSignIn") {
-            self.destination = AnyView(MainView())
+            self.destination = AnyView(MainView().environment(\.modelContext, modelContext))
         } else {
-            self.destination = AnyView(OpeningView())
+            self.destination = AnyView(OpeningView().environment(\.modelContext, modelContext))
         }
         withAnimation {
             self.isActive = true

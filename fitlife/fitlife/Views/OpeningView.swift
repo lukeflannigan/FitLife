@@ -11,6 +11,7 @@ struct OpeningView: View {
     @Environment(\.modelContext) var modelContext
     @StateObject private var viewModel = AuthenticationViewModel()
     @State private var isNavigatingToMainView = false  // State for navigation
+    @State private var userGoals = UserGoals()  // Define userGoals
     var body: some View {
         NavigationView {
             ZStack {
@@ -57,8 +58,10 @@ struct OpeningView: View {
                     .padding(.horizontal, 60)
                     .padding(.bottom, 160)
                     
-                    // NavigationLink to MainView
-                    NavigationLink(destination: MainView(), isActive: $isNavigatingToMainView) {
+                    // NavigationLink to WelcomeView
+                    NavigationLink(destination: WelcomeView(userGoals: $userGoals)
+                        .environment(\.modelContext, modelContext),
+                                   isActive: $isNavigatingToMainView) {
                         EmptyView()
                     }
                 }
