@@ -6,15 +6,20 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct WorkoutLibraryView: View {
-    @State private var workouts: [Workout] = Workout.mockWorkoutEntries // TODO: REMOVE THIS, NEEDS TO PULL FROM USER DATA WORKOUTS
+    // Fetch workouts from user data
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \Workout.date, order: .reverse) private var workouts: [Workout]
+    
+    @State private var currworkouts: [Workout] = [Workout.mockWorkoutEntry]
 
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 15) {
-                    ForEach(workouts) { workout in
+                    ForEach(currworkouts) { workout in
                         NavigationLink(destination: WorkoutsView(workout: workout)) {
                             WorkoutCard(workout: workout)
                                 .padding(.horizontal)
@@ -42,22 +47,22 @@ struct WorkoutCard: View {
                     .lineLimit(1)
 
                 Spacer()
-                
-                if workout.isFavorite {
-                    Image(systemName: "heart.fill")
-                        .foregroundColor(.red)
-                }
             }
+            
+            // Date
+            Text(workout.date, style: .date)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
 
-            .font(.subheadline)
-            .foregroundColor(.secondary)
-
-            .font(.footnote)
+            // Number of Exercises
+            Text("\(workout.exercises.count) Exercises")
+                .font(.footnote)
+                .foregroundColor(.secondary)
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.white)
+                .fill(Color(UIColor.secondarySystemBackground))
                 .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
         )
     }
@@ -66,4 +71,5 @@ struct WorkoutCard: View {
 // MARK: - Preview
 #Preview {
     WorkoutLibraryView()
+        .modelContainer(for: [Workout.self, Exercise.self]) // Needed for preview with SwiftData
 }
