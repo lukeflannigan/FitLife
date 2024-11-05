@@ -25,7 +25,7 @@ struct MainView: View {
             case .home:
                 HomeView()
             case .workouts:
-                WorkoutsView()
+                WorkoutLibraryView()
             case .progress:
                 ProgressView()
             }
