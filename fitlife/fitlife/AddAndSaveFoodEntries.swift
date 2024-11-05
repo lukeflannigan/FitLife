@@ -20,11 +20,10 @@ struct AddFoodEntryView: View{
     var body: some View {
         ZStack {
             // Gradient background for the entire screen
-            LinearGradient(gradient: Gradient(colors: [Color.blue, Color.green]),
+            LinearGradient(gradient: Gradient(colors: [Color.green, Color.blue]),
                            startPoint: .topLeading,
                            endPoint: .bottomTrailing)
                 .ignoresSafeArea() // Covers the entire screen with gradient
-            
             VStack {
                 Text("Log Your Food Intake")
                     .font(.largeTitle)
@@ -91,8 +90,6 @@ struct AddFoodEntryView: View{
             .padding()
         }
     }
-
-    
     func addFoodEntry() {
         guard var caloriesDouble = Double(calories),
               var proteinDouble = Double(protein),
