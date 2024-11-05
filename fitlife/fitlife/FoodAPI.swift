@@ -1,7 +1,3 @@
-//  FoodAPI.swift
-//  fitlife
-//  Created by Sam Arshad on 10/2/24.
-
 
 import SwiftUI
 import Foundation
@@ -114,58 +110,67 @@ struct SearchView: View {
     
     var body: some View {
         NavigationView {
+           
+            ZStack {
+                    // Background gradient
+                LinearGradient(gradient: Gradient(colors: [Color.green, Color.cyan]),
+                                   startPoint: .topLeading,
+                                   endPoint: .bottomTrailing)
+                            .ignoresSafeArea() // Make gradient fill the entire screen
+                            
             ScrollView {  // Added ScrollView here
-                VStack {
-                    // Search bar
-                    HStack {
-                        TextField("Search recipes...", text: $searchText)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .autocapitalization(.none)
-                        
-                        Button(action: {
-                            if !searchText.isEmpty {
-                                isSearching = true
-                                viewModel.fetchData(query: searchText)
-                            }
-                        }) {
-                            Image(systemName: "magnifyingglass")
-                                .foregroundColor(.blue)
-                        }
-                    }
-                    .padding()
-                    
-                    // Results list
-                    if isSearching {
-                        if viewModel.recipes.isEmpty {
-                            ProgressView()
+                        VStack {
+                            // Search bar
+                            HStack {
+                                    TextField("Search recipes...", text: $searchText)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                        .autocapitalization(.none)
+                                        
+                                    Button(action: {
+                                        if !searchText.isEmpty {
+                                            isSearching = true
+                                            viewModel.fetchData(query: searchText)
+                                        }
+                                    }) {
+                                        Image(systemName: "magnifyingglass")
+                                            .foregroundColor(.blue)
+                                        }
+                                }
                                 .padding()
-                        } else {
-                            LazyVStack(spacing: 15) {  // Using LazyVStack for better performance
-                                ForEach(viewModel.recipes, id: \.self) { recipe in
-                                    NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
-                                        RecipeCard(recipe: recipe)  // Extracted card view
+                                    
+                            // Results list
+                            if isSearching {
+                                if viewModel.recipes.isEmpty {
+                                            ProgressView()
+                                                .padding()
+                                        } else {
+                                            LazyVStack(spacing: 15) {  // Using LazyVStack for better performance
+                                                ForEach(viewModel.recipes, id: \.self) { recipe in
+                                                    NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
+                                                        RecipeCard(recipe: recipe)  // Extracted card view
+                                                    }
+                                                }
+                                            }
+                                            .padding(.horizontal)
+                                        }
+                                    } else {
+                                        // Initial state
+                                        VStack {
+                                            Image(systemName: "fork.knife.circle.fill")
+                                                .font(.system(size: 64))
+                                                .foregroundColor(.black)
+                                                .padding()
+                                            Text("Search for recipes")
+                                                .font(.title2)
+                                                .foregroundColor(.black)
+                                        }
+                                        .padding()
                                     }
                                 }
                             }
-                            .padding(.horizontal)
+                            .navigationTitle("Recipe Search")
                         }
-                    } else {
-                        // Initial state
-                        VStack {
-                            Image(systemName: "magnifyingglass")
-                                .font(.system(size: 64))
-                                .foregroundColor(.gray)
-                                .padding()
-                            Text("Search for recipes")
-                                .font(.title2)
-                                .foregroundColor(.gray)
-                        }
-                        .padding()
                     }
-                }
-            }
-            .navigationTitle("Recipe Search")
-        }
     }
 }
 
@@ -174,31 +179,33 @@ struct RecipeCard: View {
     let recipe: RecipeObject
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            AsyncImage(url: URL(string: recipe.image)) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } placeholder: {
-                Rectangle()
-                    .fill(Color.gray.opacity(0.3))
+        
+            VStack(alignment: .leading, spacing: 8) {
+                AsyncImage(url: URL(string: recipe.image)) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.3))
+                }
+                .frame(height: 200)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                
+                Text(recipe.label)
+                    .font(.headline)
+                    .lineLimit(2)
+                
+                Text("\(Int(recipe.calories)) calories • \(Int(recipe.yield)) servings")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
             }
-            .frame(height: 200)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            
-            Text(recipe.label)
-                .font(.headline)
-                .lineLimit(2)
-            
-            Text("\(Int(recipe.calories)) calories • \(Int(recipe.yield)) servings")
-                .font(.subheadline)
-                .foregroundColor(.gray)
+            .padding()
+            .background(Color.white)
+            .cornerRadius(15)
+            .shadow(radius: 5)
+        
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(15)
-        .shadow(radius: 5)
-    }
 }
 
 // Updated RecipeDetailView with improved scrolling
@@ -208,70 +215,77 @@ struct RecipeDetailView: View {
     var body: some View {
         
         ScrollView(.vertical, showsIndicators: true) {  // Explicit vertical scroll
-            VStack(alignment: .leading, spacing: 15) {  // Added consistent spacing
-                AsyncImage(url: URL(string: recipe.image)) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                } placeholder: {
-                    ProgressView()
-                }
-                .frame(maxWidth: .infinity)
-                .cornerRadius(15)
+            ZStack{
+                LinearGradient(gradient: Gradient(colors: [Color.green, Color.cyan]),
+                               startPoint: .topLeading,
+                               endPoint: .bottomTrailing)
+                //.ignoresSafeArea()
                 
-                Text("Calories: \(Int(recipe.calories))")
-                    .font(.headline)
-                
-                Text("Servings: \(Int(recipe.yield))")
-                    .font(.headline)
-
-                // Macros section
-                Group {
-                            Text("Macronutrient Information: ")
-                                     .font(.headline)
-                                     .padding(.top, 5)
-                                 
-                                 VStack(alignment: .leading, spacing: 8) {
-                                     Text("Fat: \(String(format: "%.1f", recipe.totalNutrients.FAT.quantity))\(recipe.totalNutrients.FAT.unit)")
-                                     Text("Carbs: \(String(format: "%.1f", recipe.totalNutrients.CHOCDF.quantity))\(recipe.totalNutrients.CHOCDF.unit)")
-                                     Text("Fiber: \(String(format: "%.1f", recipe.totalNutrients.FIBTG.quantity))\(recipe.totalNutrients.FIBTG.unit)")
-                                     Text("Protein: \(String(format: "%.1f", recipe.totalNutrients.PROCNT.quantity))\(recipe.totalNutrients.PROCNT.unit)")
-                                     Text("Sugar: \(String(format: "%.1f", recipe.totalNutrients.SUGAR.quantity))\(recipe.totalNutrients.SUGAR.unit)")
-                                 }
-                }
-                
-                Text("Ingredients:")
-                    .font(.title2)
-                    .padding(.top, 5)
-                
-                VStack(alignment: .leading, spacing: 8) {  // Better spacing for ingredients
-                    ForEach(recipe.ingredientLines, id: \.self) { ingredient in
-                        HStack(alignment: .top) {
-                            Text("•")
-                                .padding(.trailing, 5)
-                            Text(ingredient)
-                        }
-                    }
-                }
-
-                // The preview environment in xCode doesn't fully support opening URLs.
-                Link(destination: URL(string: recipe.shareAs)!) {
-                    HStack {
-                        Image(systemName: "link")
-                        Text("View Full Recipe")
+                VStack(alignment: .leading, spacing: 15) {  // Added consistent spacing
+                    AsyncImage(url: URL(string: recipe.image)) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    } placeholder: {
+                        ProgressView()
                     }
                     .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                    .cornerRadius(15)
+                    
+                    Text("Calories: \(Int(recipe.calories))")
+                        .font(.headline)
+                    
+                    Text("Servings: \(Int(recipe.yield))")
+                        .font(.headline)
+                    
+                    // Macros section
+                    Group {
+                        Text("Macronutrient Information: ")
+                            .font(.headline)
+                            .padding(.top, 5)
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Fat: \(String(format: "%.1f", recipe.totalNutrients.FAT.quantity))\(recipe.totalNutrients.FAT.unit)")
+                            Text("Carbs: \(String(format: "%.1f", recipe.totalNutrients.CHOCDF.quantity))\(recipe.totalNutrients.CHOCDF.unit)")
+                            Text("Fiber: \(String(format: "%.1f", recipe.totalNutrients.FIBTG.quantity))\(recipe.totalNutrients.FIBTG.unit)")
+                            Text("Protein: \(String(format: "%.1f", recipe.totalNutrients.PROCNT.quantity))\(recipe.totalNutrients.PROCNT.unit)")
+                            Text("Sugar: \(String(format: "%.1f", recipe.totalNutrients.SUGAR.quantity))\(recipe.totalNutrients.SUGAR.unit)")
+                        }
+                    }
+                    
+                    Text("Ingredients:")
+                        .font(.title2)
+                        .padding(.top, 5)
+                    
+                    VStack(alignment: .leading, spacing: 8) {  // Better spacing for ingredients
+                        ForEach(recipe.ingredientLines, id: \.self) { ingredient in
+                            HStack(alignment: .top) {
+                                Text("•")
+                                    .padding(.trailing, 5)
+                                Text(ingredient)
+                            }
+                        }
+                    }
+                    
+                    // The preview environment in xCode doesn't fully support opening URLs.
+                    Link(destination: URL(string: recipe.shareAs)!) {
+                        HStack {
+                            Image(systemName: "link")
+                            Text("View Full Recipe")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                    }
+                    .padding(.top)
                 }
-                .padding(.top)
+                .padding()
             }
-            .padding()
+            .navigationTitle(recipe.label)
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .navigationTitle(recipe.label)
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
