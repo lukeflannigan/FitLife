@@ -15,7 +15,7 @@ class Workout: Identifiable, ObservableObject {
     var exercises: [Exercise]
     var date: Date
 
-    init(id: UUID = UUID(), name: String = "defaultworkoutname", exercises: [Exercise], date: Date = Date(), isFavorite: Bool = false) {
+    init(id: UUID = UUID(), name: String = "defaultworkoutname", exercises: [Exercise], date: Date = Date()) {
         self.id = id
         self.name = name
         self.exercises = exercises
