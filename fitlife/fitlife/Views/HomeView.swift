@@ -14,6 +14,7 @@ struct HomeView: View {
             VStack(spacing: 20) {
                 headerSection
                 quickStatsSection
+                weightChartSection
                 recentActivitySection
                 goalProgressSection
             }
@@ -110,4 +111,8 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
     }
+}
+
+private var weightChartSection: some View {
+    WeightChartView()
 }

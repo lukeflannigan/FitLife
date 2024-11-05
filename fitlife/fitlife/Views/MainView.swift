@@ -21,7 +21,7 @@ struct MainView: View {
             case .profile:
                 ProfileView()
             case .nutrition:
-                NutritionView()
+                LogHomeView()
             case .home:
                 HomeView()
             case .workouts:
