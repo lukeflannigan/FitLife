@@ -22,9 +22,18 @@ struct WeightChartView: View {
         userGoals.first?.bodyMetrics.goalWeightInPounds() ?? 200
     }
     
-    // Calculate the minimum weight in the log
+    // Calculate the minimum and maximum weight in the log to determine Y-axis range
     var minWeight: Double {
         bodyWeightEntries.map { $0.weight }.min() ?? 0
+    }
+    
+    var maxWeight: Double {
+        bodyWeightEntries.map { $0.weight }.max() ?? goalWeight
+    }
+    
+    // Determine the upper bound for the Y-axis: the greater of the max recorded weight or the goal weight
+    var yAxisUpperBound: Double {
+        max(maxWeight, goalWeight)
     }
     
     @State private var isAddingWeight = false
@@ -63,12 +72,12 @@ struct WeightChartView: View {
                         x: .value("Date", entry.date),
                         y: .value("Weight", entry.weight)
                     )
-                    .symbolSize(30)  // Adjust size for better visibility
+                    .symbolSize(30)
                     .foregroundStyle(Color.blue)
                 }
             }
             .frame(height: 150)
-            .chartYScale(domain: minWeight...goalWeight)
+            .chartYScale(domain: minWeight...yAxisUpperBound)  // Dynamic Y-axis range
             .chartYAxis {
                 AxisMarks(position: .leading) {
                     AxisGridLine()
