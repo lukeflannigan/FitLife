@@ -6,13 +6,52 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct AddWeightEntryView: View {
+    @Environment(\.dismiss) var dismiss
+    @Environment(\.modelContext) var modelContext
+    var userGoal: UserGoals?
+    
+    @State private var weight: String = ""
+    @State private var date = Date()
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            Form {
+                Section(header: Text("New Weight Entry")) {
+                    TextField("Weight", text: $weight)
+                        .keyboardType(.decimalPad)
+                    
+                    DatePicker("Date", selection: $date, displayedComponents: .date)
+                }
+                
+                Section {
+                    Button(action: addWeightEntry) {
+                        Text("Save")
+                            .bold()
+                    }
+                }
+            }
+            .navigationTitle("Add Weight")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+            }
+        }
     }
-}
-
-#Preview {
-    AddWeightEntryView()
+    
+    private func addWeightEntry() {
+        guard let weightValue = Double(weight), let bodyMetrics = userGoal?.bodyMetrics else { return }
+        
+        let newEntry = BodyWeightEntry(date: date, weight: weightValue)
+        bodyMetrics.bodyWeightLog.append(newEntry)
+        
+        try? modelContext.save() // Save the new entry to the database
+        dismiss()
+    }
 }

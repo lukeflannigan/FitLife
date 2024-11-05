@@ -176,6 +176,7 @@ struct GetHeightWeightView: View {
                         } else {
                             userGoals.bodyMetrics.setCurrentWeightFromPounds(pounds: currentWeightValue) // Convert and set current weight
                         }
+                        userGoals.bodyMetrics.logWeight(currentWeightValue)
                     }
                     
                     if let goalWeightValue = Double(goalWeight) {
