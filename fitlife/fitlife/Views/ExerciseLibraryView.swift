@@ -43,8 +43,8 @@ struct ExerciseLibraryView: View {
         VStack(spacing: 0) {
             // Search and Filter Header
             VStack(spacing: 12) {
-                //SearchBar(text: $searchText)
-                //    .padding(.horizontal, 20)
+                SearchBar(text: $searchText)
+                    .padding(.horizontal, 20)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 12) {
