@@ -149,16 +149,15 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
       - [CTP-39](https://cs3398-borgs-f24.atlassian.net/browse/CTP-39)
 
   **Sam**: To sum up my contributions: Refactored, modified and added *Backend* + *Frontend* code for the nutrition segment.
-  - [SCRUM 108 - I worked on implementing a "Food search" feature for](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/SCRUM-108-Food_Recipe_Search/)
-    - **Note**: Due to Jira's synchronization issues with Premium/Standard Free version the actual branch name is: [SCRUM-108-Food_Recipe_Search](https://bitbucket.org/{}/{87bd3ba6-e4f4-475c-89d4-674a7f216cd5}/branch/SCRUM-108-Food_Recipe_Search "SCRUM-108-Food_Recipe_Search")
+- [SCRUM 108 - I worked on implementing a "Food search" feature for](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/SCRUM-108-Food_Recipe_Search/)
+ - **Note**: Due to Jira's synchronization issues with Premium/Standard Free version the actual branch name is: [SCRUM-108-Food_Recipe_Search](https://bitbucket.org/{}/{87bd3ba6-e4f4-475c-89d4-674a7f216cd5}/branch/SCRUM-108-Food_Recipe_Search "SCRUM-108-Food_Recipe_Search")
+- [SCRUM 101 - Implemented Functionality to Add and Save Food Entries](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/SCRUM-101-Functionality-to-Add-and-Save-Food-Entries/)
 
-  - [SCRUM 101 - Implemented Functionality to Add and Save Food Entries](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/SCRUM-101-Functionality-to-Add-and-Save-Food-Entries/)
+- [SCRUM 103 - Implementing Functionality to Save and Retrieve Macro Goals](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/SCRUM-103-Implement-Functionality-to-Save-and-Retrieve-Macro-Goals/)
+    - Wrote the Code for this and have commits on my Repo (weirdly they don't show up on JIRA/Bitbucket)
+    - I have the actual code, just need Data Persistence for this to be complete. 
 
-  - [SCRUM 103 - Implementing Functionality to Save and Retrieve Macro Goals](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/SCRUM-103-Implement-Functionality-to-Save-and-Retrieve-Macro-Goals/)
-     - Wrote the Code for this and have commits on my Repo (weirdly they don't show up on JIRA/Bitbucket)
-     - I have the actual code, just need Data Persistence for this to be complete. 
-
-  - [SCRUM 104 - Update Nutrition Tracker to Display Goals vs. Actual Intake](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/SCRUM-104-Update-Nutrition-Tracker-to-Display-Goals-vs.-Actual-Intake/)
+- [SCRUM 104 - Update Nutrition Tracker to Display Goals vs. Actual Intake](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/SCRUM-104-Update-Nutrition-Tracker-to-Display-Goals-vs.-Actual-Intake/)
      - Same as previous one. 
 
 
