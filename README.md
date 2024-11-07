@@ -251,6 +251,12 @@ With Data Persistence I will be
 - Completing the Functionalities of Saving and Retrieving Macro Goals. 
 - Updating the Nutrition Tracker to Display Goals vs. Actual Intake
 - Working on the UI to have a consistent look/views in the App.
-- Working on Cleaning up the UI and helping my team members where necessary. 
+- Working on Cleaning up the UI and helping my team members where necessary.
+
+**Jonas**:
+- Complete implementation of iCloud Drive.
+- Finalize icloud implementations to ensure usable device.
+- Implement beta testing to allow others to download the app (for class-wide demo)
+- Integrate various notification features.
 
 ---
