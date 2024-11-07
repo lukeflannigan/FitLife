@@ -194,6 +194,17 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
 
 ### Contributions
 
+**Thomas**: "Refactored and implemented significant components for the Workout functionality to prepare for local user data input, focusing on the data model's flexibility to work with the newly created library of workouts, integration of exercise features by moving attributes to exercises that were previously tied to workout, and UI enhancements for ease of use on mobile."
+
+- `Jira Task: Implement Difficulty Level Indicators`
+- [SCRUM-55](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-55?atlOrigin=eyJpIjoiMzYzZmUyZWM4M2NhNGZlYmJhZjQ2ZjA0NWE3OWQzZTkiLCJwIjoiaiJ9), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/SCRUM-55-4.-implement-difficulty-level-i)
+- `Jira Task: Integrate Instructional Images or Videos`
+- [SCRUM-54](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-54?atlOrigin=eyJpIjoiZWJlYzU5MGMyNWRjNDk1MTgzNDBjOTQ3MmQ4YTY1NzAiLCJwIjoiaiJ9), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/SCRUM-54-3.-integrate-instructional-imag)
+- `Jira Task: Implement workout view and workout data model with real user data`
+- [SCRUM-43](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-43?atlOrigin=eyJpIjoiNTE1ZDRhMTM3ZTI0NDA3NWE4ZjM3MmFmYjlmN2ExNmUiLCJwIjoiaiJ9), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/SCRUM-43-implement-workout-view-and-work)
+- `Jira Task: Design Workout selection UI`
+- [SCRUM-114](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-114?atlOrigin=eyJpIjoiZDY2MTY0NzQ3NzRmNGM0NWEwZjQ3Njc3OWM1NTQ4OTciLCJwIjoiaiJ9), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/SCRUM-114-design-workout-selection-ui)
+
 **Luke**: "Developed and integrated essential features for the app, including the design and implementation of the exercise library, integration of workout API, detailed exercise views, favorites functionality for workouts, and user profile settings, enhancing functionality and user experience."
 
 -  `Jira Task: Integrate Workout API for Workout Library`
@@ -220,6 +231,11 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
 
 ---
 ### Next Steps
+
+**Thomas**:
+- Expanding workout (workoutview, workoutlibraryview) UI functionality to accomodate loading local data when model persistence has been implemented
+- Explore AI exercise recommendations for each workout 
+- Work on Healthkit integration for automatic data input
 
 **Luke**:
 - Enhance workout creation/logging functionality to use pre-made exercise programs sourced from API. 
