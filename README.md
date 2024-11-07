@@ -221,6 +221,21 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
 -  `Jira Task: Implement User Profile Settings`
 - [SCRUM-45](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-45), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-45-implement-user-profile-settings)
 
+**Jonas**: "Implemented various app-wide functions, from adding iCloud authentication, notification features, safely removing Firebase and its features, and modified navigation of app based on authentication state."
+
+-  `Jira Task: Set Up CloudKit onto the app`
+- [SCRUM-115](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-115), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-115-6.-set-up-cloudkit-onto-the-ap)
+-  `Jira Task: Safely remove firebase from App`
+- [SCRUM-111](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-111), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-111-4.-switch-authentication-from-)
+-  `Jira Task: Connect iCloud authentication onto app`
+- [SCRUM-122](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-122), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-122-7.-connect-icloud-authenticati)
+-  `Jira Task: Assist The Future of CS in Bobcat Day!`
+- [SCRUM-112](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-112), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-112-5.-assist-the-future-of-cs-in-)
+-  `Jira Task: Modify sign-in navigation based-on user authentication state.`
+- [SCRUM-99](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-99), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-99-auth-modify-sign-in-navigation-)
+-  `Jira Task: Set up basic notification functionality`
+- [SCRUM-100](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-100), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-100-2.-set-up-basic-notification-f)
+
 **Sam**: "Implemented Food Search, added functionality to Save/Retrieve Macro Goals, updated Nutrition Tracker for Goals vs. Actual, and enabled Food Entry Saving."
 
 - [SCRUM 108 - I worked on implementing a "Food search" feature for](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/SCRUM-108-Food_Recipe_Search/)
