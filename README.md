@@ -192,6 +192,9 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
 
 ## Sprint 2
 
+### Burnup chart
+![Burnupchart2](./img/Sprint2-burnupchart.png)
+
 ### Contributions
 
 **Thomas**: "Refactored and implemented significant components for the Workout functionality to prepare for local user data input, focusing on the data model's flexibility to work with the newly created library of workouts, integration of exercise features by moving attributes to exercises that were previously tied to workout, and UI enhancements for ease of use on mobile."
