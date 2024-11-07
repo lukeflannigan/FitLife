@@ -260,6 +260,12 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
 - Integrate macronutrient logging based on user food entries and connect this info to the main dashboard of the app. 
 - Improve the workout logging library to store user's workouts across different days. 
 
+**Jonas**:
+- Complete implementation of iCloud Drive.
+- Finalize icloud implementations to ensure usable device.
+- Implement beta testing to allow others to download the app (for class-wide demo)
+- Integrate various notification features.
+
 **Sam**: 
 With Data Persistence I will be
 - Completing the Functionalities of Adding and Saving Food Entries. 
@@ -267,11 +273,5 @@ With Data Persistence I will be
 - Updating the Nutrition Tracker to Display Goals vs. Actual Intake
 - Working on the UI to have a consistent look/views in the App.
 - Working on Cleaning up the UI and helping my team members where necessary.
-
-**Jonas**:
-- Complete implementation of iCloud Drive.
-- Finalize icloud implementations to ensure usable device.
-- Implement beta testing to allow others to download the app (for class-wide demo)
-- Integrate various notification features.
 
 ---
