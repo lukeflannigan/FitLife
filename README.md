@@ -194,3 +194,29 @@ With Data Persistence I will be
 - Working on Cleaning up the UI and helping my team members where necessary. 
 
 ---
+
+## Sprint 2
+
+### Contributions
+
+**Luke**: "Developed and integrated essential features for the app, including the design and implementation of the exercise library, integration of workout API, detailed exercise views, favorites functionality for workouts, and user profile settings, enhancing functionality and user experience."
+
+-  `Jira Task: Integrate Workout API for Workout Library`
+- [SCRUM-25](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-25), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-25-integrate-workout-api-for-workout-library)
+-  `Jira Task: Implement Exercise Library UI`
+- [SCRUM-42](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-42), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-42-implement-exercise-library-ui)
+-  `Jira Task: Design Exercise Detail UI`
+- [SCRUM-52](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-52), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-52-1.-design-exercise-detail-ui)
+-  `Jira Task: Implement 'Favorites' Section for Workouts`
+- [SCRUM-44](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-44), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-44-implement-favorites-section-for-workouts)
+-  `Jira Task: Implement User Profile Settings`
+- [SCRUM-45](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-45), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-45-implement-user-profile-settings)
+
+---
+### Next Steps
+
+**Luke**:
+- Enhance workout creation/logging functionality to use pre-made exercise programs sourced from API. 
+- Integrate macronutrient logging based on user food entries and connect this info to the main dashboard of the app. 
+- Improve the workout logging library to store user's workouts across different days. 
+
