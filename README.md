@@ -236,6 +236,16 @@ For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) 
 -  `Jira Task: Set up basic notification functionality`
 - [SCRUM-100](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-100), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-100-2.-set-up-basic-notification-f)
 
+**Gabe**: "Implemented persistent bodyweight tracking, basic sync mechanisms, and refactored UserGoals models.
+- `Jira Task: Create Weekly Sync Mechanism`
+- [SCRUM-117](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-117), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-117-create-weekly-sync-mechanism)
+
+- `Jira Task: Refactor UserGoals models`
+- [SCRUM-118](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-118), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-118-refactor-usergoals-models)
+
+- `Jira Task: Implement Body Weight Tracking`
+- [SCRUM-119](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-119), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-119-implement-body-weight-tracking)
+
 **Sam**: "Implemented Food Search, added functionality to Save/Retrieve Macro Goals, updated Nutrition Tracker for Goals vs. Actual, and enabled Food Entry Saving."
 
 - [SCRUM 108 - I worked on implementing a "Food search" feature for](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/src/SCRUM-108-Food_Recipe_Search/)
@@ -274,4 +284,10 @@ With Data Persistence I will be
 - Working on the UI to have a consistent look/views in the App.
 - Working on Cleaning up the UI and helping my team members where necessary.
 
+
+**Gabriel**
+- Complete sync mechanism to tie all aspects of app together on daily, weekly, monthly, etc. basis so that goals reset daily.
+- Add data persistence to workouts and nutrition
+- Implement user profile settings
+- Assist team members with data model persistence
 ---
