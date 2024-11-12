@@ -40,6 +40,7 @@ struct RecipeResponse: Codable{
 
 class ViewModel: ObservableObject {
     @Published var recipes: [RecipeObject] = [] // Array to hold fetched recipes
+    @Published var favorites: Set<RecipeObject> = [] //Set to hold recipe object.
     
     func fetchData(query: String) {
         if let path = Bundle.main.path(forResource: "Secrets", ofType: "plist"),
@@ -96,6 +97,14 @@ class ViewModel: ObservableObject {
                 }
             }
             task.resume()
+        }
+    }
+    //Toggle Favorites Function.
+    func toggleFavorite(recipe: RecipeObject){
+        if favorites.contains(recipe) {
+            favorites.remove(recipe)
+        }else{
+            favorites.insert(recipe)
         }
     }
 }
@@ -177,9 +186,9 @@ struct SearchView: View {
 // Extracted card view for better organization
 struct RecipeCard: View {
     let recipe: RecipeObject
+   // @EnvironmentObject var viewModel: ViewModel
     
     var body: some View {
-        
             VStack(alignment: .leading, spacing: 8) {
                 AsyncImage(url: URL(string: recipe.image)) { image in
                     image
@@ -199,12 +208,18 @@ struct RecipeCard: View {
                 Text("\(Int(recipe.calories)) calories • \(Int(recipe.yield)) servings")
                     .font(.subheadline)
                     .foregroundColor(.gray)
+//                Button(action:{
+//                    viewModel.toggleFavorite(recipe: recipe)
+//                }) {
+//                    Image(systemName: viewModel.favorites.contains(recipe) ? "heart.fill" : "heart")
+//                        //.foregoundColor(viewModel.favories.contains(recipe) ? .red: .gray)
+//                        .padding(5)
+//                }
             }
             .padding()
             .background(Color.white)
             .cornerRadius(15)
             .shadow(radius: 5)
-        
         }
 }
 
@@ -213,7 +228,6 @@ struct RecipeDetailView: View {
     let recipe: RecipeObject
     
     var body: some View {
-        
         ScrollView(.vertical, showsIndicators: true) {  // Explicit vertical scroll
             ZStack{
                 LinearGradient(gradient: Gradient(colors: [Color.green, Color.cyan]),
