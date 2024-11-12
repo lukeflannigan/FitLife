@@ -99,6 +99,7 @@ class ViewModel: ObservableObject {
             task.resume()
         }
     }
+    
     //Toggle Favorites Function.
     func toggleFavorite(recipe: RecipeObject){
         if favorites.contains(recipe) {
@@ -186,7 +187,7 @@ struct SearchView: View {
 // Extracted card view for better organization
 struct RecipeCard: View {
     let recipe: RecipeObject
-   // @EnvironmentObject var viewModel: ViewModel
+    @StateObject private var viewModel = ViewModel()
     
     var body: some View {
             VStack(alignment: .leading, spacing: 8) {
@@ -208,13 +209,13 @@ struct RecipeCard: View {
                 Text("\(Int(recipe.calories)) calories • \(Int(recipe.yield)) servings")
                     .font(.subheadline)
                     .foregroundColor(.gray)
-//                Button(action:{
-//                    viewModel.toggleFavorite(recipe: recipe)
-//                }) {
-//                    Image(systemName: viewModel.favorites.contains(recipe) ? "heart.fill" : "heart")
-//                        //.foregoundColor(viewModel.favories.contains(recipe) ? .red: .gray)
-//                        .padding(5)
-//                }
+                Button(action:{
+                    viewModel.toggleFavorite(recipe: recipe)
+                }) {
+                    Image(systemName: viewModel.favorites.contains(recipe) ? "heart.fill" : "heart")
+                        //.foregoundColor(viewModel.favories.contains(recipe) ? .red: .gray)
+                        .padding(5)
+                }
             }
             .padding()
             .background(Color.white)
