@@ -28,6 +28,8 @@ struct RecipeObject: Hashable, Codable{
         }
     }
 }
+//Mark: - Recipe Object
+
 
 // Struct for API Response
 struct RecipeResponse: Codable{
@@ -117,19 +119,18 @@ struct SearchView: View {
     @StateObject private var viewModel = ViewModel()
     @State private var searchText = ""
     @State private var isSearching = false
+    @State private var showFavoriteRecipes = false //to be able to toggle b/w all and favorite recipes.
     
     var body: some View {
         NavigationView {
-           
             ZStack {
-                    // Background gradient
+                // Background gradient
                 LinearGradient(gradient: Gradient(colors: [Color.green, Color.cyan]),
                                    startPoint: .topLeading,
                                    endPoint: .bottomTrailing)
                             .ignoresSafeArea() // Make gradient fill the entire screen
-                            
-            ScrollView {  // Added ScrollView here
-                        VStack {
+                ScrollView {
+                  VStack {
                             // Search bar
                             HStack {
                                     TextField("Search recipes...", text: $searchText)
@@ -147,6 +148,10 @@ struct SearchView: View {
                                         }
                                 }
                                 .padding()
+                      Toggle(isOn: $showFavoriteRecipes){
+                          Text("Show Favorites Only")
+                              .font(.headline)
+                      }.padding()
                                     
                             // Results list
                             if isSearching {
