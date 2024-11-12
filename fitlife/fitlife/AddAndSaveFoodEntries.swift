@@ -9,7 +9,7 @@ import SwiftUI
 import Foundation
 
 struct AddFoodEntryView: View{
-    @State private var name: String = ""   //As in, what is the name of the food item you ate?
+    @State private var name: String = ""   //As in, what is the name of the food item you ate
     @State private var calories: String = ""
     @State private var protein: String = ""
     @State private var carbs: String = ""
