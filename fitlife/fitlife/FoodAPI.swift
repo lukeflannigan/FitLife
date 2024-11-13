@@ -148,6 +148,7 @@ struct SearchView: View {
                                         }
                                 }
                                 .padding()
+                      
                       Toggle(isOn: $showFavoriteRecipes){
                           Text("Show Favorites Only")
                               .font(.headline)
@@ -160,7 +161,11 @@ struct SearchView: View {
                                                 .padding()
                                         } else {
                                             LazyVStack(spacing: 15) {  // Using LazyVStack for better performance
-                                                ForEach(viewModel.recipes, id: \.self) { recipe in
+                                                let filteredRecipes = showFavoriteRecipes ?
+                                                viewModel.favorites.map{$0} : viewModel.recipes
+                                                
+                                                
+                                                ForEach(filteredRecipes, id: \.self) { recipe in
                                                     NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
                                                         RecipeCard(recipe: recipe)  // Extracted card view
                                                     }
