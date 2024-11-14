@@ -13,6 +13,7 @@ struct ActiveWorkoutView: View {
     @State private var showingExerciseSelection = false
     @State private var selectedExercises: [WorkoutExercise] = []
     @State private var workoutTitle = ""
+    @State private var showingCancelAlert = false
     
     var formattedTime: String {
         let hours = Int(elapsedTime) / 3600
@@ -25,16 +26,23 @@ struct ActiveWorkoutView: View {
         NavigationView {
             VStack(spacing: 24) {
                 // Title and Timer Section
-                VStack(spacing: 20) {
+                VStack(spacing: 16) {
                     TextField("Workout Name", text: $workoutTitle)
                         .font(.custom("Poppins-SemiBold", size: 24))
                         .multilineTextAlignment(.center)
-                        .padding(.top, 20)
+                        .padding(.top, 12)
+                        .submitLabel(.done)
                     
-                    Text(formattedTime)
-                        .font(.custom("Poppins-Bold", size: 36))
-                        .monospacedDigit()
-                        .foregroundColor(.black)
+                    VStack(spacing: 4) {
+                        Text("Duration")
+                            .font(.custom("Poppins-Regular", size: 14))
+                            .foregroundColor(.secondary)
+                        Text(formattedTime)
+                            .font(.custom("Poppins-Bold", size: 36))
+                            .monospacedDigit()
+                            .foregroundColor(.black)
+                    }
+                    .padding(.bottom, 8)
                 }
                 
                 Divider()
@@ -91,15 +99,35 @@ struct ActiveWorkoutView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        showingCancelAlert = true
+                    }
+                    .font(.custom("Poppins-SemiBold", size: 16))
+                    .foregroundColor(.black)
+                }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Finish") { 
+                    Button("Finish") {
+                        // Will need to save workout here
                         timer?.invalidate()
                         dismiss()
                     }
                     .font(.custom("Poppins-SemiBold", size: 16))
                     .foregroundColor(.black)
+                    .opacity(workoutTitle.isEmpty || selectedExercises.isEmpty ? 0.5 : 1)
+                    .disabled(workoutTitle.isEmpty || selectedExercises.isEmpty)
                 }
             }
+        }
+        .alert("Cancel Workout?", isPresented: $showingCancelAlert) {
+            Button("Cancel Workout", role: .destructive) {
+                timer?.invalidate()
+                dismiss()
+            }
+            Button("Continue Workout", role: .cancel) {}
+        } message: {
+            Text("Are you sure you want to cancel this workout? Your progress will be lost.")
         }
         .sheet(isPresented: $showingExerciseSelection) {
             ExerciseSelectionSheet(selectedExercises: $selectedExercises)
