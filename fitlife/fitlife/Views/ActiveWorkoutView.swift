@@ -1,12 +1,17 @@
 import SwiftUI
 
+struct WorkoutExercise: Identifiable {
+    let id = UUID()
+    let name: String
+}
+
 struct ActiveWorkoutView: View {
     @Environment(\.dismiss) private var dismiss
     @Bindable var workout: Workout
     @State private var elapsedTime: TimeInterval = 0
     @State private var timer: Timer?
     @State private var showingExerciseSelection = false
-    @State private var selectedExercises: [String] = [] 
+    @State private var selectedExercises: [WorkoutExercise] = [] 
     
     var formattedTime: String {
         let hours = Int(elapsedTime) / 3600
@@ -44,9 +49,9 @@ struct ActiveWorkoutView: View {
                 } else {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 20) {
-                            ForEach(selectedExercises, id: \.self) { exercise in
+                            ForEach(selectedExercises) { exercise in
                                 VStack(alignment: .leading, spacing: 0) {
-                                    Text(exercise)
+                                    Text(exercise.name)
                                         .font(.custom("Poppins-Medium", size: 17))
                                         .foregroundColor(.black)
                                         .padding(.horizontal, 24)
@@ -108,7 +113,7 @@ struct ActiveWorkoutView: View {
 // Basic exercise selection for now. Will need to connect this to the exercise library to use API. 
 struct ExerciseSelectionSheet: View {
     @Environment(\.dismiss) private var dismiss
-    @Binding var selectedExercises: [String]
+    @Binding var selectedExercises: [WorkoutExercise]
     
     let availableExercises = [
         "Barbell Bench Press",
@@ -122,7 +127,7 @@ struct ExerciseSelectionSheet: View {
                 LazyVStack(spacing: 16) {
                     ForEach(availableExercises, id: \.self) { exercise in
                         Button(action: {
-                            selectedExercises.append(exercise)
+                            selectedExercises.append(WorkoutExercise(name: exercise))
                             dismiss()
                         }) {
                             HStack {
