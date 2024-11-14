@@ -71,10 +71,19 @@ struct ActiveWorkoutView: View {
                         VStack(spacing: 20) {
                             ForEach(selectedExercises) { exercise in
                                 ExerciseSetCard(exercise: exercise)
+                                    .contextMenu {
+                                        Button(role: .destructive) {
+                                            withAnimation {
+                                                selectedExercises.removeAll { $0.id == exercise.id }
+                                            }
+                                        } label: {
+                                            Label("Delete Exercise", systemImage: "trash")
+                                        }
+                                    }
                             }
                         }
+                        .padding(.vertical, 8)
                     }
-                    .padding(.vertical, 8)
                 }
                 
                 // Add Exercise Button
