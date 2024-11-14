@@ -204,89 +204,101 @@ struct ExerciseSetCard: View {
                 .font(.custom("Poppins-SemiBold", size: 20))
             
             VStack(spacing: 12) {
-                HStack(alignment: .center, spacing: 0) {
-                    // Set number
-                    ZStack {
-                        Circle()
-                            .fill(Color.black)
-                            .frame(width: 28, height: 28)
-                        Text("1")
-                            .font(.custom("Poppins-SemiBold", size: 15))
-                            .foregroundColor(.white)
-                    }
-                    .frame(width: 40)
-                    
-                    // Weight Input
-                    HStack(spacing: 4) {
-                        TextField("0", text: Binding(
-                            get: { String(format: "%.0f", sets[0].weight) },
-                            set: { newValue in
-                                if let weight = Double(newValue), weight <= 2000 {
-                                    sets[0].weight = weight
-                                }
-                            }
-                        ))
-                        .keyboardType(.numberPad)
-                        .multilineTextAlignment(.trailing)
-                        .font(.custom("Poppins-Medium", size: 15))
+                ForEach(Array(sets.enumerated()), id: \.element.id) { index, set in
+                    HStack(alignment: .center, spacing: 0) {
+                        // Set number
+                        ZStack {
+                            Circle()
+                                .fill(Color.black)
+                                .frame(width: 28, height: 28)
+                            Text("\(index + 1)")
+                                .font(.custom("Poppins-SemiBold", size: 15))
+                                .foregroundColor(.white)
+                        }
                         .frame(width: 40)
                         
-                        Text("lbs")
-                            .font(.custom("Poppins-Regular", size: 12))
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(
-                        RoundedRectangle(cornerRadius: 6)
-                            .fill(Color(.systemGray6))
-                    )
-                    .frame(maxWidth: .infinity)
-                    
-                    // Multiplication Symbol
-                    Text("×")
-                        .font(.custom("Poppins-Medium", size: 18))
-                        .foregroundColor(.black)
-                        .frame(width: 20)
-                    
-                    // Reps Input
-                    HStack(spacing: 4) {
-                        TextField("0", text: Binding(
-                            get: { String(sets[0].reps) },
-                            set: { newValue in
-                                if let reps = Int(newValue), reps <= 100 {
-                                    sets[0].reps = reps
+                        // Weight Input
+                        HStack(spacing: 4) {
+                            TextField("0", text: Binding(
+                                get: { String(format: "%.0f", sets[index].weight) },
+                                set: { newValue in
+                                    if let weight = Double(newValue), weight <= 2000 {
+                                        sets[index].weight = weight
+                                    }
+                                }
+                            ))
+                            .keyboardType(.numberPad)
+                            .multilineTextAlignment(.trailing)
+                            .font(.custom("Poppins-Medium", size: 15))
+                            .frame(width: 40)
+                            
+                            Text("lbs")
+                                .font(.custom("Poppins-Regular", size: 12))
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(
+                            RoundedRectangle(cornerRadius: 6)
+                                .fill(Color(.systemGray6))
+                        )
+                        .frame(maxWidth: .infinity)
+                        
+                        // Multiplication Symbol
+                        Text("×")
+                            .font(.custom("Poppins-Medium", size: 18))
+                            .foregroundColor(.black)
+                            .frame(width: 20)
+                        
+                        // Reps Input
+                        HStack(spacing: 4) {
+                            TextField("0", text: Binding(
+                                get: { String(sets[index].reps) },
+                                set: { newValue in
+                                    if let reps = Int(newValue), reps <= 100 {
+                                        sets[index].reps = reps
+                                    }
+                                }
+                            ))
+                            .keyboardType(.numberPad)
+                            .multilineTextAlignment(.trailing)
+                            .font(.custom("Poppins-Medium", size: 15))
+                            .frame(width: 30)
+                            
+                            Text("reps")
+                                .font(.custom("Poppins-Regular", size: 12))
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(
+                            RoundedRectangle(cornerRadius: 6)
+                                .fill(Color(.systemGray6))
+                        )
+                        .frame(maxWidth: .infinity)
+                        
+                        // Delete Button
+                        Button(action: {
+                            if sets.count > 1 {
+                                withAnimation {
+                                    sets.remove(at: index)
                                 }
                             }
-                        ))
-                        .keyboardType(.numberPad)
-                        .multilineTextAlignment(.trailing)
-                        .font(.custom("Poppins-Medium", size: 15))
-                        .frame(width: 30)
-                        
-                        Text("reps")
-                            .font(.custom("Poppins-Regular", size: 12))
-                            .foregroundColor(.secondary)
+                        }) {
+                            Image(systemName: "trash")
+                                .foregroundColor(.red.opacity(0.8))
+                                .font(.system(size: 14, weight: .medium))
+                        }
+                        .frame(width: 40)
                     }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(
-                        RoundedRectangle(cornerRadius: 6)
-                            .fill(Color(.systemGray6))
-                    )
-                    .frame(maxWidth: .infinity)
-                    
-                    // Delete Button
-                    Button(action: {}) {
-                        Image(systemName: "trash")
-                            .foregroundColor(.red.opacity(0.8))
-                            .font(.system(size: 14, weight: .medium))
-                    }
-                    .frame(width: 40)
                 }
             }
             
-            Button(action: {}) {
+            Button(action: {
+                withAnimation {
+                    sets.append(WorkoutSet())
+                }
+            }) {
                 HStack {
                     Image(systemName: "plus.circle.fill")
                         .font(.system(size: 14))
