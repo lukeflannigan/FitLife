@@ -1,8 +1,15 @@
 import SwiftUI
 
+struct WorkoutSet: Identifiable {
+    let id = UUID()
+    var weight: Double = 0
+    var reps: Int = 0
+}
+
 struct WorkoutExercise: Identifiable {
     let id = UUID()
     let name: String
+    var sets: [WorkoutSet] = []
 }
 
 struct ActiveWorkoutView: View {
@@ -63,15 +70,7 @@ struct ActiveWorkoutView: View {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 20) {
                             ForEach(selectedExercises) { exercise in
-                                VStack(alignment: .leading, spacing: 0) {
-                                    Text(exercise.name)
-                                        .font(.custom("Poppins-Medium", size: 17))
-                                        .foregroundColor(.black)
-                                        .padding(.horizontal, 24)
-                                        .padding(.vertical, 16)
-                                }
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(Color(.systemGray6))
+                                ExerciseSetCard(exercise: exercise)
                             }
                         }
                     }
@@ -192,6 +191,60 @@ struct ExerciseSelectionSheet: View {
                 }
             }
         }
+    }
+}
+
+struct ExerciseSetCard: View {
+    let exercise: WorkoutExercise
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text(exercise.name)
+                .font(.custom("Poppins-SemiBold", size: 20))
+            
+            VStack(spacing: 12) {
+                // Basic set row structure
+                HStack(alignment: .center, spacing: 0) {
+                    // Set number
+                    ZStack {
+                        Circle()
+                            .fill(Color.black)
+                            .frame(width: 28, height: 28)
+                        Text("1")
+                            .font(.custom("Poppins-SemiBold", size: 15))
+                            .foregroundColor(.white)
+                    }
+                    .frame(width: 40)
+                
+                    Text("Weight & Reps")
+                        .font(.custom("Poppins-Regular", size: 15))
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity)
+                }
+            }
+            
+            Button(action: {}) {
+                HStack {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 14))
+                    Text("Add Set")
+                        .font(.custom("Poppins-SemiBold", size: 14))
+                }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
+                .background(Color.black)
+                .cornerRadius(8)
+            }
+            .padding(.top, 4)
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.systemBackground))
+                .shadow(color: Color.black.opacity(0.06), radius: 8, x: 0, y: 4)
+        )
+        .padding(.horizontal)
     }
 }
 
