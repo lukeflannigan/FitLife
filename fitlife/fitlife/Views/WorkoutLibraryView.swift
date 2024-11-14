@@ -10,9 +10,13 @@ import SwiftData
 
 struct WorkoutLibraryView: View {
     // Fetch workouts from user data
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.modelContext) var modelContext
     @Query(sort: \Workout.date, order: .reverse) private var workouts: [Workout]
     
+    // State for showing the current workout
+    @State private var showingWorkout = false
+    @Environment(\.currentWorkout) var currentWorkout
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -27,8 +31,35 @@ struct WorkoutLibraryView: View {
                 .padding(.top)
             }
             .navigationTitle("Workout Library")
+            .toolbar {
+                Button(action: {
+                    if let existingWorkout = workouts.first(where: { !$0.completed}) {
+                        currentWorkout.wrappedValue = existingWorkout
+                    } else {
+                        let newWorkout = Workout(name: "New Workout")
+                        addNewWorkout(newWorkout: newWorkout)
+                    }
+                    showingWorkout = true
+                }) {
+                    Text("Start New Workout")
+                }
+                .sheet(isPresented: $showingWorkout) {
+                    if let _ = currentWorkout.wrappedValue {
+                        NavigationStack {
+                            CurrentWorkoutView(currentWorkout: currentWorkout)
+                        }
+                    }
+                }
+            }
         }
     }
+    
+    // MARK: - Start New Workout Function
+    func addNewWorkout(newWorkout: Workout) {
+            let newWorkout = Workout(name: "New Workout")
+            modelContext.insert(newWorkout)
+            currentWorkout.wrappedValue = newWorkout
+        }
 }
 
 // MARK: - Workout Card

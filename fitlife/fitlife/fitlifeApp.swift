@@ -34,7 +34,7 @@ struct YourApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                SplashView()
+                SplashView(currentWorkout: $currentWorkout)
                     .modelContainer(modelContainer)
                     .environment(\.currentWorkout, $currentWorkout)
             }
@@ -58,5 +58,6 @@ struct YourApp: App {
             }
         }
     }
+    
 }
 

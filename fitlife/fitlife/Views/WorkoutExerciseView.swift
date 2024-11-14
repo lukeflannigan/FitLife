@@ -23,7 +23,7 @@ struct WorkoutExerciseView: View {
 
     var body: some View {
             HStack {
-                Text(workoutExercise.exercise?.title ?? "Empty")
+                Text(workoutExercise.exercise?.name ?? "Empty")
                 Spacer()
                 Menu {
                     Button(role: .destructive, action: {
