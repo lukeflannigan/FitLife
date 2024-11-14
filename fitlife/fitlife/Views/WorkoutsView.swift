@@ -296,6 +296,7 @@ struct WorkoutsView: View {
     @State private var searchText: String = ""
     @State private var showingExerciseLibrary = false
     @State private var showFavoritesOnly: Bool = false // Added for favorites filtering
+    @State private var showingActiveWorkout = false  
 
     // Filtering exercises within the workout based on search text and favorites
     var filteredExercises: [Exercise] {
@@ -393,14 +394,15 @@ struct WorkoutsView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(trailing:
-            Button(action: { showingNewExerciseForm = true }) {
+            Button(action: { showingActiveWorkout = true }) {  // Changed action
                 Image(systemName: "plus")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(Color(.darkGray))
             }
         )
-        .sheet(isPresented: $showingNewExerciseForm) {
-            NewExerciseForm(exercises: $workout.exercises)
+        .sheet(isPresented: $showingActiveWorkout) {  // Changed sheet presentation
+            let newWorkout = Workout(name: "", exercises: [])
+            ActiveWorkoutView(workout: newWorkout)
         }
     }
 
