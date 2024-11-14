@@ -253,12 +253,10 @@ struct ExerciseSelectionSheet: View {
 }
 
 struct ExerciseSetCard: View {
-    let exercise: ActiveExercise
-    @StateObject var activeExercise: ActiveExercise
+    @ObservedObject var exercise: ActiveExercise
     
     init(exercise: ActiveExercise) {
         self.exercise = exercise
-        _activeExercise = StateObject(wrappedValue: exercise)
     }
     
     var body: some View {
@@ -267,8 +265,8 @@ struct ExerciseSetCard: View {
                 .font(.custom("Poppins-SemiBold", size: 20))
             
             VStack(spacing: 12) {
-                ForEach(activeExercise.sets.indices, id: \.self) { index in
-                    let set = activeExercise.sets[index]
+                ForEach(exercise.sets.indices, id: \.self) { index in
+                    let set = exercise.sets[index]
                     HStack(alignment: .center, spacing: 0) {
                         // Set number
                         ZStack {
@@ -287,7 +285,7 @@ struct ExerciseSetCard: View {
                                 get: { String(format: "%.0f", set.weight) },
                                 set: { newValue in
                                     if let weight = Double(newValue), weight <= 2000 {
-                                        activeExercise.sets[index].weight = weight
+                                        exercise.sets[index].weight = weight
                                     }
                                 }
                             ))
@@ -320,7 +318,7 @@ struct ExerciseSetCard: View {
                                 get: { String(set.reps) },
                                 set: { newValue in
                                     if let reps = Int(newValue), reps <= 100 {
-                                        activeExercise.sets[index].reps = reps
+                                        exercise.sets[index].reps = reps
                                     }
                                 }
                             ))
@@ -343,9 +341,9 @@ struct ExerciseSetCard: View {
                         
                         // Delete Button
                         Button(action: {
-                            if activeExercise.sets.count > 1 {
+                            if exercise.sets.count > 1 {
                                 withAnimation {
-                                    activeExercise.sets.remove(at: index)
+                                    exercise.sets.remove(at: index)
                                 }
                             }
                         }) {
@@ -360,7 +358,7 @@ struct ExerciseSetCard: View {
             
             Button(action: {
                 withAnimation {
-                    activeExercise.sets.append(WorkoutSet())
+                    exercise.sets.append(WorkoutSet())
                 }
             }) {
                 HStack {
