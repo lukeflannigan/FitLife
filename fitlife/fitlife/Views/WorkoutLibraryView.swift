@@ -9,27 +9,79 @@ import SwiftUI
 import SwiftData
 
 struct WorkoutLibraryView: View {
-    // Fetch workouts from user data
     @Environment(\.modelContext) private var modelContext
+    @State private var isCreateWorkoutAlertShowing = false
+    @State private var workoutName: String = ""
+    @State private var isEditWorkoutAlertShowing = false
+    @State private var selectedWorkout: Workout?
     @Query(sort: \Workout.date, order: .reverse) private var workouts: [Workout]
     
-    @State private var currworkouts: [Workout] = [Workout.mockWorkoutEntry]
-
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 15) {
-                    ForEach(currworkouts) { workout in
+                    ForEach(workouts) { workout in
                         NavigationLink(destination: WorkoutsView(workout: workout)) {
                             WorkoutCard(workout: workout)
                                 .padding(.horizontal)
+                        }
+                        .swipeActions() {
+                            // Edit button
+                            Button("Edit") {
+                                selectedWorkout = workout
+                                workoutName = workout.name
+                                isEditWorkoutAlertShowing = true
+                            }
+                            .tint(.blue)
+                            
+                            // Delete button
+                            Button("Delete", role: .destructive) {
+                                deleteWorkout(workout)
+                            }
                         }
                     }
                 }
                 .padding(.top)
             }
             .navigationTitle("Workout Library")
+            .navigationBarItems(trailing:
+                                    Button(action: { isCreateWorkoutAlertShowing.toggle() }) {
+                Image(systemName: "plus")
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundColor(Color(.darkGray))
+            })
+            .alert("Create New Workout", isPresented: $isCreateWorkoutAlertShowing) {
+                TextField("Workout Name", text: $workoutName)
+                
+                Button("Cancel", role: .cancel) { }
+                Button("Save") {
+                    let newWorkout = Workout(name: workoutName, exercises: [], date: Date())
+                    modelContext.insert(newWorkout)
+                    workoutName = ""
+                }
+            } message: {
+                Text("Enter the name of your workout.")
+            }
+            .alert("Edit Workout", isPresented: $isEditWorkoutAlertShowing) {
+                TextField("Workout Name", text: $workoutName)
+                
+                Button("Cancel", role: .cancel) { }
+                Button("Save") {
+                    if let workout = selectedWorkout {
+                        workout.name = workoutName // Directly modifying the workout's name
+                    }
+                    workoutName = ""
+                    selectedWorkout = nil
+                }
+            } message: {
+                Text("Edit the name of your workout.")
+            }
         }
+    }
+    
+    // Function to delete a workout
+    private func deleteWorkout(_ workout: Workout) {
+        modelContext.delete(workout)
     }
 }
 
@@ -50,7 +102,7 @@ struct WorkoutCard: View {
             }
             
             // Date
-            Text(workout.date, style: .date)
+            Text("Created on \(workout.date, style: .date)")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
 
