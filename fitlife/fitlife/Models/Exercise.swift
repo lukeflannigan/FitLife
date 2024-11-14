@@ -30,9 +30,6 @@ class Exercise: Identifiable, ObservableObject {
     var equipment: String?
     var force: String?
     var mechanic: String?
-    var sets: Int
-    var reps: Int
-    var weight: Double
     var isFavorite: Bool
 
     init(
@@ -67,9 +64,6 @@ class Exercise: Identifiable, ObservableObject {
         self.equipment = equipment
         self.force = force
         self.mechanic = mechanic
-        self.sets = sets
-        self.reps = reps
-        self.weight = weight
         self.isFavorite = isFavorite
     }
 }
