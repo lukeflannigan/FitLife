@@ -316,10 +316,16 @@ struct ExerciseSetCard: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color(.systemBackground))
-                .shadow(color: Color.black.opacity(0.06), radius: 8, x: 0, y: 4)
+                .fill(Color.white)
+                .shadow(
+                    color: Color.black.opacity(0.08),
+                    radius: 15,
+                    x: 0,
+                    y: 4
+                )
         )
         .padding(.horizontal)
+        .padding(.vertical, 6)
     }
 }
 
