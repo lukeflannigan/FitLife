@@ -11,16 +11,34 @@ import SwiftData
 struct WorkoutLibraryView: View {
     // Fetch workouts from user data
     @Environment(\.modelContext) var modelContext
-    @Query(sort: \Workout.date, order: .reverse) private var workouts: [Workout]
+    @Query(sort: \Workout.date, order: .reverse) var workouts: [Workout]
     
     // State for showing the current workout
     @State private var showingWorkout = false
+    @State private var showingExerciseLibrary = false
     @Environment(\.currentWorkout) var currentWorkout
 
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 15) {
+                    Button(action: {
+                        showingExerciseLibrary = true
+                    }) {
+                        Text("Browse Exercises")
+                            .font(.headline)
+                            .foregroundColor(.blue)
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color(UIColor.secondarySystemBackground))
+                            )
+                    }
+                    .sheet(isPresented: $showingExerciseLibrary) {
+                        NavigationView {
+                            ExerciseLibraryView(workout: currentWorkout.wrappedValue ?? Workout(name: "New Workout"))
+                        }
+                    }
                     ForEach(workouts) { workout in
                         NavigationLink(destination: WorkoutDetailView(workout: workout)) {
                             WorkoutCard(workout: workout)
@@ -44,11 +62,7 @@ struct WorkoutLibraryView: View {
                     Text("Start New Workout")
                 }
                 .sheet(isPresented: $showingWorkout) {
-                    if let _ = currentWorkout.wrappedValue {
-                        NavigationStack {
-                            CurrentWorkoutView(currentWorkout: currentWorkout)
-                        }
-                    }
+                    CurrentWorkoutView(currentWorkout: currentWorkout)
                 }
             }
         }

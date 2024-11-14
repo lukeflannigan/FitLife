@@ -10,12 +10,13 @@ import SwiftData
 
 struct CurrentWorkoutView: View {
     @Environment(\.modelContext) var modelContext
-    @State private var selectedExercises = Set<UUID>()
+    @State private var selectedExercises = Set<String>()
     @State private var isSelectingExercises = false
     @Binding var currentWorkout: Workout?
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
+        Text("Current Workout")
         if let currentWorkout = currentWorkout {
             VStack {
             Text("Current Workout")
@@ -40,11 +41,11 @@ struct CurrentWorkoutView: View {
             .listStyle(.plain)
             
             
-//            .sheet(isPresented: $isSelectingExercises, content: {
-//                NavigationStack {
-//                    ExerciseSelectionView(selectedExercises: $selectedExercises, currentWorkout: $currentWorkout)
-//                }
-//            })
+            .sheet(isPresented: $isSelectingExercises, content: {
+                NavigationStack {
+                    ExerciseSelectionView(selectedExercises: $selectedExercises, currentWorkout: $currentWorkout)
+                }
+            })
                 HStack {
                     Button(role: .destructive, action: {
                         modelContext.delete(currentWorkout)
