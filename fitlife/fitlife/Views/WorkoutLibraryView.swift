@@ -12,6 +12,8 @@ struct WorkoutLibraryView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var isCreateWorkoutAlertShowing = false
     @State private var workoutName: String = ""
+    @State private var isEditWorkoutAlertShowing = false
+    @State private var selectedWorkout: Workout?
     @Query(sort: \Workout.date, order: .reverse) private var workouts: [Workout]
     
     var body: some View {
@@ -22,6 +24,20 @@ struct WorkoutLibraryView: View {
                         NavigationLink(destination: WorkoutsView(workout: workout)) {
                             WorkoutCard(workout: workout)
                                 .padding(.horizontal)
+                        }
+                        .swipeActions() {
+                            // Edit button
+                            Button("Edit") {
+                                selectedWorkout = workout
+                                workoutName = workout.name
+                                isEditWorkoutAlertShowing = true
+                            }
+                            .tint(.blue)
+                            
+                            // Delete button
+                            Button("Delete", role: .destructive) {
+                                deleteWorkout(workout)
+                            }
                         }
                     }
                 }
@@ -46,7 +62,26 @@ struct WorkoutLibraryView: View {
             } message: {
                 Text("Enter the name of your workout.")
             }
+            .alert("Edit Workout", isPresented: $isEditWorkoutAlertShowing) {
+                TextField("Workout Name", text: $workoutName)
+                
+                Button("Cancel", role: .cancel) { }
+                Button("Save") {
+                    if let workout = selectedWorkout {
+                        workout.name = workoutName // Directly modifying the workout's name
+                    }
+                    workoutName = ""
+                    selectedWorkout = nil
+                }
+            } message: {
+                Text("Edit the name of your workout.")
+            }
         }
+    }
+    
+    // Function to delete a workout
+    private func deleteWorkout(_ workout: Workout) {
+        modelContext.delete(workout)
     }
 }
 
@@ -67,7 +102,7 @@ struct WorkoutCard: View {
             }
             
             // Date
-            Text(workout.date, style: .date)
+            Text("Created on \(workout.date, style: .date)")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
 
@@ -84,7 +119,6 @@ struct WorkoutCard: View {
         )
     }
 }
-
 
 // MARK: - Preview
 #Preview {
