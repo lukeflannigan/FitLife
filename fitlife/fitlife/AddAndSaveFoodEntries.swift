@@ -20,7 +20,7 @@ struct AddFoodEntryView: View{
     var body: some View {
         ZStack {
             // Gradient background for the entire screen
-            LinearGradient(gradient: Gradient(colors: [Color.green, Color.blue]),
+            LinearGradient(gradient: Gradient(colors: [Color.white, Color.green]),
                            startPoint: .topLeading,
                            endPoint: .bottomTrailing)
                 .ignoresSafeArea() // Covers the entire screen with gradient
@@ -145,7 +145,7 @@ struct LogHomeView: View {
             NavigationView {
                 ZStack {
                     // Background gradient
-                    LinearGradient(gradient: Gradient(colors: [Color.blue, Color.green]),
+                    LinearGradient(gradient: Gradient(colors: [Color.white, Color.green]),
                                    startPoint: .topLeading,
                                    endPoint: .bottomTrailing)
                         .ignoresSafeArea()
