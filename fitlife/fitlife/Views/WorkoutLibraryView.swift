@@ -9,19 +9,16 @@ import SwiftUI
 import SwiftData
 
 struct WorkoutLibraryView: View {
-    // Fetch workouts from user data
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.dismiss) private var dismiss
+    @State private var isCreateWorkoutAlertShowing = false
+    @State private var workoutName: String = ""
     @Query(sort: \Workout.date, order: .reverse) private var workouts: [Workout]
-    @State private var isCreateWorkoutSheetShowing = false
     
-    @State private var currworkouts: [Workout] = [Workout.mockWorkoutEntry]
-
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 15) {
-                    ForEach(currworkouts) { workout in
+                    ForEach(workouts) { workout in
                         NavigationLink(destination: WorkoutsView(workout: workout)) {
                             WorkoutCard(workout: workout)
                                 .padding(.horizontal)
@@ -32,24 +29,24 @@ struct WorkoutLibraryView: View {
             }
             .navigationTitle("Workout Library")
             .navigationBarItems(trailing:
-                                    Button(action: {isCreateWorkoutSheetShowing.toggle()}) {
-                    Image(systemName: "plus")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(Color(.darkGray))
+                                    Button(action: { isCreateWorkoutAlertShowing.toggle() }) {
+                Image(systemName: "plus")
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundColor(Color(.darkGray))
+            })
+            .alert("Create New Workout", isPresented: $isCreateWorkoutAlertShowing) {
+                TextField("Workout Name", text: $workoutName)
+                
+                Button("Cancel", role: .cancel) { }
+                Button("Save") {
+                    let newWorkout = Workout(name: workoutName, exercises: [], date: Date())
+                    modelContext.insert(newWorkout)
+                    workoutName = ""
                 }
-            )
-            .sheet(isPresented: $isCreateWorkoutSheetShowing) {
-                                print("Sheet dismissed!")
-                            } content: {
-                                CreateWorkoutSheet()
-                            }
+            } message: {
+                Text("Enter the name of your workout.")
+            }
         }
-    }
-}
-
-struct CreateWorkoutSheet: View{
-    var body: some View{
-        Text("fart")
     }
 }
 
@@ -87,6 +84,7 @@ struct WorkoutCard: View {
         )
     }
 }
+
 
 // MARK: - Preview
 #Preview {
