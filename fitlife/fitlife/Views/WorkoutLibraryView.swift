@@ -11,7 +11,9 @@ import SwiftData
 struct WorkoutLibraryView: View {
     // Fetch workouts from user data
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     @Query(sort: \Workout.date, order: .reverse) private var workouts: [Workout]
+    @State private var isCreateWorkoutSheetShowing = false
     
     @State private var currworkouts: [Workout] = [Workout.mockWorkoutEntry]
 
@@ -29,7 +31,25 @@ struct WorkoutLibraryView: View {
                 .padding(.top)
             }
             .navigationTitle("Workout Library")
+            .navigationBarItems(trailing:
+                                    Button(action: {isCreateWorkoutSheetShowing.toggle()}) {
+                    Image(systemName: "plus")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(Color(.darkGray))
+                }
+            )
+            .sheet(isPresented: $isCreateWorkoutSheetShowing) {
+                                print("Sheet dismissed!")
+                            } content: {
+                                CreateWorkoutSheet()
+                            }
         }
+    }
+}
+
+struct CreateWorkoutSheet: View{
+    var body: some View{
+        Text("fart")
     }
 }
 
