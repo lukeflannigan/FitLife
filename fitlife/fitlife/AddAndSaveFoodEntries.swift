@@ -102,7 +102,7 @@ struct AddFoodEntryView: View{
     
     /* This is for when DataPersistence is added in.
      private func addFoodEntry() {
-             // Convert input strings to Double
+              Convert input strings to Double
              guard let caloriesDouble = Double(calories),
                    let proteinDouble = Double(protein),
                    let carbsDouble = Double(carbs),
@@ -112,7 +112,7 @@ struct AddFoodEntryView: View{
                  return
              }
      
-     // Create a new DailyIntake object
+      //Create a new DailyIntake object
              let newEntry = DailyIntake(
                  calories: caloriesDouble,
                  protein: proteinDouble,
@@ -121,19 +121,20 @@ struct AddFoodEntryView: View{
                  name: name
              )
      
-     // Add to model context
+      //Add to model context
              modelContext.insert(newEntry)
      
      
-     // Save the context
+      //Save the context
              do {
                  try modelContext.save()
                  print("Food entry saved successfully!")
              } catch {
                  print("Failed to save food entry: \(error.localizedDescription)")
              }
-     
      */
+     
+     
 }
 
 
