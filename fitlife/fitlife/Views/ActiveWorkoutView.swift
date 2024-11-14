@@ -42,7 +42,22 @@ struct ActiveWorkoutView: View {
                     }
                     Spacer()
                 } else {
-                    Spacer()
+                    ScrollView(showsIndicators: false) {
+                        VStack(spacing: 20) {
+                            ForEach(selectedExercises, id: \.self) { exercise in
+                                VStack(alignment: .leading, spacing: 0) {
+                                    Text(exercise)
+                                        .font(.custom("Poppins-Medium", size: 17))
+                                        .foregroundColor(.black)
+                                        .padding(.horizontal, 24)
+                                        .padding(.vertical, 16)
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(Color(.systemGray6))
+                            }
+                        }
+                    }
+                    .padding(.vertical, 8)
                 }
                 
                 // Add Exercise Button
