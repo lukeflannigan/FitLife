@@ -11,7 +11,8 @@ struct ActiveWorkoutView: View {
     @State private var elapsedTime: TimeInterval = 0
     @State private var timer: Timer?
     @State private var showingExerciseSelection = false
-    @State private var selectedExercises: [WorkoutExercise] = [] 
+    @State private var selectedExercises: [WorkoutExercise] = []
+    @State private var workoutTitle = ""
     
     var formattedTime: String {
         let hours = Int(elapsedTime) / 3600
@@ -23,17 +24,21 @@ struct ActiveWorkoutView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 24) {
-                // Timer Display
-                VStack(spacing: 8) {
-                    Text("Workout Duration")
-                        .font(.custom("Poppins-Regular", size: 16))
-                        .foregroundColor(.secondary)
+                // Title and Timer Section
+                VStack(spacing: 20) {
+                    TextField("Workout Name", text: $workoutTitle)
+                        .font(.custom("Poppins-SemiBold", size: 24))
+                        .multilineTextAlignment(.center)
+                        .padding(.top, 20)
+                    
                     Text(formattedTime)
                         .font(.custom("Poppins-Bold", size: 36))
                         .monospacedDigit()
                         .foregroundColor(.black)
                 }
-                .padding(.top, 32)
+                
+                Divider()
+                    .padding(.horizontal)
                 
                 if selectedExercises.isEmpty {
                     Spacer()
