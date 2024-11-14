@@ -1,26 +1,56 @@
 import SwiftUI
+import SwiftData
 
+// Track individual set data
 struct WorkoutSet: Identifiable {
     let id = UUID()
-    var weight: Double = 0
-    var reps: Int = 0
+    var weight: Double
+    var reps: Int
+    var isCompleted: Bool = false
 }
 
-struct WorkoutExercise: Identifiable {
+// Track exercise data during workout
+class ActiveExercise: Identifiable, ObservableObject {
     let id = UUID()
-    let name: String
-    var sets: [WorkoutSet] = []
+    let exercise: Exercise
+    @Published var sets: [WorkoutSet]
+    
+    init(exercise: Exercise) {
+        self.exercise = exercise
+        // Initialize with one set using exercise's default values
+        self.sets = [WorkoutSet(
+            weight: exercise.weight,
+            reps: exercise.reps
+        )]
+    }
 }
 
 struct ActiveWorkoutView: View {
     @Environment(\.dismiss) private var dismiss
     @Bindable var workout: Workout
+
+    @State private var activeExercises: [ActiveExercise] = []
+    @State private var workoutTitle = ""
     @State private var elapsedTime: TimeInterval = 0
     @State private var timer: Timer?
     @State private var showingExerciseSelection = false
-    @State private var selectedExercises: [WorkoutExercise] = []
-    @State private var workoutTitle = ""
     @State private var showingCancelAlert = false
+    
+    private func saveWorkout() {
+        workout.name = workoutTitle
+        workout.date = Date()
+        
+        // Convert ActiveExercises to Exercise models
+        workout.exercises = activeExercises.map { activeExercise in
+            let exercise = activeExercise.exercise
+            exercise.sets = activeExercise.sets.count
+            if let lastSet = activeExercise.sets.last {
+                exercise.weight = lastSet.weight
+                exercise.reps = lastSet.reps
+            }
+            return exercise
+        }
+    }
     
     var formattedTime: String {
         let hours = Int(elapsedTime) / 3600
@@ -55,7 +85,7 @@ struct ActiveWorkoutView: View {
                 Divider()
                     .padding(.horizontal)
                 
-                if selectedExercises.isEmpty {
+                if activeExercises.isEmpty {
                     Spacer()
                     VStack(spacing: 16) {
                         Image(systemName: "dumbbell.fill")
@@ -69,12 +99,12 @@ struct ActiveWorkoutView: View {
                 } else {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 20) {
-                            ForEach(selectedExercises) { exercise in
+                            ForEach(activeExercises) { exercise in
                                 ExerciseSetCard(exercise: exercise)
                                     .contextMenu {
                                         Button(role: .destructive) {
                                             withAnimation {
-                                                selectedExercises.removeAll { $0.id == exercise.id }
+                                                activeExercises.removeAll { $0.id == exercise.id }
                                             }
                                         } label: {
                                             Label("Delete Exercise", systemImage: "trash")
@@ -123,8 +153,8 @@ struct ActiveWorkoutView: View {
                     }
                     .font(.custom("Poppins-SemiBold", size: 16))
                     .foregroundColor(.black)
-                    .opacity(workoutTitle.isEmpty || selectedExercises.isEmpty ? 0.5 : 1)
-                    .disabled(workoutTitle.isEmpty || selectedExercises.isEmpty)
+                    .opacity(workoutTitle.isEmpty || activeExercises.isEmpty ? 0.5 : 1)
+                    .disabled(workoutTitle.isEmpty || activeExercises.isEmpty)
                 }
             }
         }
@@ -138,7 +168,7 @@ struct ActiveWorkoutView: View {
             Text("Are you sure you want to cancel this workout? Your progress will be lost.")
         }
         .sheet(isPresented: $showingExerciseSelection) {
-            ExerciseSelectionSheet(selectedExercises: $selectedExercises)
+            ExerciseSelectionSheet(selectedExercises: $activeExercises)
         }
         .onAppear {
             timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
@@ -154,7 +184,7 @@ struct ActiveWorkoutView: View {
 // Basic exercise selection for now. Will need to connect this to the exercise library to use API. 
 struct ExerciseSelectionSheet: View {
     @Environment(\.dismiss) private var dismiss
-    @Binding var selectedExercises: [WorkoutExercise]
+    @Binding var selectedExercises: [ActiveExercise]
     
     let availableExercises = [
         "Barbell Bench Press",
@@ -168,7 +198,7 @@ struct ExerciseSelectionSheet: View {
                 LazyVStack(spacing: 16) {
                     ForEach(availableExercises, id: \.self) { exercise in
                         Button(action: {
-                            selectedExercises.append(WorkoutExercise(name: exercise))
+                            selectedExercises.append(ActiveExercise(exercise: Exercise(name: exercise)))
                             dismiss()
                         }) {
                             HStack {
@@ -204,12 +234,12 @@ struct ExerciseSelectionSheet: View {
 }
 
 struct ExerciseSetCard: View {
-    let exercise: WorkoutExercise
+    let exercise: ActiveExercise
     @State private var sets: [WorkoutSet] = [WorkoutSet()]
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(exercise.name)
+            Text(exercise.exercise.name)
                 .font(.custom("Poppins-SemiBold", size: 20))
             
             VStack(spacing: 12) {
