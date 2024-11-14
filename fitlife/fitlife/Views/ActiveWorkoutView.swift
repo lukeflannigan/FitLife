@@ -203,7 +203,6 @@ struct ExerciseSetCard: View {
                 .font(.custom("Poppins-SemiBold", size: 20))
             
             VStack(spacing: 12) {
-                // Basic set row structure
                 HStack(alignment: .center, spacing: 0) {
                     // Set number
                     ZStack {
@@ -215,11 +214,52 @@ struct ExerciseSetCard: View {
                             .foregroundColor(.white)
                     }
                     .frame(width: 40)
-                
-                    Text("Weight & Reps")
-                        .font(.custom("Poppins-Regular", size: 15))
-                        .foregroundColor(.secondary)
-                        .frame(maxWidth: .infinity)
+                    
+                    // Weight Input
+                    HStack(spacing: 4) {
+                        Text("135")
+                            .font(.custom("Poppins-Medium", size: 15))
+                        Text("lbs")
+                            .font(.custom("Poppins-Regular", size: 12))
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6)
+                            .fill(Color(.systemGray6))
+                    )
+                    .frame(maxWidth: .infinity)
+                    
+                    // Multiplication Symbol
+                    Text("×")
+                        .font(.custom("Poppins-Medium", size: 18))
+                        .foregroundColor(.black)
+                        .frame(width: 20)
+                    
+                    // Reps Input
+                    HStack(spacing: 4) {
+                        Text("12")
+                            .font(.custom("Poppins-Medium", size: 15))
+                        Text("reps")
+                            .font(.custom("Poppins-Regular", size: 12))
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6)
+                            .fill(Color(.systemGray6))
+                    )
+                    .frame(maxWidth: .infinity)
+                    
+                    // Delete Button
+                    Button(action: {}) {
+                        Image(systemName: "trash")
+                            .foregroundColor(.red.opacity(0.8))
+                            .font(.system(size: 14, weight: .medium))
+                    }
+                    .frame(width: 40)
                 }
             }
             
