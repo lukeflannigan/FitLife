@@ -36,6 +36,7 @@ struct YourApp: App {
             NavigationView {
                 SplashView()
                     .modelContainer(modelContainer)
+                    .environment(\.currentWorkout, $currentWorkout)
             }
         }
         .onChange(of: scenePhase) { newPhase in
