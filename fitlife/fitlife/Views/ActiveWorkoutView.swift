@@ -7,6 +7,11 @@ struct WorkoutSet: Identifiable {
     var weight: Double
     var reps: Int
     var isCompleted: Bool = false
+    
+    init(weight: Double = 0, reps: Int = 0) {
+        self.weight = weight
+        self.reps = reps
+    }
 }
 
 // Track exercise data during workout
@@ -36,20 +41,34 @@ struct ActiveWorkoutView: View {
     @State private var showingExerciseSelection = false
     @State private var showingCancelAlert = false
     
-    private func saveWorkout() {
-        workout.name = workoutTitle
+    private func completeWorkout() {
+        // Save workout name and date
+        workout.name = workoutTitle.isEmpty ? "Workout \(Date().formatted(date: .abbreviated, time: .shortened))" : workoutTitle
         workout.date = Date()
         
-        // Convert ActiveExercises to Exercise models
-        workout.exercises = activeExercises.map { activeExercise in
-            let exercise = activeExercise.exercise
-            exercise.sets = activeExercise.sets.count
-            if let lastSet = activeExercise.sets.last {
-                exercise.weight = lastSet.weight
-                exercise.reps = lastSet.reps
-            }
-            return exercise
+        // Convert ActiveExercises to Exercise models with completed data
+        let completedExercises = activeExercises.map { activeExercise -> Exercise in
+            return Exercise(
+                id: UUID().uuidString,
+                name: activeExercise.exercise.name,
+                type: activeExercise.exercise.type,
+                muscleGroup: activeExercise.exercise.muscleGroup,
+                exerciseDescription: activeExercise.exercise.exerciseDescription,
+                imageName: activeExercise.exercise.imageName,
+                difficulty: activeExercise.exercise.difficulty,
+                imageData: activeExercise.exercise.imageData,
+                primaryMuscles: activeExercise.exercise.primaryMuscles,
+                secondaryMuscles: activeExercise.exercise.secondaryMuscles,
+                equipment: activeExercise.exercise.equipment,
+                force: activeExercise.exercise.force,
+                mechanic: activeExercise.exercise.mechanic,
+                sets: activeExercise.sets.count,
+                reps: activeExercise.sets.last?.reps ?? 0,
+                weight: activeExercise.sets.last?.weight ?? 0
+            )
         }
+        
+        workout.exercises = completedExercises
     }
     
     var formattedTime: String {
@@ -147,14 +166,14 @@ struct ActiveWorkoutView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Finish") {
-                        // Will need to save workout here
+                        completeWorkout()
                         timer?.invalidate()
                         dismiss()
                     }
                     .font(.custom("Poppins-SemiBold", size: 16))
                     .foregroundColor(.black)
-                    .opacity(workoutTitle.isEmpty || activeExercises.isEmpty ? 0.5 : 1)
-                    .disabled(workoutTitle.isEmpty || activeExercises.isEmpty)
+                    .opacity(activeExercises.isEmpty ? 0.5 : 1)
+                    .disabled(activeExercises.isEmpty)
                 }
             }
         }
@@ -235,7 +254,12 @@ struct ExerciseSelectionSheet: View {
 
 struct ExerciseSetCard: View {
     let exercise: ActiveExercise
-    @State private var sets: [WorkoutSet] = [WorkoutSet()]
+    @StateObject var activeExercise: ActiveExercise
+    
+    init(exercise: ActiveExercise) {
+        self.exercise = exercise
+        _activeExercise = StateObject(wrappedValue: exercise)
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -243,7 +267,7 @@ struct ExerciseSetCard: View {
                 .font(.custom("Poppins-SemiBold", size: 20))
             
             VStack(spacing: 12) {
-                ForEach(Array(sets.enumerated()), id: \.element.id) { index, set in
+                ForEach(Array(activeExercise.sets.enumerated()), id: \.element.id) { index, set in
                     HStack(alignment: .center, spacing: 0) {
                         // Set number
                         ZStack {
@@ -259,10 +283,10 @@ struct ExerciseSetCard: View {
                         // Weight Input
                         HStack(spacing: 4) {
                             TextField("0", text: Binding(
-                                get: { String(format: "%.0f", sets[index].weight) },
+                                get: { String(format: "%.0f", activeExercise.sets[index].weight) },
                                 set: { newValue in
                                     if let weight = Double(newValue), weight <= 2000 {
-                                        sets[index].weight = weight
+                                        activeExercise.sets[index].weight = weight
                                     }
                                 }
                             ))
@@ -292,10 +316,10 @@ struct ExerciseSetCard: View {
                         // Reps Input
                         HStack(spacing: 4) {
                             TextField("0", text: Binding(
-                                get: { String(sets[index].reps) },
+                                get: { String(activeExercise.sets[index].reps) },
                                 set: { newValue in
                                     if let reps = Int(newValue), reps <= 100 {
-                                        sets[index].reps = reps
+                                        activeExercise.sets[index].reps = reps
                                     }
                                 }
                             ))
@@ -318,9 +342,9 @@ struct ExerciseSetCard: View {
                         
                         // Delete Button
                         Button(action: {
-                            if sets.count > 1 {
+                            if activeExercise.sets.count > 1 {
                                 withAnimation {
-                                    sets.remove(at: index)
+                                    activeExercise.sets.remove(at: index)
                                 }
                             }
                         }) {
@@ -335,7 +359,7 @@ struct ExerciseSetCard: View {
             
             Button(action: {
                 withAnimation {
-                    sets.append(WorkoutSet())
+                    activeExercise.sets.append(WorkoutSet())
                 }
             }) {
                 HStack {
