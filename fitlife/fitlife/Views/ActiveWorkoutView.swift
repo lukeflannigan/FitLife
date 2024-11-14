@@ -196,6 +196,7 @@ struct ExerciseSelectionSheet: View {
 
 struct ExerciseSetCard: View {
     let exercise: WorkoutExercise
+    @State private var sets: [WorkoutSet] = [WorkoutSet()]
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -217,13 +218,24 @@ struct ExerciseSetCard: View {
                     
                     // Weight Input
                     HStack(spacing: 4) {
-                        Text("135")
-                            .font(.custom("Poppins-Medium", size: 15))
+                        TextField("0", text: Binding(
+                            get: { String(format: "%.0f", sets[0].weight) },
+                            set: { newValue in
+                                if let weight = Double(newValue), weight <= 2000 {
+                                    sets[0].weight = weight
+                                }
+                            }
+                        ))
+                        .keyboardType(.numberPad)
+                        .multilineTextAlignment(.trailing)
+                        .font(.custom("Poppins-Medium", size: 15))
+                        .frame(width: 40)
+                        
                         Text("lbs")
                             .font(.custom("Poppins-Regular", size: 12))
                             .foregroundColor(.secondary)
                     }
-                    .padding(.horizontal, 12)
+                    .padding(.horizontal, 10)
                     .padding(.vertical, 6)
                     .background(
                         RoundedRectangle(cornerRadius: 6)
@@ -239,8 +251,19 @@ struct ExerciseSetCard: View {
                     
                     // Reps Input
                     HStack(spacing: 4) {
-                        Text("12")
-                            .font(.custom("Poppins-Medium", size: 15))
+                        TextField("0", text: Binding(
+                            get: { String(sets[0].reps) },
+                            set: { newValue in
+                                if let reps = Int(newValue), reps <= 100 {
+                                    sets[0].reps = reps
+                                }
+                            }
+                        ))
+                        .keyboardType(.numberPad)
+                        .multilineTextAlignment(.trailing)
+                        .font(.custom("Poppins-Medium", size: 15))
+                        .frame(width: 30)
+                        
                         Text("reps")
                             .font(.custom("Poppins-Regular", size: 12))
                             .foregroundColor(.secondary)
