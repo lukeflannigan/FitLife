@@ -267,7 +267,8 @@ struct ExerciseSetCard: View {
                 .font(.custom("Poppins-SemiBold", size: 20))
             
             VStack(spacing: 12) {
-                ForEach(Array(activeExercise.sets.enumerated()), id: \.element.id) { index, set in
+                ForEach(activeExercise.sets.indices, id: \.self) { index in
+                    let set = activeExercise.sets[index]
                     HStack(alignment: .center, spacing: 0) {
                         // Set number
                         ZStack {
@@ -283,7 +284,7 @@ struct ExerciseSetCard: View {
                         // Weight Input
                         HStack(spacing: 4) {
                             TextField("0", text: Binding(
-                                get: { String(format: "%.0f", activeExercise.sets[index].weight) },
+                                get: { String(format: "%.0f", set.weight) },
                                 set: { newValue in
                                     if let weight = Double(newValue), weight <= 2000 {
                                         activeExercise.sets[index].weight = weight
@@ -316,7 +317,7 @@ struct ExerciseSetCard: View {
                         // Reps Input
                         HStack(spacing: 4) {
                             TextField("0", text: Binding(
-                                get: { String(activeExercise.sets[index].reps) },
+                                get: { String(set.reps) },
                                 set: { newValue in
                                     if let reps = Int(newValue), reps <= 100 {
                                         activeExercise.sets[index].reps = reps
