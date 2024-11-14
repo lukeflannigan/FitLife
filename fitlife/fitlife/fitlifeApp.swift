@@ -12,6 +12,7 @@ import UserNotifications
 @main
 struct YourApp: App {
     let modelContainer: ModelContainer
+    @State var currentWorkout: Workout? = nil
     @Environment(\.scenePhase) var scenePhase
 
     init() {
@@ -21,7 +22,9 @@ struct YourApp: App {
                 BodyMetrics.self, 
                 UserProfile.self,
                 Workout.self,
-                Exercise.self
+                Exercise.self,
+                WorkoutExercise.self,
+                ExerciseSet.self
             )
         } catch {
             fatalError("Could not initialize ModelContainer")

@@ -46,9 +46,6 @@ class Exercise: Identifiable, ObservableObject {
         equipment: String? = nil,
         force: String? = nil,
         mechanic: String? = nil,
-        sets: Int = 0,
-        reps: Int = 0,
-        weight: Double = 0,
         isFavorite: Bool = false
     ) {
         self.id = id
@@ -68,4 +65,18 @@ class Exercise: Identifiable, ObservableObject {
     }
 }
 
-
+enum Equipment: String {
+    case none = "none"              // Represents the null case
+    case medicineBall = "medicine ball"
+    case dumbbell = "dumbbell"
+    case bodyOnly = "body only"
+    case bands = "bands"
+    case kettlebells = "kettlebells"
+    case foamRoll = "foam roll"
+    case cable = "cable"
+    case machine = "machine"
+    case barbell = "barbell"
+    case exerciseBall = "exercise ball"
+    case ezCurlBar = "e-z curl bar"
+    case other = "other"
+}

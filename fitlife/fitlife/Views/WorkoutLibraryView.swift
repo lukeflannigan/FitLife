@@ -13,14 +13,12 @@ struct WorkoutLibraryView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Workout.date, order: .reverse) private var workouts: [Workout]
     
-    @State private var currworkouts: [Workout] = [Workout.mockWorkoutEntry]
-
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 15) {
-                    ForEach(currworkouts) { workout in
-                        NavigationLink(destination: WorkoutsView(workout: workout)) {
+                    ForEach(workouts) { workout in
+                        NavigationLink(destination: WorkoutDetailView(workout: workout)) {
                             WorkoutCard(workout: workout)
                                 .padding(.horizontal)
                         }
@@ -55,7 +53,7 @@ struct WorkoutCard: View {
                 .foregroundColor(.secondary)
 
             // Number of Exercises
-            Text("\(workout.exercises.count) Exercises")
+            Text("\(workout.workoutExercises.count) Exercises")
                 .font(.footnote)
                 .foregroundColor(.secondary)
         }
