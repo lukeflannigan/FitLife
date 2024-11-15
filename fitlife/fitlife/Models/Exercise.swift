@@ -16,8 +16,9 @@ enum Difficulty: String, CaseIterable, Codable{
 }
 
 @Model
-class Exercise: Identifiable, ObservableObject {
+class Exercise: Equatable, Identifiable, ObservableObject {
     var id: String
+    var uuid: UUID
     var name: String
     var type: String
     var muscleGroup: String
@@ -31,9 +32,11 @@ class Exercise: Identifiable, ObservableObject {
     var force: String?
     var mechanic: String?
     var isFavorite: Bool
+    
 
     init(
         id: String = UUID().uuidString,
+        uuid: UUID = UUID(),
         name: String = "",
         type: String = "",
         muscleGroup: String = "",
@@ -49,6 +52,7 @@ class Exercise: Identifiable, ObservableObject {
         isFavorite: Bool = false
     ) {
         self.id = id
+        self.uuid = uuid
         self.name = name
         self.type = type
         self.muscleGroup = muscleGroup

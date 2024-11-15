@@ -6,24 +6,33 @@ import SwiftData
 
 struct ExerciseLibraryView: View {
     @Bindable var workout: Workout
-    @StateObject private var viewModel = ExerciseDataViewModel()
     @Environment(\.modelContext) private var modelContext  // Access modelContext in the view
+    @Query var exercises: [Exercise]
     @State private var searchText: String = ""
     @State private var selectedExercise: Exercise?
     @State private var selectedCategory: String = "All"
     @State private var showingFilterSheet = false
 
     var categories: [String] {
-        var cats = Array(Set(viewModel.exercises.map { $0.type.capitalized })).sorted()
+        var cats = Array(Set(exercises.map { $0.type.capitalized })).sorted()
         cats.insert("All", at: 0)
         return cats
     }
     
     var filteredExercises: [Exercise] {
-        var filtered = viewModel.exercises
+        var uniqueExercises: [String: Exercise] = [:]
+        for exercise in exercises {
+            if uniqueExercises[exercise.id] == nil {
+                uniqueExercises[exercise.id] = exercise
+            }
+        }
+        
+        var filtered = Array(uniqueExercises.values)
+        
         if selectedCategory != "All" {
             filtered = filtered.filter { $0.type.capitalized == selectedCategory }
         }
+        
         if !searchText.isEmpty {
             filtered = filtered.filter { exercise in
                 exercise.name.localizedCaseInsensitiveContains(searchText) ||
@@ -31,8 +40,10 @@ struct ExerciseLibraryView: View {
                 exercise.type.localizedCaseInsensitiveContains(searchText)
             }
         }
+        
         return filtered
     }
+
     
     var body: some View {
         VStack(spacing: 0) {
@@ -57,25 +68,7 @@ struct ExerciseLibraryView: View {
             .background(Color(.systemBackground))
             
             ZStack {
-                if viewModel.isLoading {
-                    ProgressView()
-                        .scaleEffect(1.2)
-                } else if let error = viewModel.errorMessage {
-                    VStack(spacing: 16) {
-                        Image(systemName: "exclamationmark.triangle")
-                            .font(.system(size: 40))
-                            .foregroundColor(.red)
-                        Text(error)
-                            .font(.custom("Poppins-Regular", size: 16))
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                        Button("Try Again") {
-                            fetchExercises()  // Retry fetching exercises
-                        }
-                        .font(.custom("Poppins-SemiBold", size: 16))
-                    }
-                    .padding()
-                } else if filteredExercises.isEmpty {
+                if filteredExercises.isEmpty {
                     VStack(spacing: 16) {
                         Image(systemName: "magnifyingglass")
                             .font(.system(size: 40))
@@ -112,19 +105,12 @@ struct ExerciseLibraryView: View {
             }
         }
         .onAppear {
-            fetchExercises()
+//            fetchExercises()
         }
         .sheet(item: $selectedExercise) { exercise in
             NavigationView {
                 ExerciseDetailView(exercise: exercise)
             }
-        }
-    }
-    
-    // MARK: - Fetch Exercises
-    private func fetchExercises() {
-        Task {
-            await viewModel.loadExercises(modelContext: modelContext)
         }
     }
 }

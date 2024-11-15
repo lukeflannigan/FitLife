@@ -20,18 +20,25 @@ class ExerciseDataViewModel: ObservableObject {
     init() {}
 
     func loadExercises(modelContext: ModelContext) async {
-        // Check if exercises are already loaded to avoid reloading
-        if exercises.isEmpty {
-            isLoading = true
-            errorMessage = nil
-            do {
-                let fetchedExercises = try await apiClient.fetchExercises()
-                await updateExercises(with: fetchedExercises, modelContext: modelContext)
-                isLoading = false
-            } catch {
-                errorMessage = "Failed to load exercises. Please try again later."
-                isLoading = false
-            }
+        // Fetch exercises from modelContext first
+        let fetchDescriptor = FetchDescriptor<Exercise>()
+        let storedExercises = try? modelContext.fetch(fetchDescriptor)
+        
+        if let storedExercises = storedExercises, !storedExercises.isEmpty {
+            exercises = storedExercises
+            return
+        }
+        
+        // If no stored exercises, fetch from API
+        isLoading = true
+        errorMessage = nil
+        do {
+            let fetchedExercises = try await apiClient.fetchExercises()
+            await updateExercises(with: fetchedExercises, modelContext: modelContext)
+            isLoading = false
+        } catch {
+            errorMessage = "Failed to load exercises. Please try again later."
+            isLoading = false
         }
     }
     

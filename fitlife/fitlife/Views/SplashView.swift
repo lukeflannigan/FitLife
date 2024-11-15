@@ -11,6 +11,7 @@ import UserNotifications
 
 struct SplashView: View {
     @Environment(\.modelContext) var modelContext
+    @StateObject private var viewModel = ExerciseDataViewModel()
     @Binding var currentWorkout: Workout?
     @State private var isActive = false  // Flag to track when to navigate
     @State private var destination: AnyView? = nil
@@ -31,8 +32,10 @@ struct SplashView: View {
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 checkUserStatus()
+                loadCurrentWorkout()
+                fetchExercises()
             }
-            loadCurrentWorkout()
+            
 //            scheduleTestNotification()
         }
     }
@@ -64,6 +67,12 @@ struct SplashView: View {
 //            }
 //        }
 //    }
+    private func fetchExercises() {
+        Task {
+            await viewModel.loadExercises(modelContext: modelContext)
+        }
+    }
+    
     private func loadCurrentWorkout() {
             let fetchDescriptor = FetchDescriptor<Workout>(
                 predicate: #Predicate {$0.completed == false},

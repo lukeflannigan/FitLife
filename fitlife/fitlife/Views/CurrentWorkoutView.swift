@@ -4,19 +4,18 @@
 //
 //  Created by Gabriel Ciaburri on 11/14/24.
 //
-
+import Foundation
 import SwiftUI
 import SwiftData
 
 struct CurrentWorkoutView: View {
     @Environment(\.modelContext) var modelContext
-    @State private var selectedExercises = Set<String>()
+    @State private var selectedExercises = Set<UUID>()
     @State private var isSelectingExercises = false
     @Binding var currentWorkout: Workout?
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        Text("Current Workout")
         if let currentWorkout = currentWorkout {
             VStack {
             Text("Current Workout")
@@ -26,14 +25,22 @@ struct CurrentWorkoutView: View {
                 ForEach(currentWorkout.workoutExercises) { workoutExercise in
                     WorkoutExerciseView(workout: currentWorkout, workoutExercise: workoutExercise)
                 }
-                HStack {
-                    Button(action: {
-                        isSelectingExercises = true
-                    }) {
-                        Text("Add Exercises")
-                            .frame(maxWidth: .infinity)
+                Button(action: {
+                    isSelectingExercises = true
+                }) {
+                    HStack {
+                        Image(systemName: "book.fill")
+                            .font(.system(size: 20))
+                            .foregroundColor(.black)
+                        Text("Browse Exercises")
+                            .font(.custom("Poppins-SemiBold", size: 18))
+                            .foregroundColor(.black)
+                        Spacer()
                     }
-                    .buttonStyle(.borderedProminent)
+                    .padding()
+                    .background(Color(UIColor.systemGray6))
+                    .cornerRadius(10)
+                    .padding(.horizontal)
                 }
                 
                 .listRowSeparator(.hidden)

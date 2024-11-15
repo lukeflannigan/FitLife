@@ -12,7 +12,7 @@ struct ExerciseSelectionView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     @Query var exercises: [Exercise]
-    @Binding var selectedExercises: Set<String>
+    @Binding var selectedExercises: Set<UUID>
     @Binding var currentWorkout: Workout?
     @State private var searchText: String = ""
     @State private var selectedCategory: String = "All"
@@ -69,14 +69,14 @@ struct ExerciseSelectionView: View {
             // Exercise List
             List {
                 ForEach(filteredExercises) { exercise in
-                    ExerciseCardSelectView(exercise: exercise, isSelected: selectedExercises.contains(exercise.id)) {
-                        if selectedExercises.contains(exercise.id) {
-                            selectedExercises.remove(exercise.id)
+                    ExerciseCardSelectView(exercise: exercise, isSelected: selectedExercises.contains(exercise.uuid)) {
+                        if selectedExercises.contains(exercise.uuid) {
+                            selectedExercises.remove(exercise.uuid)
                         } else {
-                            selectedExercises.insert(exercise.id)
+                            selectedExercises.insert(exercise.uuid)
                         }
                     }
-                    .listRowBackground(selectedExercises.contains(exercise.id) ? Color.accentColor.opacity(0.1) : nil)
+                    .listRowBackground(selectedExercises.contains(exercise.uuid) ? Color.accentColor.opacity(0.1) : nil)
                     .padding(.vertical, 1)
                 }
             }
@@ -106,12 +106,11 @@ struct ExerciseSelectionView: View {
     }
     
     private func addSelectedExercisesToWorkout() {
-        let selectedExercisesList = exercises.filter { selectedExercises.contains($0.id) }
+        let selectedExercisesList = exercises.filter { selectedExercises.contains($0.uuid) }
         for exercise in selectedExercisesList {
             let workoutExercise = WorkoutExercise(exercise: exercise)
             workoutExercise.addSet(context: modelContext)
-            currentWorkout?.workoutExercises.append(workoutExercise)
-            modelContext.insert(workoutExercise)
+            currentWorkout?.addExercise(workoutExercise, context: modelContext)
         }
     }
 }
