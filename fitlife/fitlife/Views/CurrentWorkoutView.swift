@@ -32,7 +32,7 @@ struct CurrentWorkoutView: View {
                         Image(systemName: "book.fill")
                             .font(.system(size: 20))
                             .foregroundColor(.black)
-                        Text("Browse Exercises")
+                        Text("Add Exercises")
                             .font(.custom("Poppins-SemiBold", size: 18))
                             .foregroundColor(.black)
                         Spacer()

@@ -25,14 +25,19 @@ struct WorkoutLibraryView: View {
                     Button(action: {
                         showingExerciseLibrary = true
                     }) {
-                        Text("Browse Exercises")
-                            .font(.headline)
-                            .foregroundColor(.blue)
-                            .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(Color(UIColor.secondarySystemBackground))
-                            )
+                        HStack {
+                            Image(systemName: "book.fill")
+                                .font(.system(size: 20))
+                                .foregroundColor(.black)
+                            Text("Browse Exercises")
+                                .font(.custom("Poppins-SemiBold", size: 18))
+                                .foregroundColor(.black)
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color(UIColor.systemGray6))
+                        .cornerRadius(10)
+                        .padding(.horizontal)
                     }
                     .sheet(isPresented: $showingExerciseLibrary) {
                         NavigationView {
@@ -59,7 +64,12 @@ struct WorkoutLibraryView: View {
                     }
                     showingWorkout = true
                 }) {
-                    Text("Start New Workout")
+                    if let existingWorkout = workouts.first(where: { !$0.completed}) {
+                        Text("Resume Workout")
+                    } else {
+                        Text("Start New Workout")
+                    }
+                    
                 }
                 .sheet(isPresented: $showingWorkout) {
                     CurrentWorkoutView(currentWorkout: currentWorkout)
@@ -70,10 +80,10 @@ struct WorkoutLibraryView: View {
     
     // MARK: - Start New Workout Function
     func addNewWorkout(newWorkout: Workout) {
-            let newWorkout = Workout(name: "New Workout")
-            modelContext.insert(newWorkout)
-            currentWorkout.wrappedValue = newWorkout
+        modelContext.insert(newWorkout)
+        currentWorkout.wrappedValue = newWorkout
         }
+    
 }
 
 // MARK: - Workout Card
