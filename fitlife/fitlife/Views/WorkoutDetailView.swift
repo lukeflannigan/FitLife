@@ -12,7 +12,8 @@ struct WorkoutDetailView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     @State private var isEditingName = false
-    @Bindable var workout: Workout
+    @State private var tempName: String = ""
+    var workout: Workout
     
     var body: some View {
         ScrollView {
@@ -20,7 +21,7 @@ struct WorkoutDetailView: View {
                 VStack(spacing: 20) {
                     if isEditingName {
                         VStack(spacing: 16) {
-                            TextField("Workout Name", text: $workout.name)
+                            TextField("Workout Name", text: $tempName)
                                 .font(.system(size: 24, weight: .bold))
                                 .textFieldStyle(.plain)
                                 .padding(.vertical, 8)
@@ -30,6 +31,7 @@ struct WorkoutDetailView: View {
                             
                             HStack(spacing: 12) {
                                 Button(action: {
+                                    tempName = workout.name
                                     isEditingName = false
                                 }) {
                                     Text("Cancel")
@@ -42,6 +44,8 @@ struct WorkoutDetailView: View {
                                 }
                                 
                                 Button(action: {
+                                    workout.name = tempName
+                                    try? modelContext.save()
                                     isEditingName = false
                                 }) {
                                     Text("Save")
@@ -62,6 +66,7 @@ struct WorkoutDetailView: View {
                             Spacer()
                             
                             Button(action: {
+                                tempName = workout.name
                                 isEditingName = true
                             }) {
                                 Text("Edit")
