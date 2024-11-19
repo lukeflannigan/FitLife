@@ -174,7 +174,7 @@ struct AddFoodEntryView: View{
                                 .font(.title2)
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color.gray.opacity(0.8))
+                                .background(Color.pink.opacity(0.8))
                                 .foregroundColor(.white)
                                 .cornerRadius(10)
                                 .padding(.horizontal)

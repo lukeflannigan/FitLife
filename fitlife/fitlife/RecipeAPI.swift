@@ -42,7 +42,7 @@ class ViewModel: ObservableObject {
     @Published var recipes: [RecipeObject] = [] // Array to hold fetched recipes
     
     func fetchData(query: String) {
-        if let path = Bundle.main.path(forResource: "Secrets", ofType: "plist"),
+        if let path = Bundle.main.path(forResource: "RecipeSearch", ofType: "plist"),
            let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
            let id = dict["app_id"] as? String,
            let key = dict["app_key"] as? String{
@@ -113,7 +113,7 @@ struct SearchView: View {
            
             ZStack {
                     // Background gradient
-                LinearGradient(gradient: Gradient(colors: [Color.green, Color.cyan]),
+                LinearGradient(gradient: Gradient(colors: [Color.white, Color.green]),
                                    startPoint: .topLeading,
                                    endPoint: .bottomTrailing)
                             .ignoresSafeArea() // Make gradient fill the entire screen
@@ -216,7 +216,7 @@ struct RecipeDetailView: View {
         
         ScrollView(.vertical, showsIndicators: true) {  // Explicit vertical scroll
             ZStack{
-                LinearGradient(gradient: Gradient(colors: [Color.green, Color.cyan]),
+                LinearGradient(gradient: Gradient(colors: [Color.white, Color.cyan]),
                                startPoint: .topLeading,
                                endPoint: .bottomTrailing)
                 //.ignoresSafeArea()
