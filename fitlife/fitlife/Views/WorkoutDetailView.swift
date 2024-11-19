@@ -16,34 +16,81 @@ struct WorkoutDetailView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
+            VStack(alignment: .leading, spacing: 16) {
+                VStack(spacing: 20) {
                     if isEditingName {
-                        TextField("Workout Name", text: $workout.name)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .font(.title2.bold())
-                            .submitLabel(.done)
-                            .onSubmit {
-                                isEditingName = false
+                        VStack(spacing: 16) {
+                            TextField("Workout Name", text: $workout.name)
+                                .font(.system(size: 24, weight: .bold))
+                                .textFieldStyle(.plain)
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 12)
+                                .background(Color(.systemGray6))
+                                .cornerRadius(8)
+                            
+                            HStack(spacing: 12) {
+                                Button(action: {
+                                    isEditingName = false
+                                }) {
+                                    Text("Cancel")
+                                        .font(.system(size: 16, weight: .medium))
+                                        .foregroundColor(.black)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 12)
+                                        .background(Color(.systemGray6))
+                                        .cornerRadius(8)
+                                }
+                                
+                                Button(action: {
+                                    isEditingName = false
+                                }) {
+                                    Text("Save")
+                                        .font(.system(size: 16, weight: .medium))
+                                        .foregroundColor(.white)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 12)
+                                        .background(Color.black)
+                                        .cornerRadius(8)
+                                }
                             }
+                        }
                     } else {
-                        Text(workout.name)
-                            .font(.title2.bold())
+                        HStack {
+                            Text(workout.name)
+                                .font(.system(size: 24, weight: .bold))
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                isEditingName = true
+                            }) {
+                                Text("Edit")
+                                    .font(.system(size: 16, weight: .medium))
+                                    .foregroundColor(.black)
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 8)
+                                    .background(Color(.systemGray6))
+                                    .cornerRadius(8)
+                            }
+                        }
                     }
                     
-                    Button(action: {
-                        isEditingName.toggle()
-                    }) {
-                        Image(systemName: isEditingName ? "checkmark.circle.fill" : "pencil.circle.fill")
-                            .foregroundColor(.blue)
+                    Divider()
+                    
+                    HStack(spacing: 8) {
+                        Image(systemName: "calendar")
+                            .foregroundStyle(.black)
+                        Text(workout.date.formatted(date: .complete, time: .shortened))
+                            .font(.system(size: 16))
+                            .foregroundStyle(.black)
                     }
                 }
-                .padding(.bottom, 5)
+                .padding(20)
+                .background(Color.white)
+                .cornerRadius(16)
+                .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 2)
                 
-                Text(workout.date.formatted(date: .complete, time: .shortened))
-                    .foregroundColor(.secondary)
-                
-                ForEach(workout.workoutExercises, id: \.id) { (workoutExercise: WorkoutExercise) in
+                ForEach(workout.workoutExercises, id: \.id) { workoutExercise in
                     VStack(alignment: .leading, spacing: 2) {
                         Text("\(workoutExercise.exercise?.name ?? "Empty")")
                         ForEach(Array(workoutExercise.sortedSets.enumerated()), id: \.element.id) { index, set in
@@ -60,6 +107,8 @@ struct WorkoutDetailView: View {
             }
             .padding()
         }
+        .background(Color(.systemGray6))
+        .animation(.easeInOut(duration: 0.2), value: isEditingName)
     }
 }
 
