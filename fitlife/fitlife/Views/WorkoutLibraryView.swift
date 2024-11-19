@@ -51,12 +51,12 @@ struct WorkoutLibraryView: View {
                         }
                         .swipeActions() {
                             // Edit button
-                            Button("Edit") {
-                                selectedWorkout = workout
-                                workoutName = workout.name
-                                isEditWorkoutAlertShowing = true
-                            }
-                            .tint(.blue)
+                            //Button("Edit") {
+                            //    selectedWorkout = workout
+                            //    workoutName = workout.name
+                            //    isEditWorkoutAlertShowing = true
+                            
+                            //.tint(.blue)
                             
                             // Delete button
                             Button("Delete", role: .destructive) {
