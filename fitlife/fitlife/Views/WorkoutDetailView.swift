@@ -16,7 +16,7 @@ struct WorkoutDetailView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 24) {
                 VStack(spacing: 20) {
                     if isEditingName {
                         VStack(spacing: 16) {
@@ -91,18 +91,44 @@ struct WorkoutDetailView: View {
                 .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 2)
                 
                 ForEach(workout.workoutExercises, id: \.id) { workoutExercise in
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("\(workoutExercise.exercise?.name ?? "Empty")")
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text(workoutExercise.exercise?.name ?? "Empty")
+                            .font(.system(size: 20, weight: .semibold))
+                        
                         ForEach(Array(workoutExercise.sortedSets.enumerated()), id: \.element.id) { index, set in
                             HStack {
-                                Text("Set \(index + 1) ")
-                                    .padding()
-                                Text("\(set.weight, specifier: "%.1f")lbs x \(set.reps)")
+                                Text("Set \(index + 1)")
+                                    .font(.system(size: 16, weight: .medium))
+                                    .foregroundColor(.gray)
+                                
+                                Spacer()
+                                
+                                Text("\(set.weight, specifier: "%.1f") lbs")
+                                    .font(.system(size: 16))
+                                
+                                Text("×")
+                                    .font(.system(size: 16))
+                                    .foregroundColor(.gray)
+                                    .padding(.horizontal, 8)
+                                
+                                Text("\(set.reps) reps")
+                                    .font(.system(size: 16))
                             }
-                            .padding(.horizontal)
+                            .padding(.vertical, 8)
+                            
+                            if index < workoutExercise.sortedSets.count - 1 {
+                                Divider()
+                            }
                         }
                     }
-                    .padding(.vertical, 2)
+                    .padding(20)
+                    .background(Color.white)
+                    .cornerRadius(16)
+                    
+                    if workoutExercise.id != workout.workoutExercises.last?.id {
+                        Divider()
+                            .padding(.horizontal, 20)
+                    }
                 }
             }
             .padding()
