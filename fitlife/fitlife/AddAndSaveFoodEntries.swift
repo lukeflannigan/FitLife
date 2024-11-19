@@ -9,6 +9,7 @@ import SwiftUI
 import Foundation
 
 struct AddFoodEntryView: View{
+    @Environment(\.modelContext) var modelContext
     @State private var name: String = ""   //As in, what is the name of the food item you ate?
     @State private var calories: String = ""
     @State private var protein: String = ""
@@ -23,7 +24,7 @@ struct AddFoodEntryView: View{
             LinearGradient(gradient: Gradient(colors: [Color.white, Color.green]),
                            startPoint: .topLeading,
                            endPoint: .bottomTrailing)
-                .ignoresSafeArea() // Covers the entire screen with gradient
+            .ignoresSafeArea() // Covers the entire screen with gradient
             VStack {
                 Text("Log Your Food Intake")
                     .font(.largeTitle)
@@ -37,31 +38,31 @@ struct AddFoodEntryView: View{
                         .fontWeight(.bold)
                         .padding(.bottom, 10)
                         .foregroundColor(.white))
-                                            {
-                            
-                            TextField("What did you eat?", text: $name) .padding()
-                                .background(Color.white.opacity(0.8)) // Light background for contrast
-                                .cornerRadius(10)
-                            TextField("Calories", text: $calories) .keyboardType(.decimalPad)
-                                .padding()
-                                .background(Color.white.opacity(0.8))
-                                .cornerRadius(10)
-                                .keyboardType(.decimalPad)
-                            TextField("Protein (g)", text: $protein)
-                                .keyboardType(.decimalPad).keyboardType(.decimalPad)
-                                .padding()
-                                .background(Color.white.opacity(0.8))
-                                .cornerRadius(10)
-                            TextField("Carbohydrates (g)", text: $carbs)
-                                .keyboardType(.decimalPad)
-                                .padding()
-                                .background(Color.white.opacity(0.8))
-                                .cornerRadius(10)
-                            TextField("Fats (g)", text: $fats)
-                                .keyboardType(.decimalPad)
-                                .padding()
-                                .background(Color.white.opacity(0.8))
-                                .cornerRadius(10)
+                    {
+                        
+                        TextField("What did you eat?", text: $name) .padding()
+                            .background(Color.white.opacity(0.8)) // Light background for contrast
+                            .cornerRadius(10)
+                        TextField("Calories", text: $calories) .keyboardType(.decimalPad)
+                            .padding()
+                            .background(Color.white.opacity(0.8))
+                            .cornerRadius(10)
+                            .keyboardType(.decimalPad)
+                        TextField("Protein (g)", text: $protein)
+                            .keyboardType(.decimalPad).keyboardType(.decimalPad)
+                            .padding()
+                            .background(Color.white.opacity(0.8))
+                            .cornerRadius(10)
+                        TextField("Carbohydrates (g)", text: $carbs)
+                            .keyboardType(.decimalPad)
+                            .padding()
+                            .background(Color.white.opacity(0.8))
+                            .cornerRadius(10)
+                        TextField("Fats (g)", text: $fats)
+                            .keyboardType(.decimalPad)
+                            .padding()
+                            .background(Color.white.opacity(0.8))
+                            .cornerRadius(10)
                     }
                     .listRowBackground(Color.clear) // Make each row background transparent
                     
@@ -90,66 +91,51 @@ struct AddFoodEntryView: View{
             .padding()
         }
     }
-    func addFoodEntry() {
-        guard var caloriesDouble = Double(calories),
-              var proteinDouble = Double(protein),
-              var carbsDouble = Double(carbs),
-              var fatsDouble = Double(fats) else {
-            print("Invalid input")
+    
+    
+    private func addFoodEntry() {
+        //              Convert input strings to Double
+        guard let caloriesDouble = Double(calories),
+              let proteinDouble = Double(protein),
+              let carbsDouble = Double(carbs),
+              let fatsDouble = Double(fats),
+              !name.isEmpty else {
+            print("Invalid input") // Optional: add user feedback for invalid inputs
             return
         }
+        
+        //      Create a new DailyIntake object
+        let newEntry = DailyIntake(
+            calories: caloriesDouble,
+            protein: proteinDouble,
+            carbs: carbsDouble,
+            fats: fatsDouble,
+            name: name
+        )
+        
+        //      Add to model context
+        modelContext.insert(newEntry)
+        
+        
+        //      Save the context
+        do {
+            try modelContext.save()
+            print("Food entry saved successfully!")
+        } catch {
+            print("Failed to save food entry: \(error.localizedDescription)")
+        }
     }
-    
-    /* This is for when DataPersistence is added in.
-     private func addFoodEntry() {
-              Convert input strings to Double
-             guard let caloriesDouble = Double(calories),
-                   let proteinDouble = Double(protein),
-                   let carbsDouble = Double(carbs),
-                   let fatsDouble = Double(fats),
-                   !name.isEmpty else {
-                 print("Invalid input") // Optional: add user feedback for invalid inputs
-                 return
-             }
-     
-      //Create a new DailyIntake object
-             let newEntry = DailyIntake(
-                 calories: caloriesDouble,
-                 protein: proteinDouble,
-                 carbs: carbsDouble,
-                 fats: fatsDouble,
-                 name: name
-             )
-     
-      //Add to model context
-             modelContext.insert(newEntry)
-     
-     
-      //Save the context
-             do {
-                 try modelContext.save()
-                 print("Food entry saved successfully!")
-             } catch {
-                 print("Failed to save food entry: \(error.localizedDescription)")
-             }
-     */
-     
-     
 }
-
-
-//------------------------
-
-
-struct LogHomeView: View {
-    var body: some View {
+    
+    struct LogHomeView: View {
+        var body: some View {
             NavigationView {
                 ZStack {
                     // Background gradient
                     LinearGradient(gradient: Gradient(colors: [Color.white, Color.green]),
                                    startPoint: .topLeading,
                                    endPoint: .bottomTrailing)
-                        .ignoresSafeArea()
+                    .ignoresSafeArea()
                     
                     // Main content
                     VStack(spacing: 20) {
@@ -158,7 +144,7 @@ struct LogHomeView: View {
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                             .padding(.bottom, 40)
-
+                        
                         //Added/Log Food Entries
                         NavigationLink(destination: AddFoodEntryView()) {
                             Text("Log Food")
@@ -184,10 +170,7 @@ struct LogHomeView: View {
                         
                         
                         //Saved/Logged Food Entry Not Implemented Yet
-                        Button(action: {
-                            print("Logged Food button tapped")
-                        }) {
-                            Text("Logged Food")
+                        NavigationLink(destination: LoggedFoodView()) {                        Text("Logged Food")
                                 .font(.title2)
                                 .frame(maxWidth: .infinity)
                                 .padding()
@@ -196,20 +179,22 @@ struct LogHomeView: View {
                                 .cornerRadius(10)
                                 .padding(.horizontal)
                         }
+                        }
                     }
                     .padding()
                 }
                 
             }
         }
-}
-
-
-
-struct LogFoodView: PreviewProvider {
-    static var previews: some View {
-        LogHomeView()
-        AddFoodEntryView()
+    
+    
+    
+    
+    
+    struct LogFoodView: PreviewProvider {
+        static var previews: some View {
+            LogHomeView()
+            AddFoodEntryView()
+        }
     }
-}
-
+    
