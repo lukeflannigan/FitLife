@@ -2,17 +2,17 @@
 //  Created by Luke Flannigan on 10/17/24.
 
 import SwiftUI
+import SwiftData
 
 struct ExerciseLibraryView: View {
     @Bindable var workout: Workout
-    @State private var exercises: [Exercise] = []
+    @Environment(\.modelContext) private var modelContext  // Access modelContext in the view
+    @Query var exercises: [Exercise]
     @State private var searchText: String = ""
     @State private var selectedExercise: Exercise?
-    @State private var isLoading = true
-    @State private var errorMessage: String?
     @State private var selectedCategory: String = "All"
     @State private var showingFilterSheet = false
-    
+
     var categories: [String] {
         var cats = Array(Set(exercises.map { $0.type.capitalized })).sorted()
         cats.insert("All", at: 0)
@@ -20,14 +20,19 @@ struct ExerciseLibraryView: View {
     }
     
     var filteredExercises: [Exercise] {
-        var filtered = exercises
+        var uniqueExercises: [String: Exercise] = [:]
+        for exercise in exercises {
+            if uniqueExercises[exercise.id] == nil {
+                uniqueExercises[exercise.id] = exercise
+            }
+        }
         
-        // Apply category filter
+        var filtered = Array(uniqueExercises.values)
+        
         if selectedCategory != "All" {
             filtered = filtered.filter { $0.type.capitalized == selectedCategory }
         }
         
-        // Apply search filter
         if !searchText.isEmpty {
             filtered = filtered.filter { exercise in
                 exercise.name.localizedCaseInsensitiveContains(searchText) ||
@@ -38,10 +43,10 @@ struct ExerciseLibraryView: View {
         
         return filtered
     }
+
     
     var body: some View {
         VStack(spacing: 0) {
-            // Search and Filter Header
             VStack(spacing: 12) {
                 SearchBar(text: $searchText)
                     .padding(.horizontal, 20)
@@ -62,27 +67,8 @@ struct ExerciseLibraryView: View {
             .padding(.vertical, 12)
             .background(Color(.systemBackground))
             
-            // Content
             ZStack {
-                if isLoading {
-                    ProgressView()
-                        .scaleEffect(1.2)
-                } else if let error = errorMessage {
-                    VStack(spacing: 16) {
-                        Image(systemName: "exclamationmark.triangle")
-                            .font(.system(size: 40))
-                            .foregroundColor(.red)
-                        Text(error)
-                            .font(.custom("Poppins-Regular", size: 16))
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                        Button("Try Again") {
-                            loadExercises()
-                        }
-                        .font(.custom("Poppins-SemiBold", size: 16))
-                    }
-                    .padding()
-                } else if filteredExercises.isEmpty {
+                if filteredExercises.isEmpty {
                     VStack(spacing: 16) {
                         Image(systemName: "magnifyingglass")
                             .font(.system(size: 40))
@@ -119,29 +105,11 @@ struct ExerciseLibraryView: View {
             }
         }
         .onAppear {
-            loadExercises()
+//            fetchExercises()
         }
         .sheet(item: $selectedExercise) { exercise in
             NavigationView {
                 ExerciseDetailView(exercise: exercise)
-            }
-        }
-    }
-    
-    // MARK: - Load Exercises
-    private func loadExercises() {
-        guard exercises.isEmpty else { return }
-        
-        isLoading = true
-        errorMessage = nil
-        
-        Task {
-            do {
-                exercises = try await ExerciseAPIClient.shared.fetchExercises()
-                isLoading = false
-            } catch {
-                errorMessage = "Failed to load exercises. Please try again later."
-                isLoading = false
             }
         }
     }
@@ -165,6 +133,5 @@ struct CategoryButton: View {
         }
     }
 }
-
 
 

@@ -10,6 +10,7 @@ import SwiftData
 
 struct GetWeeklyGoalView: View {
     @Environment(\.modelContext) var modelContext
+    @Environment(\.currentWorkout) var currentWorkout
     @Binding var userGoals: UserGoals
     
     // Tracks the selected weekly goal
@@ -112,6 +113,7 @@ struct GetWeeklyGoalView: View {
         // Replace the view with MainView as a new root
         let mainView = MainView()
             .environment(\.modelContext, modelContext)
+            .environment(\.currentWorkout, currentWorkout)
         let rootView = UIHostingController(rootView: mainView)
         
         if let window = UIApplication.shared.windows.first {

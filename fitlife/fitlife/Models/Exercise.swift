@@ -16,8 +16,9 @@ enum Difficulty: String, CaseIterable, Codable{
 }
 
 @Model
-class Exercise: Identifiable, ObservableObject {
+class Exercise: Equatable, Identifiable, ObservableObject {
     var id: String
+    var uuid: UUID
     var name: String
     var type: String
     var muscleGroup: String
@@ -30,13 +31,12 @@ class Exercise: Identifiable, ObservableObject {
     var equipment: String?
     var force: String?
     var mechanic: String?
-    var sets: Int
-    var reps: Int
-    var weight: Double
     var isFavorite: Bool
+    
 
     init(
         id: String = UUID().uuidString,
+        uuid: UUID = UUID(),
         name: String = "",
         type: String = "",
         muscleGroup: String = "",
@@ -49,12 +49,10 @@ class Exercise: Identifiable, ObservableObject {
         equipment: String? = nil,
         force: String? = nil,
         mechanic: String? = nil,
-        sets: Int = 0,
-        reps: Int = 0,
-        weight: Double = 0,
         isFavorite: Bool = false
     ) {
         self.id = id
+        self.uuid = uuid
         self.name = name
         self.type = type
         self.muscleGroup = muscleGroup
@@ -67,11 +65,22 @@ class Exercise: Identifiable, ObservableObject {
         self.equipment = equipment
         self.force = force
         self.mechanic = mechanic
-        self.sets = sets
-        self.reps = reps
-        self.weight = weight
         self.isFavorite = isFavorite
     }
 }
 
-
+enum Equipment: String {
+    case none = "none"              // Represents the null case
+    case medicineBall = "medicine ball"
+    case dumbbell = "dumbbell"
+    case bodyOnly = "body only"
+    case bands = "bands"
+    case kettlebells = "kettlebells"
+    case foamRoll = "foam roll"
+    case cable = "cable"
+    case machine = "machine"
+    case barbell = "barbell"
+    case exerciseBall = "exercise ball"
+    case ezCurlBar = "e-z curl bar"
+    case other = "other"
+}

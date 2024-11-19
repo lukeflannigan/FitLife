@@ -9,19 +9,43 @@ import SwiftUI
 import SwiftData
 
 struct WorkoutLibraryView: View {
-    @Environment(\.modelContext) private var modelContext
-    @State private var isCreateWorkoutAlertShowing = false
-    @State private var workoutName: String = ""
-    @State private var isEditWorkoutAlertShowing = false
-    @State private var selectedWorkout: Workout?
-    @Query(sort: \Workout.date, order: .reverse) private var workouts: [Workout]
+    // Fetch workouts from user data
+    @Environment(\.modelContext) var modelContext
+    @Query(sort: \Workout.date, order: .reverse) var workouts: [Workout]
     
+    // State for showing the current workout
+    @State private var showingWorkout = false
+    @State private var showingExerciseLibrary = false
+    @Environment(\.currentWorkout) var currentWorkout
+
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 15) {
+                    Button(action: {
+                        showingExerciseLibrary = true
+                    }) {
+                        HStack {
+                            Image(systemName: "book.fill")
+                                .font(.system(size: 20))
+                                .foregroundColor(.black)
+                            Text("Browse Exercises")
+                                .font(.custom("Poppins-SemiBold", size: 18))
+                                .foregroundColor(.black)
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color(UIColor.systemGray6))
+                        .cornerRadius(10)
+                        .padding(.horizontal)
+                    }
+                    .sheet(isPresented: $showingExerciseLibrary) {
+                        NavigationView {
+                            ExerciseLibraryView(workout: currentWorkout.wrappedValue ?? Workout(name: "New Workout"))
+                        }
+                    }
                     ForEach(workouts) { workout in
-                        NavigationLink(destination: WorkoutsView(workout: workout)) {
+                        NavigationLink(destination: WorkoutDetailView(workout: workout)) {
                             WorkoutCard(workout: workout)
                                 .padding(.horizontal)
                         }
@@ -44,40 +68,36 @@ struct WorkoutLibraryView: View {
                 .padding(.top)
             }
             .navigationTitle("Workout Library")
-            .navigationBarItems(trailing:
-                                    Button(action: { isCreateWorkoutAlertShowing.toggle() }) {
-                Image(systemName: "plus")
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(Color(.darkGray))
-            })
-            .alert("Create New Workout", isPresented: $isCreateWorkoutAlertShowing) {
-                TextField("Workout Name", text: $workoutName)
-                
-                Button("Cancel", role: .cancel) { }
-                Button("Save") {
-                    let newWorkout = Workout(name: workoutName, exercises: [], date: Date())
-                    modelContext.insert(newWorkout)
-                    workoutName = ""
-                }
-            } message: {
-                Text("Enter the name of your workout.")
-            }
-            .alert("Edit Workout", isPresented: $isEditWorkoutAlertShowing) {
-                TextField("Workout Name", text: $workoutName)
-                
-                Button("Cancel", role: .cancel) { }
-                Button("Save") {
-                    if let workout = selectedWorkout {
-                        workout.name = workoutName // Directly modifying the workout's name
+            .toolbar {
+                Button(action: {
+                    if let existingWorkout = workouts.first(where: { !$0.completed}) {
+                        currentWorkout.wrappedValue = existingWorkout
+                    } else {
+                        let newWorkout = Workout(name: "New Workout")
+                        addNewWorkout(newWorkout: newWorkout)
                     }
-                    workoutName = ""
-                    selectedWorkout = nil
+                    showingWorkout = true
+                }) {
+                    if let existingWorkout = workouts.first(where: { !$0.completed}) {
+                        Text("Resume Workout")
+                    } else {
+                        Text("Start New Workout")
+                    }
+                    
                 }
-            } message: {
-                Text("Edit the name of your workout.")
+                .sheet(isPresented: $showingWorkout) {
+                    CurrentWorkoutView(currentWorkout: currentWorkout)
+                }
             }
         }
     }
+    
+    // MARK: - Start New Workout Function
+    func addNewWorkout(newWorkout: Workout) {
+        modelContext.insert(newWorkout)
+        currentWorkout.wrappedValue = newWorkout
+        }
+    
     
     // Function to delete a workout
     private func deleteWorkout(_ workout: Workout) {
@@ -107,7 +127,7 @@ struct WorkoutCard: View {
                 .foregroundColor(.secondary)
 
             // Number of Exercises
-            Text("\(workout.exercises.count) Exercises")
+            Text("\(workout.workoutExercises.count) Exercises")
                 .font(.footnote)
                 .foregroundColor(.secondary)
         }

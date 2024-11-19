@@ -13,6 +13,7 @@ enum Tab {
 
 struct MainView: View {
     @State private var selectedTab: Tab = .home
+    @Environment(\.currentWorkout) var currentWorkout
     @Environment(\.modelContext) var modelContext
     
     var body: some View {
