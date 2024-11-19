@@ -120,14 +120,14 @@ struct ProfileView: View {
             }
             
             VStack(spacing: 10) {
-                SettingsRow(iconName: "lock.fill", title: "Change Password") {
-                    // Change password
+                SettingsRow(iconName: "gearshape.fill", title: "User Preferences") {
+                    // Open user preferences
                 }
                 SettingsRow(iconName: "bell.fill", title: "Notifications") {
                     // Manage notifications
                 }
-                SettingsRow(iconName: "hand.raised.fill", title: "Privacy Settings") {
-                    // Manage privacy
+                SettingsRow(iconName: "rectangle.portrait.and.arrow.right.fill", title: "Log Out") {
+                    // Handle log out
                 }
             }
         }
