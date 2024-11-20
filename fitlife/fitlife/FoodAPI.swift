@@ -13,7 +13,7 @@ import Foundation
 struct FoodObject: Hashable, Codable{
     let label: String
     let image: String? //making an optional as not all food items may have images.
-    let nutritionType: String //= "logging" //Analyze single food items or portions to log daily nutritional intake.
+    let nutritionType: String = "logging" //Analyze single food items or portions to log daily nutritional intake.
     let calories: String
     let totalNutrients: FoodNutrients
     let servingSize: [ServingSize]?
@@ -26,6 +26,7 @@ struct FoodObject: Hashable, Codable{
         let FAT: Nutrient //Fats
         let FIBTG: Nutrient //Fiber
         let SUGAR: Nutrient
+        let ENERC_KCAL: Nutrient //Energy in Kilo Calories
         
         //How each one is structured.
         struct Nutrient: Hashable, Codable{
@@ -58,10 +59,31 @@ struct FoodResponse: Codable{
     }
     
     struct Hint: Codable{
-            let food: FoodObject
+        let food: FoodObject
+    }
+    
+    struct Links: Codable{
+        let next: NextLink?
+        }
+    
+    struct NextLink: Codable{
+        let href: String
+        let title: String
     }
     
     let parsed: [ParsedFood]
-        
-
+    let hints: [Hint]
+    let text: String
+    let _links: Links
+    
 }
+
+//–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+class FoodViewModel: ObservableObject{
+    @Published var foodItem: [FoodObject] = [] //Array to Hold Fetched a Food's Data
+    
+    
+}
+
+
