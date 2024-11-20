@@ -51,4 +51,10 @@ struct Measure: Codable, Hashable{
 
 //–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 //Structure for Food Response.
-
+struct FoodResponse: Codable{
+    
+    struct ParsedFood: Codable{
+        let food: FoodObject
+    }
+    
+}

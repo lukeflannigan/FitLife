@@ -262,21 +262,39 @@ struct RecipeDetailView: View {
                     
                     Text("Servings: \(Int(recipe.yield))")
                         .font(.headline)
-                    
+//-––––––––––––––––––FIX––––––––––––––––––––––––––––
                     // Macros section
-                    Group {
-                        Text("Macronutrient Information: ")
-                            .font(.headline)
-                            .padding(.top, 5)
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Fat: \(String(format: "%.1f", recipe.totalNutrients.FAT.quantity))\(recipe.totalNutrients.FAT.unit)")
-                            Text("Carbs: \(String(format: "%.1f", recipe.totalNutrients.CHOCDF.quantity))\(recipe.totalNutrients.CHOCDF.unit)")
-                            Text("Fiber: \(String(format: "%.1f", recipe.totalNutrients.FIBTG.quantity))\(recipe.totalNutrients.FIBTG.unit)")
-                            Text("Protein: \(String(format: "%.1f", recipe.totalNutrients.PROCNT.quantity))\(recipe.totalNutrients.PROCNT.unit)")
-                            Text("Sugar: \(String(format: "%.1f", recipe.totalNutrients.SUGAR.quantity))\(recipe.totalNutrients.SUGAR.unit)")
-                        }
-                    }
+//                    Group {
+//                        Text("Macronutrient Information: ")
+//                            .font(.headline)
+//                            .padding(.top, 5)
+//                        
+//                        VStack(alignment: .leading, spacing: 8) {
+//                            Text("Fat: \(String(format: "%.1f", recipe.totalNutrients.FAT.quantity))\(recipe.totalNutrients.FAT.unit)")
+//                            Text("Carbs: \(String(format: "%.1f", recipe.totalNutrients.CHOCDF.quantity))\(recipe.totalNutrients.CHOCDF.unit)")
+//                            Text("Fiber: \(String(format: "%.1f", recipe.totalNutrients.FIBTG.quantity))\(recipe.totalNutrients.FIBTG.unit)")
+//                            Text("Protein: \(String(format: "%.1f", recipe.totalNutrients.PROCNT.quantity))\(recipe.totalNutrients.PROCNT.unit)")
+//                            Text("Sugar: \(String(format: "%.1f", recipe.totalNutrients.SUGAR.quantity))\(recipe.totalNutrients.SUGAR.unit)")
+//                        }
+//                    }
+                    
+                    /*
+                     // Macros section
+                     Group {
+                         Text("Macronutrient Information: ")
+                             .font(.headline)
+                             .padding(.top, 5)
+                         
+                         VStack(alignment: .leading, spacing: 8) {
+                             Text("Fat: \(String(format: "%.1f", recipe.totalNutrients.FAT.quantity))\(recipe.totalNutrients.FAT.unit)")
+                             Text("Carbs: \(String(format: "%.1f", recipe.totalNutrients.CHOCDF.quantity))\(recipe.totalNutrients.CHOCDF.unit)")
+                             Text("Fiber: \(String(format: "%.1f", recipe.totalNutrients.FIBTG.quantity))\(recipe.totalNutrients.FIBTG.unit)")
+                             Text("Protein: \(String(format: "%.1f", recipe.totalNutrients.PROCNT.quantity))\(recipe.totalNutrients.PROCNT.unit)")
+                             Text("Sugar: \(String(format: "%.1f", recipe.totalNutrients.SUGAR.quantity))\(recipe.totalNutrients.SUGAR.unit)")
+                         }
+                     }
+                     */
+                    
                     
                     Text("Ingredients:")
                         .font(.title2)
