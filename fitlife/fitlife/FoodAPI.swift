@@ -57,4 +57,11 @@ struct FoodResponse: Codable{
         let food: FoodObject
     }
     
+    struct Hint: Codable{
+            let food: FoodObject
+    }
+    
+    let parsed: [ParsedFood]
+        
+
 }

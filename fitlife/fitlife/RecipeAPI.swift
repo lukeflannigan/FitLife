@@ -101,15 +101,6 @@ class ViewModel: ObservableObject {
             task.resume()
         }
     }
-    
-    //Toggle Favorites Function.
-    func toggleFavorite(recipe: RecipeObject){
-        if favorites.contains(recipe) {
-            favorites.remove(recipe)
-        }else{
-            favorites.insert(recipe)
-        }
-    }
 }
 
 
@@ -125,7 +116,7 @@ struct SearchView: View {
         NavigationView {
             ZStack {
                 // Background gradient
-                LinearGradient(gradient: Gradient(colors: [Color.green, Color.cyan]),
+                LinearGradient(gradient: Gradient(colors: [Color.white, Color.green]),
                                    startPoint: .topLeading,
                                    endPoint: .bottomTrailing)
                             .ignoresSafeArea() // Make gradient fill the entire screen
@@ -148,11 +139,6 @@ struct SearchView: View {
                                         }
                                 }
                                 .padding()
-                      
-                      Toggle(isOn: $showFavoriteRecipes){
-                          Text("Show Favorites Only")
-                              .font(.headline)
-                      }.padding()
                                     
                             // Results list
                             if isSearching {
@@ -219,13 +205,6 @@ struct RecipeCard: View {
                 Text("\(Int(recipe.calories)) calories • \(Int(recipe.yield)) servings")
                     .font(.subheadline)
                     .foregroundColor(.gray)
-                Button(action:{
-                    viewModel.toggleFavorite(recipe: recipe)
-                }) {
-                    Image(systemName: viewModel.favorites.contains(recipe) ? "heart.fill" : "heart")
-                        //.foregoundColor(viewModel.favories.contains(recipe) ? .red: .gray)
-                        .padding(5)
-                }
             }
             .padding()
             .background(Color.white)
