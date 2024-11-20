@@ -17,6 +17,7 @@ struct FoodObject: Hashable, Codable{
     let nutritionType: String //= "logging" //Analyze single food items or portions to log daily nutritional intake.
     let calories: String
     
+    //Nested Struct for Nutrients
     struct FoodNutrients: Hashable, Codable{
         
         
