@@ -9,11 +9,8 @@ struct ProfileView: View {
     @Query private var userGoals: [UserGoals]
     var userGoal: UserGoals? { userGoals.first }
     
-    // Will need to connect this to real data later
-    // Just using this to test view works
     @State private var userEmail: String = "email@email.com"
     @State private var userPhone: String = "+1 (123) 456-7890"
-    
     @State private var showEditProfile: Bool = false
     
     var body: some View {
@@ -31,7 +28,6 @@ struct ProfileView: View {
         .edgesIgnoringSafeArea(.bottom)
     }
     
-    // Header Section
     private var headerSection: some View {
         VStack(spacing: 15) {
             if let profilePicture = userGoal?.profilePicture,
@@ -71,12 +67,10 @@ struct ProfileView: View {
                     .shadow(radius: 10)
             }
             
-            // Username
             Text(userGoal?.userProfile.name ?? "")
                 .font(.custom("Poppins-Bold", size: 28))
                 .foregroundColor(.primary)
             
-            // Edit Profile Button
             Button(action: {
                 showEditProfile.toggle()
             }) {
@@ -92,7 +86,6 @@ struct ProfileView: View {
         }
     }
     
-    // Personal Info Section
     private var personalInfoSection: some View {
         VStack(spacing: 15) {
             HStack {
@@ -109,7 +102,6 @@ struct ProfileView: View {
         }
     }
     
-    // Settings Section
     private var settingsSection: some View {
         VStack(spacing: 15) {
             HStack {
@@ -120,25 +112,20 @@ struct ProfileView: View {
             }
             
             VStack(spacing: 10) {
-                SettingsRow(iconName: "gearshape.fill", title: "User Preferences") {
-                    // Open user preferences
-                }
-                SettingsRow(iconName: "bell.fill", title: "Notifications") {
-                    // Manage notifications
-                }
+                SettingsRow(iconName: "gearshape.fill", title: "User Preferences") {}
+                SettingsRow(iconName: "bell.fill", title: "Notifications") {}
                 SettingsRow(iconName: "rectangle.portrait.and.arrow.right.fill", title: "Log Out") {
-                    logOut() // Call logOut() directly
+                    logOut()
                 }
             }
         }
     }
     
-    // Log Out Function
     private func logOut() {
-        // Clear any user-specific session data if needed
-        print("Log Out tapped!") // For debugging
-
-        // Navigate back to OpeningView
+        print("Log Out tapped!")
+        UserDefaults.standard.removeObject(forKey: "userSession")
+        UserDefaults.standard.set(false, forKey: "skippedSignIn")
+        
         if let window = UIApplication.shared.windows.first {
             window.rootViewController = UIHostingController(rootView: OpeningView())
             window.makeKeyAndVisible()
