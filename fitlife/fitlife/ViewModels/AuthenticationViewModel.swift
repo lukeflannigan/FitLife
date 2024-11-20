@@ -53,6 +53,19 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
         }
     }
     
+    func logOut() {
+        // Clear user session
+        UserDefaults.standard.removeObject(forKey: "userSession")
+        UserDefaults.standard.removeObject(forKey: "skippedSignIn")
+        
+        self.userSession = nil
+        
+        // Set isSignedIn to false to trigger navigation back to OpeningView
+        DispatchQueue.main.async {
+            self.isSignedIn = false
+        }
+    }
+    
     // Apple Sign In Delegate methods
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         processAppleSignIn(authorization)
