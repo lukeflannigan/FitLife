@@ -127,7 +127,7 @@ struct ProfileView: View {
                     // Manage notifications
                 }
                 SettingsRow(iconName: "rectangle.portrait.and.arrow.right.fill", title: "Log Out") {
-                    // Handle log out
+                    logOut()
                 }
             }
         }
