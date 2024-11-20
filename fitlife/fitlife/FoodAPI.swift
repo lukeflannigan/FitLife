@@ -9,3 +9,16 @@
 
 import SwiftUI
 import Foundation
+
+//The Food Object: All Necessary Food Information.
+struct FoodObject: Hashable, Codable{
+    let label: String
+    let image: String
+    let nutritionType: String //= "logging" //Analyze single food items or portions to log daily nutritional intake.
+    let calories: String
+    
+    struct FoodNutrients: Hashable, Codable{
+        
+        
+    }
+}
