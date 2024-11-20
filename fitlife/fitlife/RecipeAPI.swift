@@ -15,10 +15,10 @@ struct RecipeObject: Hashable, Codable{
     
     // Nested struct for nutrients
     struct TotalNutrients: Codable, Hashable {
-        let FAT: Nutrient
-        let CHOCDF: Nutrient
-        let FIBTG: Nutrient
-        let PROCNT: Nutrient
+        let PROCNT: Nutrient //Protein
+        let CHOCDEF: Nutrient //Carbs
+        let FAT: Nutrient //Fats
+        let FIBTG: Nutrient //Fiber
         let SUGAR: Nutrient
         
         struct Nutrient: Codable, Hashable {
