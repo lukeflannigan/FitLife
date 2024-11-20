@@ -4,12 +4,11 @@
 //
 //  Created by Saamer Arshad on 11/19/24.
 //
-
-
-
 import SwiftUI
 import Foundation
 
+
+//–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 //The Food Object: All Necessary Food Information.
 struct FoodObject: Hashable, Codable{
     let label: String
@@ -17,7 +16,8 @@ struct FoodObject: Hashable, Codable{
     let nutritionType: String //= "logging" //Analyze single food items or portions to log daily nutritional intake.
     let calories: String
     let totalNutrients: FoodNutrients
-    
+    let servingSize: [ServingSize]?
+    let servingsPerContainer: Int?
     
     //Nested Struct for Nutrients in a Food.
     struct FoodNutrients: Hashable, Codable{
@@ -41,3 +41,16 @@ struct FoodObject: Hashable, Codable{
         let quantitiy: Double?
     }
 }
+//–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+//–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+//Structure for Food Response.
+//struct FoodResponse: Codable{
+//    let hits = [Hit] //
+//    
+//    struct Hit: Codable{
+//        let food: FoodObject
+//    }
+//    
+//    
+//}
