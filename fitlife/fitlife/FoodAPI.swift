@@ -18,6 +18,7 @@ struct FoodObject: Hashable, Codable{
     let calories: String
     let totalNutrients: FoodNutrients
     
+    
     //Nested Struct for Nutrients in a Food.
     struct FoodNutrients: Hashable, Codable{
         let PROCNT: Nutrient //Protein
@@ -26,6 +27,7 @@ struct FoodObject: Hashable, Codable{
         let FIBTG: Nutrient //Fiber
         let SUGAR: Nutrient
         
+        //How each one is structured.
         struct Nutrient: Hashable, Codable{
             let label: String
             let quantity: Double
@@ -35,7 +37,7 @@ struct FoodObject: Hashable, Codable{
     
     struct ServingSize: Hashable, Codable{
         let uri: String?
-        let label: String
-        let quantitiy: Double
+        let label: String?
+        let quantitiy: Double?
     }
 }
