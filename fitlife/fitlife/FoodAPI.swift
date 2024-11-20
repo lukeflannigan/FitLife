@@ -13,7 +13,7 @@ import Foundation
 struct FoodObject: Hashable, Codable{
     let label: String
     let image: String? //making an optional as not all food items may have images.
-    let nutritionType: String = "logging" //Analyze single food items or portions to log daily nutritional intake.
+    let nutritionType: String //= "logging" //Analyze single food items or portions to log daily nutritional intake.
     let calories: String
     let totalNutrients: FoodNutrients
     let servingSize: [ServingSize]?
@@ -81,7 +81,7 @@ struct FoodResponse: Codable{
 //–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
 class FoodViewModel: ObservableObject{
-    @Published var foodItem: [FoodObject] = [] //Array to Hold Fetched a Food's Data
+    @Published var foods: [FoodObject] = [] //Array to Hold Fetched a Food's Data
     
     func fetchData(ingredient: String){
         if let path = Bundle.main.path(forResource: "FoodSearch", ofType: "plist"),
@@ -94,21 +94,70 @@ class FoodViewModel: ObservableObject{
             
             
             //Construct the URL with the Credentials
+            let URLString = "https://api.edamam.com/api/food-database/v2/parser?ingr=\(encodedIngredient)&app_id=\(id)&app_key=\(key)&nutrition-type=logging"
+            print("Constructed URL: \(URLString)")
             
-            //let URLString = "https://api.edamam.com/api/food-database/v2/parser?ingr=\(encodedQuery)&app_key=\(key)&_cont="
-            let urlString = "https://api.edamam.com/api/food-database/v2/parser?ingr=\(encodedIngredient)&app_id=\(id)&app_key=\(key)&nutrition-type=logging"
-            print("Constructed URL: \(urlString)")
+            //Validate the URL
+            guard let url = URL(string: URLString) else{
+                print("Error: Invalid Link")
+                return
+            }
             
+            //Create the URL Session Task
+            let task = URLSession.shared.dataTask(with: url){ data, response, error in
+                //1. Handle Errors
+                if let error = error {
+                    print ("Error: \(error.localizedDescription)")
+                    return
+                }
+                
+                //2. Check for Valid Data
+                guard let validData = data else{
+                    print("Strange,there's nothing here... (Error: No Data Received)")
+                    return
+                }
+                
+                //Decoding the JSON Block
+                do{
+                    let decodedResponse = try JSONDecoder().decode(FoodResponse.self, from: validData)
+                    DispatchQueue.main.async{
+                        self.foods = decodedResponse.parsed.map {$0.food}
+                        
+                        
+                        //Optional: hints
+                        //self.hints = decodedResponse.hints.map{ $0.food }
+                        
+                        print("Decoded response successfully: \(self.foods)")
+                    }
+                } catch{
+                    
+                    //Handle Decoding Errors
+                    print("Failed to decode JSON: \(error.localizedDescription)")
+                    
+                    // Pretty-print JSON for debugging purposes
+                    if let jsonObject = try? JSONSerialization.jsonObject(with: validData, options: []),
+                       let prettyData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted),
+                       let prettyPrintedString = String(data: prettyData, encoding: .utf8) {
+                        print("Pretty JSON Response:\n\(prettyPrintedString)")
+                    }
+                    else {
+                        print("Unable to format JSON.")
+                    }
+                    
+                    // Print out the raw response in case JSON couldn't be decoded
+                    print(String(data: validData, encoding: .utf8) ?? "Unable to convert data to string for debugging.")
+                }
+            }
             
-            
-            
+            // Start The Task
+            task.resume()
         }
-        // Construct the URL string with credentials
-        //            let urlString = "https://api.edamam.com/api/recipes/v2?q=\(encodedQuery)&app_key=\(key)&_cont=CHcVQBtNNQphDmgVQntAEX4BYUt6AwAPSmBJAmEVY1FzAQYVX3cUC2YWMFJ6BldUFzBECmUaMl1zUAUEQzYRUmMXYAYlARFqX3cWQT1OcV9xBE4%3D&type=any&app_id=\(id)"
-        //
-        //            //}
-        //        }
-        //    }
     }
 }
+
+//–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+             
+              
+           
+
 
