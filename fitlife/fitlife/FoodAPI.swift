@@ -41,16 +41,14 @@ struct FoodObject: Hashable, Codable{
         let quantitiy: Double?
     }
 }
-//–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+//Measurements are dynamic and context-dependent, hence kept out of the Static FoodObject.
+struct Measure: Codable, Hashable{
+    let uri: String
+    let label: String
+    let weight: Double?
+}
 
 //–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 //Structure for Food Response.
-//struct FoodResponse: Codable{
-//    let hits = [Hit] //
-//    
-//    struct Hit: Codable{
-//        let food: FoodObject
-//    }
-//    
-//    
-//}
+
