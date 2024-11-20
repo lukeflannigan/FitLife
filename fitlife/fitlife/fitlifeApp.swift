@@ -24,7 +24,8 @@ struct YourApp: App {
                 Workout.self,
                 Exercise.self,
                 WorkoutExercise.self,
-                ExerciseSet.self
+                ExerciseSet.self,
+                DailyIntake.self
             )
         } catch {
             fatalError("Could not initialize ModelContainer")
