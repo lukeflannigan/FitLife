@@ -127,9 +127,21 @@ struct ProfileView: View {
                     // Manage notifications
                 }
                 SettingsRow(iconName: "rectangle.portrait.and.arrow.right.fill", title: "Log Out") {
-                    logOut()
+                    logOut() // Call logOut() directly
                 }
             }
+        }
+    }
+    
+    // Log Out Function
+    private func logOut() {
+        // Clear any user-specific session data if needed
+        print("Log Out tapped!") // For debugging
+
+        // Navigate back to OpeningView
+        if let window = UIApplication.shared.windows.first {
+            window.rootViewController = UIHostingController(rootView: OpeningView())
+            window.makeKeyAndVisible()
         }
     }
     
