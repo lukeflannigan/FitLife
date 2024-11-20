@@ -83,7 +83,11 @@ struct FoodResponse: Codable{
 class FoodViewModel: ObservableObject{
     @Published var foodItem: [FoodObject] = [] //Array to Hold Fetched a Food's Data
     
-    
+    func fetchData(query: String){
+        if let path = Bundle.main.path(forResource: "FoodSearch", ofType: "plist"),
+           let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
+           
+    }
 }
 
 
