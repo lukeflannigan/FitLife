@@ -17,68 +17,126 @@ struct CurrentWorkoutView: View {
     
     var body: some View {
         if let currentWorkout = currentWorkout {
-            VStack {
-            Text("Current Workout")
-                .font(.headline)
-                .padding()
-            List {
-                ForEach(currentWorkout.workoutExercises) { workoutExercise in
-                    WorkoutExerciseView(workout: currentWorkout, workoutExercise: workoutExercise)
+            VStack(spacing: 0) {
+                // Header
+                VStack(spacing: 8) {
+                    Text("Current Workout")
+                        .font(.system(size: 24, weight: .bold))
+                    Text(currentWorkout.date.formatted(date: .abbreviated, time: .shortened))
+                        .font(.system(size: 15))
+                        .foregroundColor(.secondary)
                 }
-                Button(action: {
-                    isSelectingExercises = true
-                }) {
-                    HStack {
-                        Image(systemName: "book.fill")
-                            .font(.system(size: 20))
-                            .foregroundColor(.black)
-                        Text("Add Exercises")
-                            .font(.custom("Poppins-SemiBold", size: 18))
-                            .foregroundColor(.black)
-                        Spacer()
+                .padding(.vertical, 20)
+                .frame(maxWidth: .infinity)
+                .background(Color(.systemBackground))
+                
+                // Exercise List
+                ScrollView {
+                    LazyVStack(spacing: 20) {
+                        ForEach(currentWorkout.workoutExercises) { workoutExercise in
+                            WorkoutExerciseView(workout: currentWorkout, workoutExercise: workoutExercise)
+                                .padding(.horizontal, 20)
+                        }
+                        
+                        // Add Exercise Button
+                        Button(action: { isSelectingExercises = true }) {
+                            HStack(spacing: 12) {
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.system(size: 22))
+                                    .foregroundColor(.black)
+                                
+                                Text("Add Exercises")
+                                    .font(.system(size: 17, weight: .semibold))
+                                    .foregroundColor(.black)
+                                
+                                Spacer()
+                                
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color(.systemGray6))
+                            )
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 12)
                     }
-                    .padding()
-                    .background(Color(UIColor.systemGray6))
-                    .cornerRadius(10)
-                    .padding(.horizontal)
+                    .padding(.top, 20)
+                    .padding(.bottom, 100)
                 }
                 
-                .listRowSeparator(.hidden)
-            }
-            .listStyle(.plain)
-            
-            
-            .sheet(isPresented: $isSelectingExercises, content: {
-                NavigationStack {
-                    ExerciseSelectionView(selectedExercises: $selectedExercises, currentWorkout: $currentWorkout)
-                }
-            })
-                HStack {
-                    Button(role: .destructive, action: {
-                        modelContext.delete(currentWorkout)
-                        self.currentWorkout = nil
-                        dismiss()
-                    }) {
-                        Text("Cancel Workout")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    if !currentWorkout.workoutExercises.isEmpty {
-                        Button(action: {
-                            currentWorkout.completed = true
+                // Bottom Action Bar
+                VStack(spacing: 12) {
+                    Divider()
+                    
+                    HStack(spacing: 16) {
+                        // Cancel Button
+                        Button(role: .destructive, action: {
+                            modelContext.delete(currentWorkout)
                             self.currentWorkout = nil
                             dismiss()
                         }) {
-                            Text("Finish Workout")
-                                .frame(maxWidth: .infinity)
+                            HStack {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.system(size: 16, weight: .semibold))
+                                Text("Cancel")
+                                    .font(.system(size: 16, weight: .semibold))
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 52)
+                            .background(Color(.systemGray6))
+                            .foregroundColor(.red)
+                            .cornerRadius(26)
                         }
-                        .buttonStyle(.borderedProminent)
+                        
+                        // Finish Button
+                        if !currentWorkout.workoutExercises.isEmpty {
+                            Button(action: {
+                                currentWorkout.completed = true
+                                self.currentWorkout = nil
+                                dismiss()
+                            }) {
+                                HStack {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.system(size: 16, weight: .semibold))
+                                    Text("Complete")
+                                        .font(.system(size: 16, weight: .semibold))
+                                }
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 52)
+                                .background(Color.black)
+                                .foregroundColor(.white)
+                                .cornerRadius(26)
+                            }
+                        }
                     }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
                 }
-                .padding()
-        }
+                .background(Color(.systemBackground))
+            }
+            .sheet(isPresented: $isSelectingExercises) {
+                NavigationStack {
+                    ExerciseSelectionView(selectedExercises: $selectedExercises, currentWorkout: $currentWorkout)
+                }
+            }
         } else {
-            Text("No current workout")
+            // Empty State
+            VStack(spacing: 16) {
+                Image(systemName: "dumbbell.fill")
+                    .font(.system(size: 40))
+                    .foregroundColor(.secondary)
+                Text("No Active Workout")
+                    .font(.system(size: 20, weight: .semibold))
+                Text("Start a new workout to begin tracking your exercises")
+                    .font(.system(size: 16))
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(40)
         }
     }
 }
