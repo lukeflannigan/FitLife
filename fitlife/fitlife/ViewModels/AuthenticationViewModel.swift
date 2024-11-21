@@ -12,7 +12,7 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
     
     @Published var userSession: String? = nil
     @Published var errorMessage: String? = nil
-    @Published var isSignedIn = false  // Track sign-in status
+    @Published var isSignedIn = false
     
     override init() {
         super.init()
@@ -31,12 +31,9 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
     func processAppleSignIn(_ authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             let userIdentifier = appleIDCredential.user
-            self.userSession = userIdentifier  // Save user session
+            self.userSession = userIdentifier
             
-            // Store session in UserDefaults for future use
             UserDefaults.standard.set(userIdentifier, forKey: "userSession")
-            
-            // Set isSignedIn to true to trigger navigation
             DispatchQueue.main.async {
                 self.isSignedIn = true
             }
@@ -44,16 +41,12 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
     }
     
     func skipSignIn() {
-        // Mark user as having skipped sign-in
         UserDefaults.standard.set(true, forKey: "skippedSignIn")
-        
-        // Directly set isSignedIn to true to trigger navigation to MainView
         DispatchQueue.main.async {
             self.isSignedIn = true
         }
     }
     
-    // Apple Sign In Delegate methods
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         processAppleSignIn(authorization)
     }
