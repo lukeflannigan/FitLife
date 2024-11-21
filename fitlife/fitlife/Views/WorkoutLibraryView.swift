@@ -87,8 +87,34 @@ struct WorkoutLibraryView: View {
             .sheet(isPresented: $showingWorkout) {
                 CurrentWorkoutView(currentWorkout: currentWorkout)
             }
+            .sheet(isPresented: $showingExerciseLibrary) {
+                NavigationView {
+                    ExerciseLibraryView(workout: Workout(name: "Temporary"))
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Done") {
+                                    showingExerciseLibrary = false
+                                }
+                            }
+                        }
+                }
+            }
             .navigationTitle("Workout Library")
             .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showingExerciseLibrary = true
+                    }) {
+                        Image(systemName: "book.closed.fill")
+                            .font(.system(size: 16))
+                            .foregroundColor(.black)
+                            .frame(width: 36, height: 36)
+                            .background(Color(.systemGray6))
+                            .clipShape(Circle())
+                    }
+                }
+            }
         }
     }
     
