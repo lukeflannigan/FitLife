@@ -32,31 +32,54 @@ struct ExerciseSetView: View {
             HStack {
                 Spacer().frame(width: 8)
                 
-                Text("\(setNumber)")
-                    .frame(width: 45)
+                // Set Number
+                ZStack {
+                    Circle()
+                        .fill(.black)
+                        .frame(width: 28, height: 28)
+                    Text("\(setNumber)")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(.white)
+                }
+                .frame(width: 45)
                 
                 Spacer().frame(width: 20)
                 
-                Text("prev")
+                // Previous Weight
+                Text("—")
+                    .font(.system(size: 17, weight: .medium))
+                    .foregroundColor(.secondary)
                     .frame(width: 45)
                 
                 Spacer().frame(width: 20)
                 
                 HStack(spacing: 12) {
-                    TextField("lbs", value: $exerciseSet.weight, format: .number)
-                        .frame(width: 70)
-                        .textFieldStyle(.roundedBorder)
+                    // Weight Input
+                    TextField("0", value: $exerciseSet.weight, format: .number)
+                        .keyboardType(.numberPad)
                         .multilineTextAlignment(.center)
+                        .font(.system(size: 17, weight: .medium))
+                        .frame(width: 70)
+                        .padding(.vertical, 8)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(18)
                     
-                    TextField("Reps", value: $exerciseSet.reps, format: .number)
-                        .frame(width: 70)
-                        .textFieldStyle(.roundedBorder)
+                    // Reps Input
+                    TextField("0", value: $exerciseSet.reps, format: .number)
+                        .keyboardType(.numberPad)
                         .multilineTextAlignment(.center)
+                        .font(.system(size: 17, weight: .medium))
+                        .frame(width: 70)
+                        .padding(.vertical, 8)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(18)
                 }
                 
                 Spacer().frame(width: 16)
                 
                 Image(systemName: "checkmark")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.black)
                     .frame(width: 30)
                 
                 Spacer().frame(width: 8)
