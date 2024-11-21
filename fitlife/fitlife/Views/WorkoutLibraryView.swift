@@ -15,7 +15,7 @@ struct WorkoutLibraryView: View {
     
     // State for showing the current workout
     @State private var showingWorkout = false
-    @State private var showingExerciseLibrary = false
+    @State private var showingExerciseCreation = false
     @Environment(\.currentWorkout) var currentWorkout
     
     // Animation state
@@ -94,25 +94,11 @@ struct WorkoutLibraryView: View {
             .sheet(isPresented: $showingWorkout) {
                 CurrentWorkoutView(currentWorkout: currentWorkout)
             }
-            .sheet(isPresented: $showingExerciseLibrary) {
-                NavigationView {
-                    ExerciseLibraryView(workout: Workout(name: "Temporary"))
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarTrailing) {
-                                Button("Done") {
-                                    showingExerciseLibrary = false
-                                }
-                            }
-                        }
-                }
-            }
             .navigationTitle("Workout Library")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        showingExerciseLibrary = true
-                    }) {
+                    NavigationLink(destination: ExerciseLibraryView(workout: Workout(name: "temp"))) {
                         Image(systemName: "book.closed.fill")
                             .font(.system(size: 16))
                             .foregroundColor(.black)
