@@ -97,8 +97,31 @@ struct WorkoutDetailView: View {
                 
                 ForEach(workout.workoutExercises, id: \.id) { workoutExercise in
                     VStack(alignment: .leading, spacing: 16) {
-                        Text(workoutExercise.exercise?.name ?? "Empty")
-                            .font(.system(size: 20, weight: .semibold))
+                        HStack(alignment: .top, spacing: 16) {
+                            AsyncImage(url: URL(string: workoutExercise.exercise?.imageName ?? "")) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 80, height: 80)
+                                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                            } placeholder: {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color(.systemGray6))
+                                    .frame(width: 80, height: 80)
+                                    .overlay(
+                                        Image(systemName: "dumbbell.fill")
+                                            .foregroundColor(.gray)
+                                    )
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(workoutExercise.exercise?.name ?? "Empty")
+                                    .font(.system(size: 20, weight: .semibold))
+                                Text(workoutExercise.exercise?.muscleGroup.capitalized ?? "")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.secondary)
+                            }
+                        }
                         
                         ForEach(Array(workoutExercise.sortedSets.enumerated()), id: \.element.id) { index, set in
                             HStack {
