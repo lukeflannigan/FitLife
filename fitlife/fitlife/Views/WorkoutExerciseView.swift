@@ -23,9 +23,10 @@ struct WorkoutExerciseView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             // Exercise Title and Menu
-            HStack {
+            HStack(alignment: .center) {
                 Text(workoutExercise.exercise?.name ?? "Empty")
-                    .font(.system(size: 24, weight: .bold))
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundColor(.black)
                 Spacer()
                 Menu {
                     Button(role: .destructive, action: {
@@ -36,10 +37,14 @@ struct WorkoutExerciseView: View {
                     }
                 } label: {
                     Image(systemName: "ellipsis")
-                        .foregroundColor(.black)
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.secondary)
                 }
             }
             .padding(.horizontal)
+            
+            Divider()
+                .padding(.horizontal)
             
             // Column Headers
             HStack(spacing: 0) {
@@ -81,6 +86,7 @@ struct WorkoutExerciseView: View {
                 Spacer().frame(width: 8)
             }
             .frame(maxWidth: .infinity)
+            .padding(.bottom, 8)
             
             // Exercise Sets
             ForEach(Array(workoutExercise.sortedSets.enumerated()), id: \.element.id) { index, set in
@@ -99,7 +105,7 @@ struct WorkoutExerciseView: View {
             .buttonStyle(.bordered)
             .padding(.horizontal)
         }
-        .padding(.vertical)
+        .padding(.vertical, 8)
     }
     
     private func deleteWorkoutExercise() {
