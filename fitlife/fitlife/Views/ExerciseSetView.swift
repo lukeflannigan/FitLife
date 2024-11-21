@@ -23,29 +23,47 @@ struct ExerciseSetView: View {
                         Image(systemName: "trash")
                             .foregroundColor(.white)
                             .padding(.trailing, 20), alignment: .trailing
-                            
                     )
-            }.frame(height: 50)
-            HStack {
-                Text("\(setNumber)")
-                    .frame(maxWidth: .infinity)
-                Text("prev")
-                    .frame(maxWidth: .infinity)
-                TextField("lbs", value: $exerciseSet.weight, format: .number)
-                    .frame(maxWidth: .infinity)
-                    .textFieldStyle(.roundedBorder)
-                    .multilineTextAlignment(.center)
-                
-                TextField("Reps", value: $exerciseSet.reps, format: .number)
-                    .frame(maxWidth: .infinity)
-                    .textFieldStyle(.roundedBorder)
-                    .multilineTextAlignment(.center)
-                
-                Image(systemName: "checkmark.rectangle.fill")
-                    .frame(maxWidth: .infinity)
             }
             .frame(height: 50)
-            .background(Color.white)
+            .clipped()
+            
+            // Main content
+            HStack {
+                Spacer().frame(width: 8)
+                
+                Text("\(setNumber)")
+                    .frame(width: 45)
+                
+                Spacer().frame(width: 20)
+                
+                Text("prev")
+                    .frame(width: 45)
+                
+                Spacer().frame(width: 20)
+                
+                HStack(spacing: 12) {
+                    TextField("lbs", value: $exerciseSet.weight, format: .number)
+                        .frame(width: 70)
+                        .textFieldStyle(.roundedBorder)
+                        .multilineTextAlignment(.center)
+                    
+                    TextField("Reps", value: $exerciseSet.reps, format: .number)
+                        .frame(width: 70)
+                        .textFieldStyle(.roundedBorder)
+                        .multilineTextAlignment(.center)
+                }
+                
+                Spacer().frame(width: 16)
+                
+                Image(systemName: "checkmark")
+                    .frame(width: 30)
+                
+                Spacer().frame(width: 8)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(Color(.systemBackground))
             .offset(x: offset)
             .gesture(
                 DragGesture()
@@ -67,7 +85,6 @@ struct ExerciseSetView: View {
                         }
                     }
             )
-            
             .clipped()
             .animation(.default, value: offset)
         }
