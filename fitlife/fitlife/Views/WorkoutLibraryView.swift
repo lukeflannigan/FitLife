@@ -34,6 +34,13 @@ struct WorkoutLibraryView: View {
                                     WorkoutCard(workout: workout)
                                 }
                                 .buttonStyle(WorkoutCardButtonStyle())
+                                .contextMenu {
+                                    Button(role: .destructive) {
+                                        deleteWorkout(workout)
+                                    } label: {
+                                        Label("Delete Workout", systemImage: "trash")
+                                    }
+                                }
                                 .swipeActions {
                                     Button("Delete", role: .destructive) {
                                         withAnimation {
@@ -127,6 +134,7 @@ struct WorkoutLibraryView: View {
     // Function to delete a workout
     private func deleteWorkout(_ workout: Workout) {
         modelContext.delete(workout)
+        try? modelContext.save()
     }
 }
 
