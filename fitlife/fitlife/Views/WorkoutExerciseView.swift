@@ -95,15 +95,24 @@ struct WorkoutExerciseView: View {
             .listRowSeparator(.hidden)
             
             // Add Set Button
-            Button(action: { workoutExercise.addSet(context: modelContext) }) {
-                Text("Add Set")
-                    .font(.system(size: 15, weight: .medium))
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
+            HStack {
+                Spacer()
+                Button(action: { workoutExercise.addSet(context: modelContext) }) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("Add Set")
+                            .font(.system(size: 15, weight: .semibold))
+                    }
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    .background(Color.black)
+                    .clipShape(Capsule())
+                }
+                Spacer()
             }
-            .buttonStyle(.bordered)
-            .padding(.horizontal)
+            .padding(.top, 4)
         }
         .padding(.vertical, 8)
     }
