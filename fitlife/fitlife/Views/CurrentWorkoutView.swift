@@ -14,14 +14,53 @@ struct CurrentWorkoutView: View {
     @State private var isSelectingExercises = false
     @Binding var currentWorkout: Workout?
     @Environment(\.dismiss) var dismiss
+    @State private var isEditingName = false
+    @State private var tempName: String = ""
     
     var body: some View {
         if let currentWorkout = currentWorkout {
             VStack(spacing: 0) {
                 // Header
                 VStack(spacing: 8) {
-                    Text("Current Workout")
-                        .font(.system(size: 24, weight: .bold))
+                    HStack {
+                        Spacer()
+                        if isEditingName {
+                            HStack(spacing: 8) {
+                                TextField("Workout Name", text: $tempName)
+                                    .font(.system(size: 24, weight: .bold))
+                                    .multilineTextAlignment(.center)
+                                    .textFieldStyle(.plain)
+                                    .frame(width: 240)
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 8)
+                                    .background(Color(.systemGray6))
+                                    .clipShape(Capsule())
+                                
+                                Button(action: { saveWorkoutName(currentWorkout) }) {
+                                    Text("Save")
+                                        .font(.system(size: 16, weight: .medium))
+                                        .foregroundColor(.black)
+                                }
+                            }
+                        } else {
+                            HStack(spacing: 8) {
+                                Text(currentWorkout.name)
+                                    .font(.system(size: 24, weight: .bold))
+                                
+                                Button(action: {
+                                    tempName = currentWorkout.name
+                                    isEditingName = true
+                                }) {
+                                    Image(systemName: "square.and.pencil")
+                                        .font(.system(size: 20))
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
+                        Spacer()
+                    }
+                    .padding(.horizontal, 20)
+                    
                     Text(currentWorkout.date.formatted(date: .abbreviated, time: .shortened))
                         .font(.system(size: 15))
                         .foregroundColor(.secondary)
@@ -138,6 +177,12 @@ struct CurrentWorkoutView: View {
             }
             .padding(40)
         }
+    }
+    
+    private func saveWorkoutName(_ workout: Workout) {
+        workout.name = tempName
+        try? modelContext.save()
+        isEditingName = false
     }
 }
 
