@@ -12,6 +12,7 @@ struct ExerciseLibraryView: View {
     @State private var selectedExercise: Exercise?
     @State private var selectedCategory: String = "All"
     @State private var showingFilterSheet = false
+    @State private var showingExerciseCreation = false
 
     var categories: [String] {
         var cats = Array(Set(exercises.map { $0.type.capitalized })).sorted()
@@ -103,6 +104,14 @@ struct ExerciseLibraryView: View {
                 Text("Exercise Library")
                     .font(.custom("Poppins-SemiBold", size: 18))
             }
+            ToolbarItem(placement: .navigationBarTrailing) { // Add the new toolbar item
+                    Button(action: {
+                        showingExerciseCreation = true
+                    }) {
+                        Image(systemName: "plus")
+                            .font(.system(size: 18))
+                    }
+                }
         }
         .onAppear {
 //            fetchExercises()
@@ -111,6 +120,9 @@ struct ExerciseLibraryView: View {
             NavigationView {
                 ExerciseDetailView(exercise: exercise)
             }
+        }
+        .sheet(isPresented: $showingExerciseCreation) {
+            ExerciseCreationView()
         }
     }
 }
