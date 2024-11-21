@@ -16,18 +16,19 @@ struct WorkoutDetailView: View {
     var workout: Workout
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                VStack(spacing: 20) {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 24) {
+                // Workout Header Card
+                VStack(alignment: .leading, spacing: 20) {
                     if isEditingName {
-                        VStack(spacing: 16) {
+                        VStack(alignment: .leading, spacing: 16) {
                             TextField("Workout Name", text: $tempName)
-                                .font(.system(size: 24, weight: .bold))
+                                .font(.system(size: 28, weight: .bold))
                                 .textFieldStyle(.plain)
-                                .padding(.vertical, 8)
-                                .padding(.horizontal, 12)
+                                .padding(.vertical, 12)
+                                .padding(.horizontal, 16)
                                 .background(Color(.systemGray6))
-                                .cornerRadius(8)
+                                .cornerRadius(12)
                             
                             HStack(spacing: 12) {
                                 Button(action: {
@@ -38,9 +39,9 @@ struct WorkoutDetailView: View {
                                         .font(.system(size: 16, weight: .medium))
                                         .foregroundColor(.black)
                                         .frame(maxWidth: .infinity)
-                                        .padding(.vertical, 12)
+                                        .padding(.vertical, 14)
                                         .background(Color(.systemGray6))
-                                        .cornerRadius(8)
+                                        .cornerRadius(12)
                                 }
                                 
                                 Button(action: {
@@ -52,16 +53,16 @@ struct WorkoutDetailView: View {
                                         .font(.system(size: 16, weight: .medium))
                                         .foregroundColor(.white)
                                         .frame(maxWidth: .infinity)
-                                        .padding(.vertical, 12)
+                                        .padding(.vertical, 14)
                                         .background(Color.black)
-                                        .cornerRadius(8)
+                                        .cornerRadius(12)
                                 }
                             }
                         }
                     } else {
                         HStack {
                             Text(workout.name)
-                                .font(.system(size: 24, weight: .bold))
+                                .font(.system(size: 28, weight: .bold))
                             
                             Spacer()
                             
@@ -70,7 +71,7 @@ struct WorkoutDetailView: View {
                                 isEditingName = true
                             }) {
                                 Text("Edit")
-                                    .font(.system(size: 16, weight: .medium))
+                                    .font(.system(size: 14, weight: .medium))
                                     .foregroundColor(.black)
                                     .padding(.horizontal, 16)
                                     .padding(.vertical, 8)
@@ -80,65 +81,100 @@ struct WorkoutDetailView: View {
                         }
                     }
                     
-                    Divider()
-                    
                     HStack(spacing: 8) {
                         Image(systemName: "calendar")
-                            .foregroundStyle(.black)
-                        Text(workout.date.formatted(date: .complete, time: .shortened))
                             .font(.system(size: 16))
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.secondary)
+                        Text(workout.date.formatted(date: .abbreviated, time: .shortened))
+                            .font(.system(size: 16))
+                            .foregroundStyle(.secondary)
                     }
                 }
-                .padding(20)
+                .padding(24)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .background(Color.white)
-                .cornerRadius(16)
-                .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 2)
+                .cornerRadius(20)
+                .shadow(color: .black.opacity(0.03), radius: 15, x: 0, y: 2)
                 
+                // Exercises List
                 ForEach(workout.workoutExercises, id: \.id) { workoutExercise in
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text(workoutExercise.exercise?.name ?? "Empty")
-                            .font(.system(size: 20, weight: .semibold))
-                        
-                        ForEach(Array(workoutExercise.sortedSets.enumerated()), id: \.element.id) { index, set in
-                            HStack {
-                                Text("Set \(index + 1)")
-                                    .font(.system(size: 16, weight: .medium))
-                                    .foregroundColor(.gray)
-                                
-                                Spacer()
-                                
-                                Text("\(set.weight, specifier: "%.1f") lbs")
-                                    .font(.system(size: 16))
-                                
-                                Text("×")
-                                    .font(.system(size: 16))
-                                    .foregroundColor(.gray)
-                                    .padding(.horizontal, 8)
-                                
-                                Text("\(set.reps) reps")
-                                    .font(.system(size: 16))
+                    VStack(alignment: .leading, spacing: 0) {
+                        // Exercise Header
+                        HStack(alignment: .top, spacing: 16) {
+                            AsyncImage(url: URL(string: workoutExercise.exercise?.imageName ?? "")) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 65, height: 65)
+                            } placeholder: {
+                                Color(.systemGray6)
+                                    .overlay(
+                                        Image(systemName: "dumbbell.fill")
+                                            .font(.system(size: 20))
+                                            .foregroundColor(.gray)
+                                    )
                             }
-                            .padding(.vertical, 8)
+                            .clipShape(RoundedRectangle(cornerRadius: 14))
                             
-                            if index < workoutExercise.sortedSets.count - 1 {
-                                Divider()
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text(workoutExercise.exercise?.name ?? "Empty")
+                                    .font(.system(size: 20, weight: .semibold))
+                                Text(workoutExercise.exercise?.muscleGroup.capitalized ?? "")
+                                    .font(.system(size: 15))
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 16)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.white)
+                        
+                        // Sets List
+                        VStack(spacing: 0) {
+                            ForEach(Array(workoutExercise.sortedSets.enumerated()), id: \.element.id) { index, set in
+                                HStack {
+                                    Text("Set \(index + 1)")
+                                        .font(.system(size: 16, weight: .medium))
+                                        .foregroundColor(.secondary)
+                                    
+                                    Spacer()
+                                    
+                                    HStack(spacing: 4) {
+                                        Text("\(set.weight, specifier: "%.1f")")
+                                            .font(.system(size: 16, weight: .medium))
+                                        Text("lbs")
+                                            .font(.system(size: 15))
+                                            .foregroundColor(.secondary)
+                                        
+                                        Text("•")
+                                            .font(.system(size: 15))
+                                            .foregroundColor(.secondary)
+                                            .padding(.horizontal, 4)
+                                        
+                                        Text("\(set.reps)")
+                                            .font(.system(size: 16, weight: .medium))
+                                        Text("reps")
+                                            .font(.system(size: 15))
+                                            .foregroundColor(.secondary)
+                                    }
+                                }
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 12)
+                                .background(index % 2 == 0 ? Color.white : Color(.systemGray6).opacity(0.3))
                             }
                         }
                     }
-                    .padding(20)
                     .background(Color.white)
-                    .cornerRadius(16)
-                    
-                    if workoutExercise.id != workout.workoutExercises.last?.id {
-                        Divider()
-                            .padding(.horizontal, 20)
-                    }
+                    .cornerRadius(20)
+                    .shadow(color: .black.opacity(0.03), radius: 15, x: 0, y: 2)
                 }
             }
-            .padding()
+            .padding(.horizontal, 16)
+            .padding(.vertical, 24)
         }
-        .background(Color(.systemGray6))
+        .background(Color(.systemGray6).opacity(0.5))
         .animation(.easeInOut(duration: 0.2), value: isEditingName)
     }
 }

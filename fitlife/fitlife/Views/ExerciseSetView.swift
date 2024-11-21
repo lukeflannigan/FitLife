@@ -23,29 +23,70 @@ struct ExerciseSetView: View {
                         Image(systemName: "trash")
                             .foregroundColor(.white)
                             .padding(.trailing, 20), alignment: .trailing
-                            
                     )
-            }.frame(height: 50)
-            HStack {
-                Text("\(setNumber)")
-                    .frame(maxWidth: .infinity)
-                Text("prev")
-                    .frame(maxWidth: .infinity)
-                TextField("lbs", value: $exerciseSet.weight, format: .number)
-                    .frame(maxWidth: .infinity)
-                    .textFieldStyle(.roundedBorder)
-                    .multilineTextAlignment(.center)
-                
-                TextField("Reps", value: $exerciseSet.reps, format: .number)
-                    .frame(maxWidth: .infinity)
-                    .textFieldStyle(.roundedBorder)
-                    .multilineTextAlignment(.center)
-                
-                Image(systemName: "checkmark.rectangle.fill")
-                    .frame(maxWidth: .infinity)
             }
             .frame(height: 50)
-            .background(Color.white)
+            .clipped()
+            
+            // Main content
+            HStack {
+                Spacer().frame(width: 8)
+                
+                // Set Number
+                ZStack {
+                    Circle()
+                        .fill(.black)
+                        .frame(width: 28, height: 28)
+                    Text("\(setNumber)")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(.white)
+                }
+                .frame(width: 45)
+                
+                Spacer().frame(width: 20)
+                
+                // Previous Weight
+                Text("—")
+                    .font(.system(size: 17, weight: .medium))
+                    .foregroundColor(.secondary)
+                    .frame(width: 45)
+                
+                Spacer().frame(width: 20)
+                
+                HStack(spacing: 12) {
+                    // Weight Input
+                    TextField("0", value: $exerciseSet.weight, format: .number)
+                        .keyboardType(.numberPad)
+                        .multilineTextAlignment(.center)
+                        .font(.system(size: 17, weight: .medium))
+                        .frame(width: 70)
+                        .padding(.vertical, 8)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(18)
+                    
+                    // Reps Input
+                    TextField("0", value: $exerciseSet.reps, format: .number)
+                        .keyboardType(.numberPad)
+                        .multilineTextAlignment(.center)
+                        .font(.system(size: 17, weight: .medium))
+                        .frame(width: 70)
+                        .padding(.vertical, 8)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(18)
+                }
+                
+                Spacer().frame(width: 16)
+                
+                Image(systemName: "checkmark")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.black)
+                    .frame(width: 30)
+                
+                Spacer().frame(width: 8)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(Color(.systemBackground))
             .offset(x: offset)
             .gesture(
                 DragGesture()
@@ -67,7 +108,6 @@ struct ExerciseSetView: View {
                         }
                     }
             )
-            
             .clipped()
             .animation(.default, value: offset)
         }
