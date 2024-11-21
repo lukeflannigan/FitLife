@@ -69,7 +69,7 @@ class Exercise: Equatable, Identifiable, ObservableObject {
     }
 }
 
-enum Equipment: String {
+enum Equipment: String,CaseIterable {
     case none = "none"              // Represents the null case
     case medicineBall = "medicine ball"
     case dumbbell = "dumbbell"
