@@ -13,6 +13,7 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
     @Published var userSession: String? = nil
     @Published var errorMessage: String? = nil
     @Published var isSignedIn = false
+    @Published var isNewUser = false  // Track if the user is new
     
     override init() {
         super.init()
@@ -33,6 +34,13 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
             let userIdentifier = appleIDCredential.user
             self.userSession = userIdentifier
             
+            // Check if the user is new
+            if isNewUser(userIdentifier) {
+                self.isNewUser = true
+            } else {
+                self.isNewUser = false
+            }
+            
             UserDefaults.standard.set(userIdentifier, forKey: "userSession")
             DispatchQueue.main.async {
                 self.isSignedIn = true
@@ -44,6 +52,19 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
         UserDefaults.standard.set(true, forKey: "skippedSignIn")
         DispatchQueue.main.async {
             self.isSignedIn = true
+        }
+    }
+    
+    private func isNewUser(_ userIdentifier: String) -> Bool {
+        // Simulated database check. Replace this with a real database query.
+        if let existingUsers = UserDefaults.standard.array(forKey: "existingUsers") as? [String] {
+            return !existingUsers.contains(userIdentifier)
+        } else {
+            // First time running the app, no users exist yet
+            var users = [String]()
+            users.append(userIdentifier)  // Add this user as the first entry
+            UserDefaults.standard.set(users, forKey: "existingUsers")
+            return true
         }
     }
     
