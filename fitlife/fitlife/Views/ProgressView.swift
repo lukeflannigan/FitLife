@@ -138,6 +138,7 @@ struct ProgressView: View {
                                 RoundedRectangle(cornerRadius: 4)
                                     .fill(workoutDates.contains(date) ? Color.black : Color(.systemGray6))
                                     .frame(width: cellSize, height: cellSize)
+                            } else {
                             }
                         }
                     }
@@ -147,11 +148,22 @@ struct ProgressView: View {
     }
     
     private func dateFor(row: Int, col: Int, totalWeeks: Int) -> Date? {
-        let calendar = Calendar.current
+        var calendar = Calendar.current
+        calendar.firstWeekday = 1
+
         let today = calendar.startOfDay(for: Date())
+
+        guard let startOfCurrentWeek = calendar.dateInterval(of: .weekOfYear, for: today)?.start else {
+            return nil
+        }
+
         let weeksAgo = totalWeeks - col - 1
-        let daysAgo = weeksAgo * 7 + row
-        return calendar.date(byAdding: .day, value: -daysAgo, to: today)
+        guard let weekStart = calendar.date(byAdding: .weekOfYear, value: -weeksAgo, to: startOfCurrentWeek) else {
+            return nil
+        }
+
+        let date = calendar.date(byAdding: .day, value: row, to: weekStart)
+        return date
     }
     
     private func monthAbbreviation(for date: Date) -> String {
