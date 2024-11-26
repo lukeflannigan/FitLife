@@ -8,7 +8,7 @@ import SwiftData
 
 struct WorkoutTemplateView: View {
     @Environment(\.modelContext) var modelContext
-    @Query var templates: [WorkoutTemplate] // Fetch existing workout templates
+    @State private var templates: [WorkoutTemplate] = [] // Local array for templates
     @State private var newWorkoutClicked: Bool = false
 
     var body: some View {
@@ -50,29 +50,30 @@ struct WorkoutTemplateView: View {
                 .padding(.horizontal)
                 .padding(.bottom, 60)
                 .sheet(isPresented: $newWorkoutClicked) {
-                    NewWorkoutTemplateSheet()
-                        .onDisappear {
-                            newWorkoutClicked = false // Reset state when sheet is dismissed
-                        }
+                    NewWorkoutTemplateSheet(onTemplateSaved: { newTemplate in
+                        // Append new template to local array
+                        templates.append(newTemplate)
+                    })
                 }
             }
             .navigationBarTitle("", displayMode: .inline)
             .navigationBarHidden(true)
+            .onAppear {
+                // Load existing templates into the local array
+                templates = fetchTemplates()
+            }
         }
     }
 
-    private func saveNewTemplate(name: String, exercises: [Exercise]) {
-        let workoutExercises = exercises.map { exercise in
-            WorkoutExercise(exercise: exercise) // Convert Exercise to WorkoutExercise
-        }
-        
-        let newTemplate = WorkoutTemplate(name: name, exercises: workoutExercises)
+    private func fetchTemplates() -> [WorkoutTemplate] {
+        // Define a fetch descriptor for WorkoutTemplate
+        let descriptor = FetchDescriptor<WorkoutTemplate>()
+
         do {
-            modelContext.insert(newTemplate)
-            try modelContext.save()
-            print("Template saved successfully: \(newTemplate.name)")
+            return try modelContext.fetch(descriptor)
         } catch {
-            print("Error saving template: \(error)")
+            print("Error fetching templates: \(error)")
+            return []
         }
     }
 
@@ -122,6 +123,7 @@ struct NewWorkoutTemplateSheet: View {
     @State private var selectedExercises: [Exercise] = []
     @State private var showExerciseLibrary: Bool = false
     @State private var currWorkout: Workout = Workout(id: UUID(), name: "")
+    var onTemplateSaved: ((WorkoutTemplate) -> Void)? // Callback for parent view
 
     var body: some View {
         NavigationView {
@@ -194,6 +196,9 @@ struct NewWorkoutTemplateSheet: View {
             modelContext.insert(newTemplate)
             try modelContext.save()
             print("Workout template saved: \(newTemplate.name)")
+            
+            // Notify parent view about the new template
+            onTemplateSaved?(newTemplate)
             
             // Dismiss the sheet after saving
             dismiss()
