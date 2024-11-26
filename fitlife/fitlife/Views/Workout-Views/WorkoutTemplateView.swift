@@ -10,11 +10,9 @@ import SwiftUI
 import SwiftUI
 
 struct WorkoutTemplateView: View {
-    @State private var templates = [
-        WorkoutTemplate(name: "Full Body Blast", description: "A complete workout for all muscle groups."),
-        WorkoutTemplate(name: "Cardio Kick", description: "Intense cardio for fat burning."),
-        WorkoutTemplate(name: "Strength Builder", description: "Focus on heavy lifts and strength gains.")
-    ]
+    @State private var templates: [WorkoutTemplate] = []
+    @State private var newWorkoutClicked: Bool = false
+    @State private var newWorkoutName: String = ""
     
     var body: some View {
         NavigationView {
@@ -26,8 +24,13 @@ struct WorkoutTemplateView: View {
                 
                 ScrollView {
                     VStack(spacing: 16) {
-                        ForEach(templates, id: \.id) { template in
-                            TemplateCard(template: template)
+                        if(!templates.isEmpty){
+                            ForEach(templates, id: \.id) { template in
+                                TemplateCard(template: template)
+                            }
+                        }
+                        else{
+                            Text("No Templates Found")
                         }
                     }
                     .padding()
@@ -35,7 +38,7 @@ struct WorkoutTemplateView: View {
                 
                 Spacer()
         
-                Button(action: {
+                Button(action: { newWorkoutClicked.toggle()
                 }) {
                     Text("Add New Template")
                         .font(.headline)
@@ -46,6 +49,12 @@ struct WorkoutTemplateView: View {
                         .cornerRadius(10)
                         .shadow(radius: 5)
                 }
+                .alert("Workout Template Created", isPresented: $newWorkoutClicked, actions: {
+                            // default value for text input
+                            TextField("My New Workout Template", text: .constant(""))
+                        }, message: {
+                            TextField("TextField", text: .constant("Please Enter a Name"))
+                        })
                 .padding(.horizontal)
                 .padding(.bottom)
             }
@@ -107,8 +116,6 @@ struct WorkoutTemplate: Identifiable {
     let id = UUID()
     let name: String
     let description: String
+    let exercises: [WorkoutExercise]
 }
 
-#Preview {
-    WorkoutTemplateView()
-}
