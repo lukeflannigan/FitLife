@@ -30,15 +30,30 @@ struct ProgressView: View {
     private let carbsGoal: Double = 250
     private let fatsGoal: Double = 65
     
+    private var weeklyWorkoutProgress: Double {
+        let calendar = Calendar.current
+        let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
+        let weekWorkouts = workouts.filter { 
+            $0.completed && 
+            $0.date >= weekStart && 
+            $0.date <= Date() 
+        }.count
+        return Double(weekWorkouts) / Double(weeklyWorkoutGoal)
+    }
+    
+    private let weeklyWorkoutGoal: Int = 5 // Later connect to UserGoals
+    
     var body: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 20) {
                 statsRow
                 dailyMacrosCard
                 activityCard
+                weeklyGoalsCard
             }
             .padding(.horizontal)
             .padding(.top, 16)
+            .padding(.bottom, 32)
         }
         .background(Color(UIColor.systemBackground))
         .navigationTitle("Progress")
@@ -243,6 +258,40 @@ struct ProgressView: View {
         .cornerRadius(16)
         .shadow(color: Color.black.opacity(0.06), radius: 12, x: 0, y: 4)
     }
+    
+    private var weeklyGoalsCard: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Weekly Goals")
+                .font(.system(size: 20, weight: .semibold))
+            
+            VStack(spacing: 20) {
+                GoalProgressRow(
+                    icon: "dumbbell.fill",
+                    title: "Workout Sessions",
+                    progress: weeklyWorkoutProgress,
+                    detail: "\(Int(weeklyWorkoutProgress * Double(weeklyWorkoutGoal)))/\(weeklyWorkoutGoal)"
+                )
+                
+                GoalProgressRow(
+                    icon: "fork.knife",
+                    title: "Calorie Target",
+                    progress: min(todaysMacros.calories / calorieGoal, 1.0),
+                    detail: "\(Int(todaysMacros.calories))/\(Int(calorieGoal)) kcal"
+                )
+                
+                GoalProgressRow(
+                    icon: "chart.bar.fill",
+                    title: "Protein Goal",
+                    progress: min(todaysMacros.protein / proteinGoal, 1.0),
+                    detail: "\(Int(todaysMacros.protein))/\(Int(proteinGoal))g"
+                )
+            }
+        }
+        .padding(20)
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.06), radius: 12, x: 0, y: 4)
+    }
 }
 
 struct MacroBar: View {
@@ -281,6 +330,59 @@ struct MacroBar: View {
                     .font(.system(size: 10))
                     .foregroundColor(.secondary)
             }
+        }
+    }
+}
+
+struct GoalProgressRow: View {
+    let icon: String
+    let title: String
+    let progress: Double
+    let detail: String
+    
+    var body: some View {
+        VStack(spacing: 12) {
+            HStack {
+                Image(systemName: icon)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(.white)
+                    .frame(width: 26, height: 26)
+                    .background(Color.black)
+                    .clipShape(Circle())
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.system(size: 16, weight: .medium))
+                    Text(detail)
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                }
+                
+                Spacer()
+            
+                Text("\(Int(progress * 100))%")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(progress >= 1.0 ? .green : .primary)
+            }
+
+            GeometryReader { geometry in
+                ZStack(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Color(.systemGray6))
+                        .frame(height: 8)
+                    
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(
+                            LinearGradient(
+                                gradient: Gradient(colors: [.black, .gray]),
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(width: geometry.size.width * progress, height: 8)
+                }
+            }
+            .frame(height: 8)
         }
     }
 }
