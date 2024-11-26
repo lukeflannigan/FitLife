@@ -97,6 +97,7 @@ struct ProgressView: View {
             
             contributionGrid
         }
+        .frame(maxWidth: .infinity)
         .padding(20)
         .background(Color(.systemBackground))
         .cornerRadius(16)
@@ -252,6 +253,7 @@ struct ProgressView: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity)
         .padding(20)
         .background(Color(.systemBackground))
         .cornerRadius(16)
@@ -286,6 +288,7 @@ struct ProgressView: View {
                 )
             }
         }
+        .frame(maxWidth: .infinity)
         .padding(20)
         .background(Color(.systemBackground))
         .cornerRadius(16)
