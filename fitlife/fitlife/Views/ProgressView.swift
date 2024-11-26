@@ -60,26 +60,51 @@ struct ProgressView: View {
     private var activityCard: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Activity")
-                .font(.custom("Poppins-SemiBold", size: 18))
-                .padding(.horizontal, 4)
+                .font(.system(size: 20, weight: .semibold))
             
             contributionGrid
         }
+        .padding(20)
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.06), radius: 12, x: 0, y: 4)
     }
     
     private var contributionGrid: some View {
         let weeks = 12
-        let cellSize: CGFloat = 12
+        let cellSize: CGFloat = 18
         let spacing: CGFloat = 4
         
         return VStack(alignment: .leading, spacing: 12) {
-            LazyVGrid(columns: Array(repeating: GridItem(.fixed(cellSize), spacing: spacing), count: weeks), spacing: spacing) {
-                ForEach(0..<7) { row in
-                    ForEach(0..<weeks) { col in
-                        if let date = dateFor(row: row, col: col, totalWeeks: weeks) {
-                            RoundedRectangle(cornerRadius: 2)
-                                .fill(colorForDate(date))
-                                .frame(width: cellSize, height: cellSize)
+            HStack(spacing: 0) {
+                ForEach(previousMonths(count: 3), id: \.self) { date in
+                    Text(monthAbbreviation(for: date))
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(.secondary)
+                        .frame(width: (cellSize + spacing) * CGFloat(weeks) / 3)
+                }
+            }
+            .padding(.leading, 32)
+            
+            HStack(spacing: spacing) {
+                VStack(alignment: .trailing, spacing: spacing) {
+                    ForEach(["S", "M", "T", "W", "T", "F", "S"], id: \.self) { day in
+                        Text(day)
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundColor(.secondary)
+                            .frame(height: cellSize)
+                    }
+                }
+                .padding(.trailing, 8)
+                
+                LazyVGrid(columns: Array(repeating: GridItem(.fixed(cellSize), spacing: spacing), count: weeks), spacing: spacing) {
+                    ForEach(0..<7) { row in
+                        ForEach(0..<weeks) { col in
+                            if let date = dateFor(row: row, col: col, totalWeeks: weeks) {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(workoutDates.contains(date) ? Color.black : Color(.systemGray6))
+                                    .frame(width: cellSize, height: cellSize)
+                            }
                         }
                     }
                 }
@@ -95,11 +120,22 @@ struct ProgressView: View {
         return calendar.date(byAdding: .day, value: -daysAgo, to: today)
     }
     
+    private func monthAbbreviation(for date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM"
+        return formatter.string(from: date)
+    }
+    
+    private func previousMonths(count: Int) -> [Date] {
+        let calendar = Calendar.current
+        let today = Date()
+        return (0..<count).compactMap { months in
+            calendar.date(byAdding: .month, value: -months, to: today)
+        }.reversed()
+    }
+    
     private func colorForDate(_ date: Date) -> Color {
-        if workoutDates.contains(calendar.startOfDay(for: date)) {
-            return .black
-        }
-        return Color(.systemGray5)
+        workoutDates.contains(date) ? Color.accentColor : Color(.systemGray5)
     }
     
     private var currentMonthWorkouts: Int {
