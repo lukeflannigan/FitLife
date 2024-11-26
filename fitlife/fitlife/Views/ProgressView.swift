@@ -17,12 +17,14 @@ struct ProgressView: View {
         let today = calendar.startOfDay(for: Date())
         let todaysIntake = dailyIntakes.filter { calendar.isDate($0.date, inSameDayAs: today) }
         
-        return (
-            calories: todaysIntake.reduce(0) { $0 + $1.calories },
-            protein: todaysIntake.reduce(0) { $0 + $1.protein },
-            carbs: todaysIntake.reduce(0) { $0 + $1.carbs },
-            fats: todaysIntake.reduce(0) { $0 + $1.fats }
-        )
+        return todaysIntake.reduce((calories: 0.0, protein: 0.0, carbs: 0.0, fats: 0.0)) { result, intake in
+            (
+                calories: result.calories + intake.calories,
+                protein: result.protein + intake.protein,
+                carbs: result.carbs + intake.carbs,
+                fats: result.fats + intake.fats
+            )
+        }
     }
     
     private let calorieGoal: Double = 2000
@@ -31,13 +33,14 @@ struct ProgressView: View {
     private let fatsGoal: Double = 65
     
     private var weeklyWorkoutProgress: Double {
-        let calendar = Calendar.current
-        let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
+        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: Date()) else { return 0 }
+        
         let weekWorkouts = workouts.filter { 
             $0.completed && 
-            $0.date >= weekStart && 
-            $0.date <= Date() 
+            $0.date >= weekInterval.start && 
+            $0.date < weekInterval.end 
         }.count
+        
         return Double(weekWorkouts) / Double(weeklyWorkoutGoal)
     }
     
@@ -148,22 +151,18 @@ struct ProgressView: View {
     }
     
     private func dateFor(row: Int, col: Int, totalWeeks: Int) -> Date? {
-        var calendar = Calendar.current
-        calendar.firstWeekday = 1
-
         let today = calendar.startOfDay(for: Date())
-
+        
         guard let startOfCurrentWeek = calendar.dateInterval(of: .weekOfYear, for: today)?.start else {
             return nil
         }
-
+        
         let weeksAgo = totalWeeks - col - 1
         guard let weekStart = calendar.date(byAdding: .weekOfYear, value: -weeksAgo, to: startOfCurrentWeek) else {
             return nil
         }
-
-        let date = calendar.date(byAdding: .day, value: row, to: weekStart)
-        return date
+        
+        return calendar.date(byAdding: .day, value: row, to: weekStart)
     }
     
     private func monthAbbreviation(for date: Date) -> String {
@@ -173,7 +172,6 @@ struct ProgressView: View {
     }
     
     private func previousMonths(count: Int) -> [Date] {
-        let calendar = Calendar.current
         let today = Date()
         return (0..<count).compactMap { months in
             calendar.date(byAdding: .month, value: -months, to: today)
@@ -181,23 +179,19 @@ struct ProgressView: View {
     }
     
     private func colorForDate(_ date: Date) -> Color {
-        guard workoutDates.contains(date) else {
-            return Color(.systemGray6)
-        }
-       
         let workoutsOnDate = workouts.filter { 
             $0.completed && calendar.isDate($0.date, inSameDayAs: date)
         }.count
-    
+        
         switch workoutsOnDate {
+        case 0:
+            return Color(.systemGray6)
         case 1:
             return Color(red: 0.4, green: 0.8, blue: 0.4)   
         case 2:
             return Color(red: 0.3, green: 0.7, blue: 0.3) 
-        case 3...:
+        default: // 3 or more
             return Color(red: 0.2, green: 0.6, blue: 0.2) 
-        default:
-            return Color(.systemGray6)
         }
     }
     
@@ -208,15 +202,26 @@ struct ProgressView: View {
     }
     
     private func calculateStreak() -> Int {
-        var currentDate = calendar.startOfDay(for: Date())
+        let today = calendar.startOfDay(for: Date())
+        var currentDate = today
         var streak = 0
         
-        while workoutDates.contains(currentDate) {
-            streak += 1
-            currentDate = calendar.date(byAdding: .day, value: -1, to: currentDate) ?? Date()
+        if !workoutDates.contains(today) {
+            return 0
         }
         
-        return streak
+        while true {
+            guard let previousDay = calendar.date(byAdding: .day, value: -1, to: currentDate) else { break }
+            
+            if !workoutDates.contains(previousDay) {
+                break
+            }
+            
+            currentDate = previousDay
+            streak += 1
+        }
+        
+        return streak + 1
     }
     
     private var dailyMacrosCard: some View {
