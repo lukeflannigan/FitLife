@@ -136,7 +136,7 @@ struct ProgressView: View {
                         ForEach(0..<weeks) { col in
                             if let date = dateFor(row: row, col: col, totalWeeks: weeks) {
                                 RoundedRectangle(cornerRadius: 4)
-                                    .fill(workoutDates.contains(date) ? Color.black : Color(.systemGray6))
+                                    .fill(colorForDate(date))
                                     .frame(width: cellSize, height: cellSize)
                             } else {
                             }
@@ -181,7 +181,24 @@ struct ProgressView: View {
     }
     
     private func colorForDate(_ date: Date) -> Color {
-        workoutDates.contains(date) ? Color.accentColor : Color(.systemGray5)
+        guard workoutDates.contains(date) else {
+            return Color(.systemGray6)
+        }
+       
+        let workoutsOnDate = workouts.filter { 
+            $0.completed && calendar.isDate($0.date, inSameDayAs: date)
+        }.count
+    
+        switch workoutsOnDate {
+        case 1:
+            return Color(red: 0.4, green: 0.8, blue: 0.4)   
+        case 2:
+            return Color(red: 0.3, green: 0.7, blue: 0.3) 
+        case 3...:
+            return Color(red: 0.2, green: 0.6, blue: 0.2) 
+        default:
+            return Color(.systemGray6)
+        }
     }
     
     private var currentMonthWorkouts: Int {
