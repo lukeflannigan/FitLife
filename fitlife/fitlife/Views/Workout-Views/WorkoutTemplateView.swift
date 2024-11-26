@@ -6,9 +6,6 @@
 import SwiftUI
 import SwiftData
 
-import SwiftUI
-import SwiftData
-
 struct WorkoutTemplateView: View {
     @Environment(\.modelContext) var modelContext
     @Query var templates: [WorkoutTemplate] // Fetch existing workout templates
@@ -53,11 +50,10 @@ struct WorkoutTemplateView: View {
                 .padding(.horizontal)
                 .padding(.bottom, 60)
                 .sheet(isPresented: $newWorkoutClicked) {
-                    NewWorkoutTemplateSheet(
-                        onSave: { name, selectedExercises in
-                            saveNewTemplate(name: name, exercises: selectedExercises)
+                    NewWorkoutTemplateSheet()
+                        .onDisappear {
+                            newWorkoutClicked = false // Reset state when sheet is dismissed
                         }
-                    )
                 }
             }
             .navigationBarTitle("", displayMode: .inline)
@@ -71,9 +67,10 @@ struct WorkoutTemplateView: View {
         }
         
         let newTemplate = WorkoutTemplate(name: name, exercises: workoutExercises)
-        modelContext.insert(newTemplate) // Persist the template in SwiftData
         do {
+            modelContext.insert(newTemplate)
             try modelContext.save()
+            print("Template saved successfully: \(newTemplate.name)")
         } catch {
             print("Error saving template: \(error)")
         }
@@ -119,10 +116,11 @@ struct TemplateCard: View {
 }
 
 struct NewWorkoutTemplateSheet: View {
+    @Environment(\.dismiss) var dismiss // Allows dismissing the sheet
+    @Environment(\.modelContext) var modelContext
     @State private var name: String = ""
     @State private var selectedExercises: [Exercise] = []
     @State private var showExerciseLibrary: Bool = false
-    let onSave: (String, [Exercise]) -> Void
     @State private var currWorkout: Workout = Workout(id: UUID(), name: "")
 
     var body: some View {
@@ -159,7 +157,7 @@ struct NewWorkoutTemplateSheet: View {
                 }
                 .padding(.horizontal)
 
-                Button(action: saveTemplate) {
+                Button(action: saveTemplateAndDismiss) { // Updated action
                     Text("Save Template")
                         .font(.headline)
                         .foregroundColor(.white)
@@ -169,7 +167,7 @@ struct NewWorkoutTemplateSheet: View {
                         .cornerRadius(10)
                 }
                 .padding()
-                .disabled(name.isEmpty || selectedExercises.isEmpty)
+                .disabled(name.isEmpty) // Allow saving even if no exercises are selected
             }
             .navigationTitle("New Template")
             .navigationBarTitleDisplayMode(.inline)
@@ -181,8 +179,28 @@ struct NewWorkoutTemplateSheet: View {
         }
     }
 
-    private func saveTemplate() {
-        onSave(name, selectedExercises)
+    /// Saves the template and dismisses the sheet
+    private func saveTemplateAndDismiss() {
+        // Map exercises to WorkoutExercise, handle empty case
+        let workoutExercises = selectedExercises.map { exercise in
+            WorkoutExercise(exercise: exercise)
+        }
+
+        // Create a new WorkoutTemplate
+        let newTemplate = WorkoutTemplate(name: name, exercises: workoutExercises)
+
+        // Persist the WorkoutTemplate in the SwiftData context
+        do {
+            modelContext.insert(newTemplate)
+            try modelContext.save()
+            print("Workout template saved: \(newTemplate.name)")
+            
+            // Dismiss the sheet after saving
+            dismiss()
+        } catch {
+            print("Error saving template: \(error)")
+            // Optionally, you could display an error alert here
+        }
     }
 
     private func addExercise(_ exercise: Exercise) {
