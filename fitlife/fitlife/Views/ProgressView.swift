@@ -45,17 +45,16 @@ struct ProgressView: View {
     
     var body: some View {
         ScrollView(showsIndicators: false) {
-            LazyVStack(spacing: 20) {
+            VStack(spacing: 24) {
                 statsRow
                 dailyMacrosCard
                 activityCard
                 weeklyGoalsCard
             }
-            .padding(.horizontal)
-            .padding(.top, 16)
-            .padding(.bottom, 32)
+            .padding(20)
+            .padding(.bottom, 80)
         }
-        .background(Color(UIColor.systemBackground))
+        .background(Color(.systemBackground))
         .navigationTitle("Progress")
         .navigationBarTitleDisplayMode(.large)
     }
