@@ -2,18 +2,18 @@
 //  WorkoutTemplateView.swift
 //  fitlife
 //
-//  Created by Thomas Mendoza on 11/25/24.
-//
 
 import SwiftUI
+import SwiftData
 
 import SwiftUI
+import SwiftData
 
 struct WorkoutTemplateView: View {
-    @State private var templates: [WorkoutTemplate] = []
+    @Environment(\.modelContext) var modelContext
+    @Query var templates: [WorkoutTemplate] // Fetch existing workout templates
     @State private var newWorkoutClicked: Bool = false
-    @State private var newWorkoutName: String = ""
-    
+
     var body: some View {
         NavigationView {
             VStack {
@@ -21,25 +21,26 @@ struct WorkoutTemplateView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.top)
-                
+
                 ScrollView {
                     VStack(spacing: 16) {
-                        if(!templates.isEmpty){
+                        if !templates.isEmpty {
                             ForEach(templates, id: \.id) { template in
-                                TemplateCard(template: template)
+                                TemplateCard(template: template, onUse: {
+                                    startNewWorkout(with: template)
+                                })
                             }
-                        }
-                        else{
+                        } else {
                             Text("No Templates Found")
+                                .foregroundColor(.gray)
                         }
                     }
                     .padding()
                 }
-                
+
                 Spacer()
-        
-                Button(action: { newWorkoutClicked.toggle()
-                }) {
+
+                Button(action: { newWorkoutClicked.toggle() }) {
                     Text("Add New Template")
                         .font(.headline)
                         .foregroundColor(.white)
@@ -49,76 +50,64 @@ struct WorkoutTemplateView: View {
                         .cornerRadius(10)
                         .shadow(radius: 5)
                 }
-                // Stolen from: https://sarunw.com/posts/swiftui-alert-textfield/
-                .alert("Add New Workout Template", isPresented: $newWorkoutClicked, actions: {
-                    TextField("Enter workout name", text: $newWorkoutName)
-                    Button("Save") {
-                        if !newWorkoutName.isEmpty {
-                            // Append to templates
-                            templates.append(
-                                WorkoutTemplate(
-                                    name: newWorkoutName,
-                                    exercises: [] // Add exercises if needed
-                                )
-                            )
-                            print("New workout name: \(newWorkoutName)") // Print the new workout name
-                            newWorkoutName = "" // Reset the input field
-                        }
-                    }
-                    Button("Cancel", role: .cancel) {
-                        newWorkoutName = "" // Clear the input on cancel
-                    }
-                }, message: {
-                    Text("Please enter a name for the new workout template.")
-                })
-            
                 .padding(.horizontal)
-                .padding(.bottom)
+                .padding(.bottom, 60)
+                .sheet(isPresented: $newWorkoutClicked) {
+                    NewWorkoutTemplateSheet(
+                        onSave: { name, selectedExercises in
+                            saveNewTemplate(name: name, exercises: selectedExercises)
+                        }
+                    )
+                }
             }
             .navigationBarTitle("", displayMode: .inline)
             .navigationBarHidden(true)
         }
     }
+
+    private func saveNewTemplate(name: String, exercises: [Exercise]) {
+        let workoutExercises = exercises.map { exercise in
+            WorkoutExercise(exercise: exercise) // Convert Exercise to WorkoutExercise
+        }
+        
+        let newTemplate = WorkoutTemplate(name: name, exercises: workoutExercises)
+        modelContext.insert(newTemplate) // Persist the template in SwiftData
+        do {
+            try modelContext.save()
+        } catch {
+            print("Error saving template: \(error)")
+        }
+    }
+
+    private func startNewWorkout(with template: WorkoutTemplate) {
+        print("Starting new workout with template: \(template.name)")
+        print("Exercises: \(template.exercises.map { $0.exercise?.name ?? "Unnamed Exercise" }.joined(separator: ", "))")
+        // Navigate to workout session or initialize a new workout
+    }
 }
 
 struct TemplateCard: View {
     let template: WorkoutTemplate
+    let onUse: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(template.name)
                 .font(.headline)
                 .fontWeight(.bold)
-            
+
             Text("\(template.exercises.count) exercises")
                 .font(.subheadline)
                 .foregroundColor(.gray)
-            
+
             HStack {
-                Button(action: {
-                }) {
-                    Text("Edit")
-                        .font(.subheadline)
-                        .foregroundColor(.blue)
-                }
-                
                 Spacer()
-                
-                Button(action: {
-                }) {
+                Button(action: onUse) {
                     Text("Use")
                         .font(.subheadline)
                         .foregroundColor(.green)
                 }
-                
                 Spacer()
-                
-                Button(action: {
-                }) {
-                    Text("Delete")
-                        .font(.subheadline)
-                        .foregroundColor(.red)
-                }
             }
             .padding(.top, 4)
         }
@@ -129,9 +118,76 @@ struct TemplateCard: View {
     }
 }
 
-struct WorkoutTemplate: Identifiable {
-    let id = UUID()
-    let name: String
-    let exercises: [WorkoutExercise]
-}
+struct NewWorkoutTemplateSheet: View {
+    @State private var name: String = ""
+    @State private var selectedExercises: [Exercise] = []
+    @State private var showExerciseLibrary: Bool = false
+    let onSave: (String, [Exercise]) -> Void
+    @State private var currWorkout: Workout = Workout(id: UUID(), name: "")
 
+    var body: some View {
+        NavigationView {
+            VStack {
+                TextField("Enter workout name", text: $name)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
+
+                Text("Exercises")
+                    .font(.headline)
+                    .padding(.top)
+
+                if selectedExercises.isEmpty {
+                    Text("No exercises selected")
+                        .foregroundColor(.gray)
+                        .padding()
+                } else {
+                    List(selectedExercises, id: \.id) { exercise in
+                        Text(exercise.name)
+                    }
+                }
+
+                Spacer()
+
+                Button(action: { showExerciseLibrary.toggle() }) {
+                    Text("Add Exercises")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                }
+                .padding(.horizontal)
+
+                Button(action: saveTemplate) {
+                    Text("Save Template")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.green)
+                        .cornerRadius(10)
+                }
+                .padding()
+                .disabled(name.isEmpty || selectedExercises.isEmpty)
+            }
+            .navigationTitle("New Template")
+            .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $showExerciseLibrary) {
+                ExerciseLibraryView(
+                    workout: currWorkout
+                )
+            }
+        }
+    }
+
+    private func saveTemplate() {
+        onSave(name, selectedExercises)
+    }
+
+    private func addExercise(_ exercise: Exercise) {
+        if !selectedExercises.contains(where: { $0.id == exercise.id }) {
+            selectedExercises.append(exercise)
+        }
+    }
+}
