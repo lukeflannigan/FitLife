@@ -49,6 +49,7 @@ struct WorkoutTemplateView: View {
                         .cornerRadius(10)
                         .shadow(radius: 5)
                 }
+                // Stolen from: https://sarunw.com/posts/swiftui-alert-textfield/
                 .alert("Workout Template Created", isPresented: $newWorkoutClicked, actions: {
                             // default value for text input
                             TextField("My New Workout Template", text: .constant(""))
