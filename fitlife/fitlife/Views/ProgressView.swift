@@ -218,7 +218,7 @@ struct ProgressView: View {
                             .trim(from: 0, to: min(todaysMacros.calories / calorieGoal, 1.0))
                             .stroke(
                                 LinearGradient(
-                                    gradient: Gradient(colors: [.black, .gray]),
+                                    gradient: Gradient(colors: [Color.pink, Color.purple]),
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 ),
@@ -246,21 +246,24 @@ struct ProgressView: View {
                         value: todaysMacros.protein,
                         goal: proteinGoal,
                         label: "Protein",
-                        unit: "g"
+                        unit: "g",
+                        barColor: Color.blue
                     )
                     
                     MacroBar(
                         value: todaysMacros.carbs,
                         goal: carbsGoal,
                         label: "Carbs",
-                        unit: "g"
+                        unit: "g",
+                        barColor: Color.green
                     )
                     
                     MacroBar(
                         value: todaysMacros.fats,
                         goal: fatsGoal,
                         label: "Fats",
-                        unit: "g"
+                        unit: "g",
+                        barColor: Color.orange
                     )
                 }
             }
@@ -282,21 +285,24 @@ struct ProgressView: View {
                     icon: "dumbbell.fill",
                     title: "Workout Sessions",
                     progress: weeklyWorkoutProgress,
-                    detail: "\(Int(weeklyWorkoutProgress * Double(weeklyWorkoutGoal)))/\(weeklyWorkoutGoal)"
+                    detail: "\(Int(weeklyWorkoutProgress * Double(weeklyWorkoutGoal)))/\(weeklyWorkoutGoal)",
+                    progressBarColor: Color.purple
                 )
                 
                 GoalProgressRow(
                     icon: "fork.knife",
                     title: "Calorie Target",
                     progress: min(todaysMacros.calories / calorieGoal, 1.0),
-                    detail: "\(Int(todaysMacros.calories))/\(Int(calorieGoal)) kcal"
+                    detail: "\(Int(todaysMacros.calories))/\(Int(calorieGoal)) kcal",
+                    progressBarColor: Color.pink
                 )
                 
                 GoalProgressRow(
                     icon: "chart.bar.fill",
                     title: "Protein Goal",
                     progress: min(todaysMacros.protein / proteinGoal, 1.0),
-                    detail: "\(Int(todaysMacros.protein))/\(Int(proteinGoal))g"
+                    detail: "\(Int(todaysMacros.protein))/\(Int(proteinGoal))g",
+                    progressBarColor: Color.blue
                 )
             }
         }
@@ -313,6 +319,7 @@ struct MacroBar: View {
     let goal: Double
     let label: String
     let unit: String
+    let barColor: Color
     
     var body: some View {
         VStack(spacing: 8) {
@@ -322,13 +329,7 @@ struct MacroBar: View {
                     .frame(width: 30, height: 100)
                 
                 RoundedRectangle(cornerRadius: 4)
-                    .fill(
-                        LinearGradient(
-                            gradient: Gradient(colors: [.black, .gray]),
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
+                    .fill(barColor)
                     .frame(width: 30, height: min(100 * value / goal, 100))
             }
             
@@ -353,6 +354,7 @@ struct GoalProgressRow: View {
     let title: String
     let progress: Double
     let detail: String
+    let progressBarColor: Color
     
     var body: some View {
         VStack(spacing: 12) {
@@ -361,7 +363,7 @@ struct GoalProgressRow: View {
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.white)
                     .frame(width: 26, height: 26)
-                    .background(Color.black)
+                    .background(progressBarColor)
                     .clipShape(Circle())
 
                 VStack(alignment: .leading, spacing: 4) {
@@ -386,14 +388,8 @@ struct GoalProgressRow: View {
                         .frame(height: 8)
                     
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(
-                            LinearGradient(
-                                gradient: Gradient(colors: [.black, .gray]),
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                        )
-                        .frame(width: geometry.size.width * progress, height: 8)
+                        .fill(progressBarColor)
+                        .frame(width: geometry.size.width * CGFloat(progress), height: 8)
                 }
             }
             .frame(height: 8)
