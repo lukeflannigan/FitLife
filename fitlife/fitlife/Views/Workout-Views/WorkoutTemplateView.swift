@@ -50,12 +50,28 @@ struct WorkoutTemplateView: View {
                         .shadow(radius: 5)
                 }
                 // Stolen from: https://sarunw.com/posts/swiftui-alert-textfield/
-                .alert("Workout Template Created", isPresented: $newWorkoutClicked, actions: {
-                            // default value for text input
-                            TextField("My New Workout Template", text: .constant(""))
-                        }, message: {
-                            TextField("TextField", text: .constant("Please Enter a Name"))
-                        })
+                .alert("Add New Workout Template", isPresented: $newWorkoutClicked, actions: {
+                    TextField("Enter workout name", text: $newWorkoutName)
+                    Button("Save") {
+                        if !newWorkoutName.isEmpty {
+                            // Append to templates
+                            templates.append(
+                                WorkoutTemplate(
+                                    name: newWorkoutName,
+                                    exercises: [] // Add exercises if needed
+                                )
+                            )
+                            print("New workout name: \(newWorkoutName)") // Print the new workout name
+                            newWorkoutName = "" // Reset the input field
+                        }
+                    }
+                    Button("Cancel", role: .cancel) {
+                        newWorkoutName = "" // Clear the input on cancel
+                    }
+                }, message: {
+                    Text("Please enter a name for the new workout template.")
+                })
+            
                 .padding(.horizontal)
                 .padding(.bottom)
             }
@@ -74,7 +90,7 @@ struct TemplateCard: View {
                 .font(.headline)
                 .fontWeight(.bold)
             
-            Text(template.description)
+            Text("\(template.exercises.count) exercises")
                 .font(.subheadline)
                 .foregroundColor(.gray)
             
@@ -116,7 +132,6 @@ struct TemplateCard: View {
 struct WorkoutTemplate: Identifiable {
     let id = UUID()
     let name: String
-    let description: String
     let exercises: [WorkoutExercise]
 }
 
