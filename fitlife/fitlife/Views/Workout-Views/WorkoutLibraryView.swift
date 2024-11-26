@@ -107,6 +107,16 @@ struct WorkoutLibraryView: View {
                             .clipShape(Circle())
                     }
                 }
+                ToolbarItem(placement: .topBarLeading){
+                    NavigationLink(destination: WorkoutTemplateView()){
+                        Image(systemName: "square.stack.3d.down.forward")
+                                    .font(.system(size: 16))
+                                    .foregroundColor(.black)
+                                    .frame(width: 36, height: 36)
+                                    .background(Color(.systemGray6))
+                                    .clipShape(Circle())
+                    }
+                }
             }
         }
     }
