@@ -194,32 +194,37 @@ struct LogHomeView: View {
                 Color(.systemBackground)
                     .ignoresSafeArea()
                 
-                VStack(spacing: 20) {
-                    NavigationLink(destination: AddFoodEntryView()) {
-                        NavigationCard(
-                            title: "Log Food",
-                            subtitle: "Record your meals and snacks",
-                            systemImage: "plus.circle.fill"
-                        )
+                VStack {
+                    VStack(spacing: 16) {
+                        NavigationLink(destination: AddFoodEntryView()) {
+                            NavigationCard(
+                                title: "Log Food",
+                                subtitle: "Record your meals and snacks",
+                                systemImage: "plus.circle.fill"
+                            )
+                        }
+                        
+                        NavigationLink(destination: SearchView()) {
+                            NavigationCard(
+                                title: "Search Food",
+                                subtitle: "Find recipes and nutrition info",
+                                systemImage: "magnifyingglass.circle.fill"
+                            )
+                        }
+                        
+                        NavigationLink(destination: LoggedFoodView()) {
+                            NavigationCard(
+                                title: "Food History",
+                                subtitle: "View your logged meals",
+                                systemImage: "clock.fill"
+                            )
+                        }
                     }
+                    .padding(.horizontal)
+                    .padding(.top, 8)
                     
-                    NavigationLink(destination: SearchView()) {
-                        NavigationCard(
-                            title: "Search Food",
-                            subtitle: "Find recipes and nutrition info",
-                            systemImage: "magnifyingglass.circle.fill"
-                        )
-                    }
-                    
-                    NavigationLink(destination: LoggedFoodView()) {
-                        NavigationCard(
-                            title: "Food History",
-                            subtitle: "View your logged meals",
-                            systemImage: "clock.fill"
-                        )
-                    }
+                    Spacer()
                 }
-                .padding()
             }
             .navigationTitle("Nutrition")
         }
