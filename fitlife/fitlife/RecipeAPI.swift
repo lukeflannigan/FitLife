@@ -244,82 +244,158 @@ struct RecipeCard: View {
 
 // Updated RecipeDetailView with improved scrolling
 struct RecipeDetailView: View {
+    @Environment(\.dismiss) var dismiss
     let recipe: RecipeObject
     
     var body: some View {
-        
-        ScrollView(.vertical, showsIndicators: true) {  // Explicit vertical scroll
-            ZStack{
-                LinearGradient(gradient: Gradient(colors: [Color.white, Color.cyan]),
-                               startPoint: .topLeading,
-                               endPoint: .bottomTrailing)
-                //.ignoresSafeArea()
-                
-                VStack(alignment: .leading, spacing: 15) {  // Added consistent spacing
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(spacing: 0) {
+                // Image
+                ZStack(alignment: .topLeading) {
                     AsyncImage(url: URL(string: recipe.image)) { image in
                         image
                             .resizable()
-                            .aspectRatio(contentMode: .fit)
+                            .aspectRatio(contentMode: .fill)
                     } placeholder: {
                         ProgressView()
                     }
-                    .frame(maxWidth: .infinity)
-                    .cornerRadius(15)
+                    .frame(height: 300)
+                    .clipped()
                     
-                    Text("Calories: \(Int(recipe.calories))")
-                        .font(.headline)
+                    // Back button
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(.white)
+                            .padding(12)
+                            .background(Color.black.opacity(0.6))
+                            .clipShape(Circle())
+                    }
+                    .padding(.top, 48)
+                    .padding(.leading, 16)
+                }
+                
+                // Title Section
+                Text(recipe.label)
+                    .font(.system(size: 32, weight: .bold))
+                    .padding(.horizontal, 20)
+                    .padding(.top, 24)
+                    .padding(.bottom, 16)
+                
+                // Content
+                VStack(spacing: 24) {
+                    // Stats Cards
+                    HStack(spacing: 20) {
+                        NutritionStatBox(icon: "flame.fill", value: "\(Int(recipe.calories))", label: "Calories", color: .orange)
+                        NutritionStatBox(icon: "person.2.fill", value: "\(Int(recipe.yield))", label: "Servings", color: .blue)
+                    }
                     
-                    Text("Servings: \(Int(recipe.yield))")
-                        .font(.headline)
-                    
-                    // Macros section
-                    Group {
-                        Text("Macronutrient Information: ")
-                            .font(.headline)
-                            .padding(.top, 5)
+                    // Macros Section
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Nutrition Facts")
+                            .font(.title2.bold())
                         
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Fat: \(String(format: "%.1f", recipe.totalNutrients.FAT.quantity))\(recipe.totalNutrients.FAT.unit)")
-                            Text("Carbs: \(String(format: "%.1f", recipe.totalNutrients.CHOCDF.quantity))\(recipe.totalNutrients.CHOCDF.unit)")
-                            Text("Fiber: \(String(format: "%.1f", recipe.totalNutrients.FIBTG.quantity))\(recipe.totalNutrients.FIBTG.unit)")
-                            Text("Protein: \(String(format: "%.1f", recipe.totalNutrients.PROCNT.quantity))\(recipe.totalNutrients.PROCNT.unit)")
-                            Text("Sugar: \(String(format: "%.1f", recipe.totalNutrients.SUGAR.quantity))\(recipe.totalNutrients.SUGAR.unit)")
+                        VStack(spacing: 12) {
+                            MacroRow(name: "Fat", value: recipe.totalNutrients.FAT.quantity, unit: recipe.totalNutrients.FAT.unit, color: .yellow)
+                            MacroRow(name: "Carbs", value: recipe.totalNutrients.CHOCDF.quantity, unit: recipe.totalNutrients.CHOCDF.unit, color: .orange)
+                            MacroRow(name: "Protein", value: recipe.totalNutrients.PROCNT.quantity, unit: recipe.totalNutrients.PROCNT.unit, color: .red)
+                            MacroRow(name: "Fiber", value: recipe.totalNutrients.FIBTG.quantity, unit: recipe.totalNutrients.FIBTG.unit, color: .green)
+                            MacroRow(name: "Sugar", value: recipe.totalNutrients.SUGAR.quantity, unit: recipe.totalNutrients.SUGAR.unit, color: .purple)
                         }
                     }
                     
-                    Text("Ingredients:")
-                        .font(.title2)
-                        .padding(.top, 5)
-                    
-                    VStack(alignment: .leading, spacing: 8) {  // Better spacing for ingredients
-                        ForEach(recipe.ingredientLines, id: \.self) { ingredient in
-                            HStack(alignment: .top) {
-                                Text("•")
-                                    .padding(.trailing, 5)
-                                Text(ingredient)
+                    // Ingredients Section
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Ingredients")
+                            .font(.title2.bold())
+                        
+                        VStack(alignment: .leading, spacing: 12) {
+                            ForEach(recipe.ingredientLines, id: \.self) { ingredient in
+                                HStack(alignment: .top, spacing: 12) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundColor(.green)
+                                    Text(ingredient)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
                             }
                         }
+                        .padding(.vertical, 8)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
                     }
                     
                     // The preview environment in xCode doesn't fully support opening URLs.
                     Link(destination: URL(string: recipe.shareAs)!) {
                         HStack {
-                            Image(systemName: "link")
                             Text("View Full Recipe")
+                                .fontWeight(.semibold)
+                            Image(systemName: "arrow.right.circle.fill")
                         }
                         .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
+                        .padding(.vertical, 16)
+                        .background(Color.black)
                         .foregroundColor(.white)
-                        .cornerRadius(10)
+                        .cornerRadius(16)
                     }
-                    .padding(.top)
                 }
-                .padding()
+                .padding(20)
+                .padding(.bottom, 100)
             }
-            .navigationTitle(recipe.label)
-            .navigationBarTitleDisplayMode(.inline)
         }
+        .ignoresSafeArea()
+        .navigationBarHidden(true)
+    }
+}
+
+// Helper Views
+struct NutritionStatBox: View {
+    let icon: String
+    let value: String
+    let label: String
+    let color: Color
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.system(size: 24))
+                .foregroundColor(color)
+            Text(value)
+                .font(.title2.bold())
+            Text(label)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 20)
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
+    }
+}
+
+struct MacroRow: View {
+    let name: String
+    let value: Double
+    let unit: String
+    let color: Color
+    
+    var body: some View {
+        HStack {
+            Circle()
+                .fill(color)
+                .frame(width: 8, height: 8)
+            Text(name)
+                .fontWeight(.medium)
+            Spacer()
+            Text("\(String(format: "%.1f", value))\(unit)")
+                .foregroundColor(.secondary)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(Color(.systemGray6))
+        .cornerRadius(12)
     }
 }
 

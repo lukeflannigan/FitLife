@@ -170,41 +170,39 @@ private struct FormField: View {
 
 struct LogHomeView: View {
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color(.systemBackground)
-                    .ignoresSafeArea()
-                
-                VStack(spacing: 20) {
-                    // Navigation Cards
-                    NavigationLink(destination: AddFoodEntryView()) {
-                        NavigationCard(
-                            title: "Log Food",
-                            subtitle: "Record your meals and snacks",
-                            systemImage: "plus.circle.fill"
-                        )
-                    }
-                    
-                    NavigationLink(destination: SearchView()) {
-                        NavigationCard(
-                            title: "Search Food",
-                            subtitle: "Find recipes and nutrition info",
-                            systemImage: "magnifyingglass.circle.fill"
-                        )
-                    }
-                    
-                    NavigationLink(destination: LoggedFoodView()) {
-                        NavigationCard(
-                            title: "Food History",
-                            subtitle: "View your logged meals",
-                            systemImage: "clock.fill"
-                        )
-                    }
+        ZStack {
+            Color(.systemBackground)
+                .ignoresSafeArea()
+            
+            VStack(spacing: 20) {
+                // Navigation Cards
+                NavigationLink(destination: AddFoodEntryView().navigationBarHidden(true)) {
+                    NavigationCard(
+                        title: "Log Food",
+                        subtitle: "Record your meals and snacks",
+                        systemImage: "plus.circle.fill"
+                    )
                 }
-                .padding()
+                
+                NavigationLink(destination: SearchView().navigationBarHidden(true)) {
+                    NavigationCard(
+                        title: "Search Food",
+                        subtitle: "Find recipes and nutrition info",
+                        systemImage: "magnifyingglass.circle.fill"
+                    )
+                }
+                
+                NavigationLink(destination: LoggedFoodView().navigationBarHidden(true)) {
+                    NavigationCard(
+                        title: "Food History",
+                        subtitle: "View your logged meals",
+                        systemImage: "clock.fill"
+                    )
+                }
             }
-            .navigationTitle("Nutrition")
+            .padding()
         }
+        .navigationTitle("Nutrition")
     }
 }
 
