@@ -10,6 +10,8 @@ struct WorkoutTemplateView: View {
     @Environment(\.modelContext) var modelContext
     @State private var templates: [WorkoutTemplate] = [] // Local array for templates
     @State private var newWorkoutClicked: Bool = false
+    @State private var currWorkout: Workout? = nil // Add a state for current workout
+    @State private var exercises: Set<UUID> = [] // Add a state for selected exercises
 
     var body: some View {
         NavigationView {
@@ -50,25 +52,25 @@ struct WorkoutTemplateView: View {
                 .padding(.horizontal)
                 .padding(.bottom, 60)
                 .sheet(isPresented: $newWorkoutClicked) {
-                    NewWorkoutTemplateSheet(onTemplateSaved: { newTemplate in
-                        // Append new template to local array
-                        templates.append(newTemplate)
-                    })
+                    NewWorkoutTemplateSheet(
+                        currWorkout: $currWorkout,
+                        onTemplateSaved: { newTemplate in
+                            templates.append(newTemplate)
+                        },
+                        exercises: $exercises
+                    )
                 }
             }
             .navigationBarTitle("", displayMode: .inline)
             .navigationBarHidden(true)
             .onAppear {
-                // Load existing templates into the local array
                 templates = fetchTemplates()
             }
         }
     }
 
     private func fetchTemplates() -> [WorkoutTemplate] {
-        // Define a fetch descriptor for WorkoutTemplate
         let descriptor = FetchDescriptor<WorkoutTemplate>()
-
         do {
             return try modelContext.fetch(descriptor)
         } catch {
@@ -79,8 +81,6 @@ struct WorkoutTemplateView: View {
 
     private func startNewWorkout(with template: WorkoutTemplate) {
         print("Starting new workout with template: \(template.name)")
-        print("Exercises: \(template.exercises.map { $0.exercise?.name ?? "Unnamed Exercise" }.joined(separator: ", "))")
-        // Navigate to workout session or initialize a new workout
     }
 }
 
@@ -122,8 +122,9 @@ struct NewWorkoutTemplateSheet: View {
     @State private var name: String = ""
     @State private var selectedExercises: [Exercise] = []
     @State private var showExerciseLibrary: Bool = false
-    @State private var currWorkout: Workout = Workout(id: UUID(), name: "")
+    @Binding var currWorkout: Workout?
     var onTemplateSaved: ((WorkoutTemplate) -> Void)? // Callback for parent view
+    @Binding var exercises: Set<UUID>
 
     var body: some View {
         NavigationView {
@@ -174,8 +175,9 @@ struct NewWorkoutTemplateSheet: View {
             .navigationTitle("New Template")
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showExerciseLibrary) {
-                ExerciseLibraryView(
-                    workout: currWorkout
+                ExerciseSelectionView(
+                    selectedExercises: $exercises,
+                    currentWorkout: $currWorkout
                 )
             }
         }
