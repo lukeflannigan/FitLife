@@ -175,33 +175,68 @@ struct RecipeCard: View {
     let recipe: RecipeObject
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 0) {
+            // Image
             AsyncImage(url: URL(string: recipe.image)) { image in
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
             } placeholder: {
                 Rectangle()
-                    .fill(Color(.systemGray5))
+                    .fill(Color(.systemGray6))
+                    .overlay(
+                        ProgressView()
+                            .tint(.gray)
+                    )
             }
             .frame(height: 200)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .clipped()
             
-            VStack(alignment: .leading, spacing: 8) {
+            // Recipe Info
+            VStack(alignment: .leading, spacing: 12) {
+                // Recipe Name
                 Text(recipe.label)
-                    .font(.headline)
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundColor(.black)
                     .lineLimit(2)
+                    .padding(.top, 16)
+                    .padding(.horizontal, 16)
                 
-                Text("\(Int(recipe.calories)) calories • \(Int(recipe.yield)) servings")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
+                // Stats bar
+                HStack(spacing: 24) {
+                    // Calories
+                    HStack(spacing: 8) {
+                        Image(systemName: "flame")
+                            .foregroundColor(.orange)
+                        Text("\(Int(recipe.calories))")
+                            .foregroundColor(.black)
+                            .fontWeight(.medium)
+                        Text("calories")
+                            .foregroundColor(.gray)
+                    }
+                    
+                    // Servings
+                    HStack(spacing: 8) {
+                        Image(systemName: "person.2")
+                            .foregroundColor(.gray)
+                        Text("\(Int(recipe.yield))")
+                            .foregroundColor(.black)
+                            .fontWeight(.medium)
+                        Text("servings")
+                            .foregroundColor(.gray)
+                    }
+                }
+                .font(.system(size: 15))
+                .padding(.horizontal, 16)
+                .padding(.bottom, 16)
             }
-            .padding(.horizontal, 4)
+            .background(Color.white)
         }
-        .padding(12)
-        .background(Color(.systemBackground))
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 2)
+        .padding(.horizontal)
+        .padding(.vertical, 6)
     }
 }
 
