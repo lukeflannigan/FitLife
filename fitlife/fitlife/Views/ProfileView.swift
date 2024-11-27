@@ -14,18 +14,20 @@ struct ProfileView: View {
     @State private var showEditProfile: Bool = false
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                headerSection
-                personalInfoSection
-                settingsSection
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 20) {
+                    headerSection
+                    personalInfoSection
+                    settingsSection
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+                .padding(.bottom, 80) // To account for tab bar.
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 20)
-            .padding(.bottom, 80) // To account for tab bar.
+            .background(Color(UIColor.systemBackground))
+            .edgesIgnoringSafeArea(.bottom)
         }
-        .background(Color(UIColor.systemBackground))
-        .edgesIgnoringSafeArea(.bottom)
     }
     
     private var headerSection: some View {
@@ -112,10 +114,52 @@ struct ProfileView: View {
             }
             
             VStack(spacing: 10) {
-                SettingsRow(iconName: "gearshape.fill", title: "User Preferences") {}
-                SettingsRow(iconName: "bell.fill", title: "Notifications") {}
-                SettingsRow(iconName: "rectangle.portrait.and.arrow.right.fill", title: "Log Out") {
-                    logOut()
+                // Direct NavigationLink for User Preferences
+                NavigationLink(destination: UserPreferencesView()) {
+                    HStack {
+                        Image(systemName: "gearshape.fill")
+                            .foregroundColor(Color("GradientStart"))
+                            .frame(width: 24, height: 24)
+                        Text("User Preferences")
+                            .font(.custom("Poppins-Medium", size: 16))
+                            .foregroundColor(.primary)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color(UIColor.secondarySystemBackground))
+                    .cornerRadius(8)
+                }
+                
+                // Placeholder for Notifications
+                NavigationLink(destination: NotificationSettingsView()) {
+                    HStack {
+                        Image(systemName: "bell.fill")
+                            .foregroundColor(Color("GradientStart"))
+                            .frame(width: 24, height: 24)
+                        Text("Notifications")
+                            .font(.custom("Poppins-Medium", size: 16))
+                            .foregroundColor(.primary)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color(UIColor.secondarySystemBackground))
+                    .cornerRadius(8)
+                }
+                
+                // Log Out Button
+                Button(action: logOut) {
+                    HStack {
+                        Image(systemName: "rectangle.portrait.and.arrow.right.fill")
+                            .foregroundColor(Color("GradientStart"))
+                            .frame(width: 24, height: 24)
+                        Text("Log Out")
+                            .font(.custom("Poppins-Medium", size: 16))
+                            .foregroundColor(.primary)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color(UIColor.secondarySystemBackground))
+                    .cornerRadius(8)
                 }
             }
         }
