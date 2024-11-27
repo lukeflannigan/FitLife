@@ -19,11 +19,30 @@ struct AddFoodEntryView: View{
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 32) {
-                // Header
-                Text("Add Food")
-                    .font(.system(size: 28, weight: .bold))
-                    .padding(.top, 20)
+            VStack {
+                // Custom navigation bar
+                HStack {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(.black)
+                            .padding(12)
+                            .background(Color(.systemGray6))
+                            .clipShape(Circle())
+                    }
+                    
+                    Spacer()
+                    
+                    Text("Add Food")
+                        .font(.title3.bold())
+                    
+                    Spacer()
+                
+                    Circle()
+                        .fill(Color.clear)
+                        .frame(width: 44, height: 44)
+                }
+                .padding()
                 
                 // Form Fields
                 VStack(alignment: .leading, spacing: 24) {
@@ -93,7 +112,7 @@ struct AddFoodEntryView: View{
             .padding(.horizontal, 24)
         }
         .background(Color(.systemBackground))
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarHidden(true)
     }
     private func addFoodEntry() {
         //              Convert input strings to Double
@@ -170,39 +189,40 @@ private struct FormField: View {
 
 struct LogHomeView: View {
     var body: some View {
-        ZStack {
-            Color(.systemBackground)
-                .ignoresSafeArea()
-            
-            VStack(spacing: 20) {
-                // Navigation Cards
-                NavigationLink(destination: AddFoodEntryView().navigationBarHidden(true)) {
-                    NavigationCard(
-                        title: "Log Food",
-                        subtitle: "Record your meals and snacks",
-                        systemImage: "plus.circle.fill"
-                    )
-                }
+        NavigationStack {
+            ZStack {
+                Color(.systemBackground)
+                    .ignoresSafeArea()
                 
-                NavigationLink(destination: SearchView().navigationBarHidden(true)) {
-                    NavigationCard(
-                        title: "Search Food",
-                        subtitle: "Find recipes and nutrition info",
-                        systemImage: "magnifyingglass.circle.fill"
-                    )
+                VStack(spacing: 20) {
+                    NavigationLink(destination: AddFoodEntryView()) {
+                        NavigationCard(
+                            title: "Log Food",
+                            subtitle: "Record your meals and snacks",
+                            systemImage: "plus.circle.fill"
+                        )
+                    }
+                    
+                    NavigationLink(destination: SearchView()) {
+                        NavigationCard(
+                            title: "Search Food",
+                            subtitle: "Find recipes and nutrition info",
+                            systemImage: "magnifyingglass.circle.fill"
+                        )
+                    }
+                    
+                    NavigationLink(destination: LoggedFoodView()) {
+                        NavigationCard(
+                            title: "Food History",
+                            subtitle: "View your logged meals",
+                            systemImage: "clock.fill"
+                        )
+                    }
                 }
-                
-                NavigationLink(destination: LoggedFoodView().navigationBarHidden(true)) {
-                    NavigationCard(
-                        title: "Food History",
-                        subtitle: "View your logged meals",
-                        systemImage: "clock.fill"
-                    )
-                }
+                .padding()
             }
-            .padding()
+            .navigationTitle("Nutrition")
         }
-        .navigationTitle("Nutrition")
     }
 }
 

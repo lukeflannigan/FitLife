@@ -11,36 +11,50 @@ import SwiftData
 struct LoggedFoodView: View {
     @Environment(\.modelContext) var modelContext
     @Query(sort: \DailyIntake.date, order: .reverse) var loggedFood: [DailyIntake]
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        NavigationView {
-            ScrollView {
+        ScrollView {
+            VStack {
+                // Custom navigation bar
+                HStack {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(.black)
+                            .padding(12)
+                            .background(Color(.systemGray6))
+                            .clipShape(Circle())
+                    }
+                    
+                    Spacer()
+                    
+                    Text("Logged Foods")
+                        .font(.title3.bold())
+                    
+                    Spacer()
+                    
+                    NavigationLink(destination: AddFoodEntryView()) {
+                        Image(systemName: "plus")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(.black)
+                            .padding(12)
+                            .background(Color(.systemGray6))
+                            .clipShape(Circle())
+                    }
+                }
+                .padding()
+                
                 LazyVStack(spacing: 12) {
                     ForEach(loggedFood) { food in
                         FoodCard(food: food)
                             .padding(.horizontal)
                     }
                 }
-                .padding(.vertical)
-            }
-            .background(Color(.systemGray6))
-            .navigationTitle("Logged Foods")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: AddFoodEntryView()) {
-                        Image(systemName: "plus")
-                            .foregroundColor(.black)
-                            .font(.system(size: 16, weight: .semibold))
-                            .padding(8)
-                            .background(
-                                Circle()
-                                    .fill(Color.white)
-                                    .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-                            )
-                    }
-                }
             }
         }
+        .background(Color(.systemGray6))
+        .navigationBarHidden(true)
     }
 }
 
