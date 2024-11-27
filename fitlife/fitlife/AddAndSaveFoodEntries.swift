@@ -131,61 +131,74 @@ struct AddFoodEntryView: View{
         var body: some View {
             NavigationView {
                 ZStack {
-                    // Background gradient
-                    LinearGradient(gradient: Gradient(colors: [Color.white, Color.green]),
-                                   startPoint: .topLeading,
-                                   endPoint: .bottomTrailing)
-                    .ignoresSafeArea()
+                    Color(.systemBackground)
+                        .ignoresSafeArea()
                     
-                    // Main content
                     VStack(spacing: 20) {
-                        Text("Food Tracker")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .padding(.bottom, 40)
-                        
-                        //Added/Log Food Entries
+                        // Navigation Cards
                         NavigationLink(destination: AddFoodEntryView()) {
-                            Text("Log Food")
-                                .font(.title2)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.blue.opacity(0.8))
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                                .padding(.horizontal)
+                            NavigationCard(
+                                title: "Log Food",
+                                subtitle: "Record your meals and snacks",
+                                systemImage: "plus.circle.fill"
+                            )
                         }
                         
-                        NavigationLink(destination:   SearchView()) {
-                            Text("Search Food")
-                                .font(.title2)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.green.opacity(0.8))
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                                .padding(.horizontal)
+                        NavigationLink(destination: SearchView()) {
+                            NavigationCard(
+                                title: "Search Food",
+                                subtitle: "Find recipes and nutrition info",
+                                systemImage: "magnifyingglass.circle.fill"
+                            )
                         }
                         
-                        
-                        //Saved/Logged Food Entry Not Implemented Yet
-                        NavigationLink(destination: LoggedFoodView()) {                        Text("Logged Food")
-                                .font(.title2)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.pink.opacity(0.8))
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                                .padding(.horizontal)
-                        }
+                        NavigationLink(destination: LoggedFoodView()) {
+                            NavigationCard(
+                                title: "Food History",
+                                subtitle: "View your logged meals",
+                                systemImage: "clock.fill"
+                            )
                         }
                     }
                     .padding()
                 }
-                
+                .navigationTitle("Nutrition")
             }
         }
+    }
+    
+    private struct NavigationCard: View {
+        let title: String
+        let subtitle: String
+        let systemImage: String
+        
+        var body: some View {
+            HStack(spacing: 16) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 24))
+                    .foregroundColor(.black)
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    Text(subtitle)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.secondary)
+            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color(.systemGray6))
+            )
+        }
+    }
     
     
     
