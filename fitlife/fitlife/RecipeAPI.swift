@@ -112,110 +112,112 @@ struct SearchView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        ScrollView { // Removed NavigationView since it's handled by parent
-            VStack(spacing: 0) {
-                // Top bar with back button and title
-                ZStack {
-                    // Center Title
-                    Text("Recipe Search")
-                        .font(.title3.bold())
-                        .frame(maxWidth: .infinity)
-                    
-                    // Back button aligned to left
-                    HStack {
-                        Button(action: { dismiss() }) {
-                            Image(systemName: "chevron.left")
-                                .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(.black)
-                                .padding(12)
-                                .background(Color(.systemGray6))
-                                .clipShape(Circle())
-                        }
-                        Spacer()
-                    }
-                }
-                .padding()
-                
-                // Search bar
-                HStack {
-                    HStack {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.gray)
-                            .padding(.leading, 8)
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 0) {
+                    // Top bar with back button and title
+                    ZStack {
+                        // Center Title
+                        Text("Recipe Search")
+                            .font(.title3.bold())
+                            .frame(maxWidth: .infinity)
                         
-                        TextField("Search recipes...", text: $searchText)
-                            .autocapitalization(.none)
+                        // Back button aligned to left
+                        HStack {
+                            Button(action: { dismiss() }) {
+                                Image(systemName: "chevron.left")
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .foregroundColor(.black)
+                                    .padding(12)
+                                    .background(Color(.systemGray6))
+                                    .clipShape(Circle())
+                            }
+                            Spacer()
+                        }
+                    }
+                    .padding()
+                    
+                    // Search bar
+                    HStack {
+                        HStack {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(.gray)
+                                .padding(.leading, 8)
+                            
+                            TextField("Search recipes...", text: $searchText)
+                                .autocapitalization(.none)
+                            
+                            if !searchText.isEmpty {
+                                Button(action: { searchText = "" }) {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(.gray)
+                                }
+                                .padding(.trailing, 8)
+                            }
+                        }
+                        .padding(.vertical, 12)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
                         
                         if !searchText.isEmpty {
-                            Button(action: { searchText = "" }) {
-                                Image(systemName: "xmark.circle.fill")
+                            Button(action: {
+                                isSearching = true
+                                viewModel.fetchData(query: searchText)
+                            }) {
+                                Text("Search")
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 12)
+                                    .background(Color.black)
+                                    .cornerRadius(12)
+                            }
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 8)
+                    
+                    // Results list
+                    if isSearching {
+                        if viewModel.recipes.isEmpty {
+                            VStack(spacing: 16) {
+                                ProgressView()
+                                Text("Searching recipes...")
                                     .foregroundColor(.gray)
                             }
-                            .padding(.trailing, 8)
-                        }
-                    }
-                    .padding(.vertical, 12)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(12)
-                    
-                    if !searchText.isEmpty {
-                        Button(action: {
-                            isSearching = true
-                            viewModel.fetchData(query: searchText)
-                        }) {
-                            Text("Search")
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 12)
-                                .background(Color.black)
-                                .cornerRadius(12)
-                        }
-                    }
-                }
-                .padding(.horizontal)
-                .padding(.bottom, 8)
-                
-                // Results list
-                if isSearching {
-                    if viewModel.recipes.isEmpty {
-                        VStack(spacing: 16) {
-                            ProgressView()
-                            Text("Searching recipes...")
-                                .foregroundColor(.gray)
-                        }
-                        .padding(.top, 32)
-                    } else {
-                        LazyVStack(spacing: 20) {  // Using LazyVStack for better performance
-                            ForEach(viewModel.recipes, id: \.self) { recipe in
-                                NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
-                                    RecipeCard(recipe: recipe) // Extracted card view
+                            .padding(.top, 32)
+                        } else {
+                            LazyVStack(spacing: 20) {  // Using LazyVStack for better performance
+                                ForEach(viewModel.recipes, id: \.self) { recipe in
+                                    NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
+                                        RecipeCard(recipe: recipe) // Extracted card view
 
+                                    }
                                 }
                             }
+                            .padding(.top, 16)
                         }
-                        .padding(.top, 16)
+                    } else {
+                        // Initial state
+                        VStack(spacing: 16) {
+                            Image(systemName: "fork.knife.circle.fill")
+                                .font(.system(size: 64))
+                                .foregroundColor(.black)
+                                .padding()
+                            Text("Search for recipes")
+                                .font(.title2)
+                                .foregroundColor(.black)
+                            Text("Find the recipe you need")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                        .padding(.top, 60)
                     }
-                } else {
-                    // Initial state
-                    VStack(spacing: 16) {
-                        Image(systemName: "fork.knife.circle.fill")
-                            .font(.system(size: 64))
-                            .foregroundColor(.black)
-                            .padding()
-                        Text("Search for recipes")
-                            .font(.title2)
-                            .foregroundColor(.black)
-                        Text("Find the recipe you need")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                    }
-                    .padding(.top, 60)
                 }
             }
+            .background(Color(.systemBackground))
+            .navigationBarHidden(true)
         }
-        .background(Color(.systemBackground))
-        .navigationBarHidden(true)
     }
 }
 
@@ -307,11 +309,12 @@ struct RecipeDetailView: View {
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fill)
+                            .frame(maxWidth: .infinity, maxHeight: 300)
+                            .clipped()
                     } placeholder: {
                         ProgressView()
+                            .frame(maxWidth: .infinity, maxHeight: 300)
                     }
-                    .frame(height: 300)
-                    .clipped()
                     
                     // Back button
                     Button(action: { dismiss() }) {
@@ -326,15 +329,13 @@ struct RecipeDetailView: View {
                     .padding(.leading, 16)
                 }
                 
-                // Title Section
-                Text(recipe.label)
-                    .font(.system(size: 32, weight: .bold))
-                    .padding(.horizontal, 20)
-                    .padding(.top, 24)
-                    .padding(.bottom, 16)
-                
-                // Content
-                VStack(spacing: 24) {
+                // Content 
+                VStack(alignment: .leading, spacing: 24) {
+                    // Title
+                    Text(recipe.label)
+                        .font(.system(size: 32, weight: .bold))
+                        .padding(.top, 24)
+                    
                     // Stats Cards
                     HStack(spacing: 20) {
                         NutritionStatBox(icon: "flame.fill", value: "\(Int(recipe.calories))", label: "Calories", color: .orange)
@@ -391,11 +392,13 @@ struct RecipeDetailView: View {
                         .cornerRadius(16)
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(20)
                 .padding(.bottom, 100)
             }
+            .background(Color(.systemBackground))
         }
-        .ignoresSafeArea()
+        .ignoresSafeArea(edges: .top) // Ignore safe area only at the top
         .navigationBarHidden(true)
     }
 }
@@ -453,7 +456,9 @@ struct MacroRow: View {
 //–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
 #Preview {
-    SearchView()
+    NavigationStack {
+        SearchView()
+    }
 }
 
 
