@@ -109,62 +109,81 @@ struct SearchView: View {
     @StateObject private var viewModel = ViewModel()
     @State private var searchText = ""
     @State private var isSearching = false
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        NavigationView {
-            ScrollView {  // Added ScrollView here
-                VStack {
-                    // Search bar
-                    HStack {
-                        TextField("Search recipes...", text: $searchText)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .autocapitalization(.none)
-                        
-                        Button(action: {
-                            if !searchText.isEmpty {
-                                isSearching = true
-                                viewModel.fetchData(query: searchText)
-                            }
-                        }) {
-                            Image(systemName: "magnifyingglass")
-                                .foregroundColor(.black)
-                        }
+        ScrollView {  // Removed NavigationView since it's handled by parent
+            VStack {
+                // Top bar with back button and title
+                HStack {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(.black)
+                            .padding(12)
+                            .background(Color(.systemGray6))
+                            .clipShape(Circle())
                     }
-                    .padding()
                     
-                    // Results list
-                    if isSearching {
-                        if viewModel.recipes.isEmpty {
-                            ProgressView()
-                                .padding()
-                        } else {
-                            LazyVStack(spacing: 16) {  // Using LazyVStack for better performance
-                                ForEach(viewModel.recipes, id: \.self) { recipe in
-                                    NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
-                                        RecipeCard(recipe: recipe)  // Extracted card view
-                                    }
-                                }
-                            }
-                            .padding(.horizontal)
+                    Spacer()
+                    
+                    Text("Recipe Search")
+                        .font(.title3.bold())
+                    
+                    Spacer()
+                }
+                .padding()
+                
+                // Search bar
+                HStack {
+                    TextField("Search recipes...", text: $searchText)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .autocapitalization(.none)
+                    
+                    Button(action: {
+                        if !searchText.isEmpty {
+                            isSearching = true
+                            viewModel.fetchData(query: searchText)
                         }
-                    } else {
-                        // Initial state
-                        VStack {
-                            Image(systemName: "fork.knife.circle.fill")
-                                .font(.system(size: 64))
-                                .foregroundColor(.black)
-                                .padding()
-                            Text("Search for recipes")
-                                .font(.title2)
-                                .foregroundColor(.black)
-                        }
-                        .padding(.top, 40)
+                    }) {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.black)
                     }
                 }
+                .padding()
+                
+                // Results list
+                if isSearching {
+                    if viewModel.recipes.isEmpty {
+                        ProgressView()
+                            .padding()
+                    } else {
+                        LazyVStack(spacing: 16) {  // Using LazyVStack for better performance
+                            ForEach(viewModel.recipes, id: \.self) { recipe in
+                                NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
+                                    RecipeCard(recipe: recipe)  // Extracted card view
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                } else {
+                    // Initial state
+                    VStack {
+                        Image(systemName: "fork.knife.circle.fill")
+                            .font(.system(size: 64))
+                            .foregroundColor(.black)
+                            .padding()
+                        Text("Search for recipes")
+                            .font(.title2)
+                            .foregroundColor(.black)
+                    }
+                    .padding(.top, 40)
+                }
             }
-            .navigationTitle("Recipe Search")
-            .background(Color(.systemBackground))
         }
+        .background(Color(.systemBackground))
+        .navigationBarHidden(true)
     }
 }
 
