@@ -164,26 +164,35 @@ struct GetHeightWeightView: View {
                 .simultaneousGesture(TapGesture().onEnded {
                     // Save height based on metric/imperial system
                     if useMetric {
-                        userGoals.userProfile.heightInCm = Double(heightCentimeters) // Use height in cm directly
+                        userGoals.userProfile.heightInCm = Double(heightCentimeters)
                     } else {
-                        userGoals.userProfile.setHeightFromImperial(feet: heightFeet, inches: heightInches) // Convert and set height
+                        userGoals.userProfile.setHeightFromImperial(feet: heightFeet, inches: heightInches)
                     }
+
+                    // Set isMetric in userGoals
+                    userGoals.isMetric = useMetric
+
+                    // Ensure bodyMetrics has a reference to userGoals
+                    userGoals.bodyMetrics.userGoals = userGoals
 
                     // Save weight based on metric/imperial system
                     if let currentWeightValue = Double(currentWeight) {
                         if useMetric {
-                            userGoals.bodyMetrics.currentWeightInKg = currentWeightValue // Already in kg
+                            userGoals.bodyMetrics.currentWeightInKg = currentWeightValue
+                            userGoals.bodyMetrics.logWeight(currentWeightValue, modelContext: modelContext)
                         } else {
-                            userGoals.bodyMetrics.setCurrentWeightFromPounds(pounds: currentWeightValue) // Convert and set current weight
+                            let weightInKg = currentWeightValue * 0.453592
+                            userGoals.bodyMetrics.currentWeightInKg = weightInKg
+                            userGoals.bodyMetrics.logWeight(weightInKg, modelContext: modelContext)
                         }
-                        userGoals.bodyMetrics.logWeight(currentWeightValue)
                     }
-                    
+
                     if let goalWeightValue = Double(goalWeight) {
                         if useMetric {
-                            userGoals.bodyMetrics.goalWeightInKg = goalWeightValue // Already in kg
+                            userGoals.bodyMetrics.goalWeightInKg = goalWeightValue
                         } else {
-                            userGoals.bodyMetrics.setGoalWeightFromPounds(pounds: goalWeightValue) // Convert and set goal weight
+                            let weightInKg = goalWeightValue * 0.453592
+                            userGoals.bodyMetrics.goalWeightInKg = weightInKg
                         }
                     }
                 })

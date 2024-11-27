@@ -48,10 +48,7 @@ struct AddWeightEntryView: View {
     private func addWeightEntry() {
         guard let weightValue = Double(weight), let bodyMetrics = userGoal?.bodyMetrics else { return }
         
-        let newEntry = BodyWeightEntry(date: date, weight: weightValue)
-        bodyMetrics.bodyWeightLog.append(newEntry)
-        
-        try? modelContext.save() // Save the new entry to the database
+        bodyMetrics.logWeight(weightValue, modelContext: modelContext)
         dismiss()
     }
 }

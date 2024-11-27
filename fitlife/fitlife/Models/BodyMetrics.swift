@@ -46,9 +46,10 @@ class BodyMetrics {
     
 
     // Method to log daily weight
-    func logWeight(_ weight: Double) {
-        currentWeightInKg = weight
-        bodyWeightLog.append(BodyWeightEntry(date: Date(), weight: weight))
+    func logWeight(_ weightInKg: Double, modelContext: ModelContext) {
+        currentWeightInKg = weightInKg
+        bodyWeightLog.append(BodyWeightEntry(date: Date(), weight: currentWeightInKg))
+        try? modelContext.save()
         adjustGoalsBasedOnWeight()
     }
 
