@@ -112,64 +112,93 @@ struct SearchView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        ScrollView {  // Removed NavigationView since it's handled by parent
-            VStack {
+        ScrollView { // Removed NavigationView since it's handled by parent
+            VStack(spacing: 0) {
                 // Top bar with back button and title
-                HStack {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(.black)
-                            .padding(12)
-                            .background(Color(.systemGray6))
-                            .clipShape(Circle())
-                    }
-                    
-                    Spacer()
-                    
+                ZStack {
+                    // Center Title
                     Text("Recipe Search")
                         .font(.title3.bold())
+                        .frame(maxWidth: .infinity)
                     
-                    Spacer()
+                    // Back button aligned to left
+                    HStack {
+                        Button(action: { dismiss() }) {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundColor(.black)
+                                .padding(12)
+                                .background(Color(.systemGray6))
+                                .clipShape(Circle())
+                        }
+                        Spacer()
+                    }
                 }
                 .padding()
                 
                 // Search bar
                 HStack {
-                    TextField("Search recipes...", text: $searchText)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .autocapitalization(.none)
-                    
-                    Button(action: {
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
+                            .padding(.leading, 8)
+                        
+                        TextField("Search recipes...", text: $searchText)
+                            .autocapitalization(.none)
+                        
                         if !searchText.isEmpty {
+                            Button(action: { searchText = "" }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.gray)
+                            }
+                            .padding(.trailing, 8)
+                        }
+                    }
+                    .padding(.vertical, 12)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
+                    
+                    if !searchText.isEmpty {
+                        Button(action: {
                             isSearching = true
                             viewModel.fetchData(query: searchText)
+                        }) {
+                            Text("Search")
+                                .fontWeight(.semibold)
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                                .background(Color.black)
+                                .cornerRadius(12)
                         }
-                    }) {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.black)
                     }
                 }
-                .padding()
+                .padding(.horizontal)
+                .padding(.bottom, 8)
                 
                 // Results list
                 if isSearching {
                     if viewModel.recipes.isEmpty {
-                        ProgressView()
-                            .padding()
+                        VStack(spacing: 16) {
+                            ProgressView()
+                            Text("Searching recipes...")
+                                .foregroundColor(.gray)
+                        }
+                        .padding(.top, 32)
                     } else {
-                        LazyVStack(spacing: 16) {  // Using LazyVStack for better performance
+                        LazyVStack(spacing: 20) {  // Using LazyVStack for better performance
                             ForEach(viewModel.recipes, id: \.self) { recipe in
                                 NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
-                                    RecipeCard(recipe: recipe)  // Extracted card view
+                                    RecipeCard(recipe: recipe) // Extracted card view
+
                                 }
                             }
                         }
-                        .padding(.horizontal)
+                        .padding(.top, 16)
                     }
                 } else {
                     // Initial state
-                    VStack {
+                    VStack(spacing: 16) {
                         Image(systemName: "fork.knife.circle.fill")
                             .font(.system(size: 64))
                             .foregroundColor(.black)
@@ -177,8 +206,11 @@ struct SearchView: View {
                         Text("Search for recipes")
                             .font(.title2)
                             .foregroundColor(.black)
+                        Text("Find the recipe you need")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
                     }
-                    .padding(.top, 40)
+                    .padding(.top, 60)
                 }
             }
         }
