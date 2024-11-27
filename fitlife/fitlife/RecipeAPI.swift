@@ -1,4 +1,3 @@
-
 import SwiftUI
 import Foundation
 
@@ -113,66 +112,58 @@ struct SearchView: View {
     
     var body: some View {
         NavigationView {
-            
-            ZStack {
-                // Background gradient
-                LinearGradient(gradient: Gradient(colors: [Color.white, Color.green]),
-                               startPoint: .topLeading,
-                               endPoint: .bottomTrailing)
-                .ignoresSafeArea() // Make gradient fill the entire screen
-                
-                ScrollView {  // Added ScrollView here
-                    VStack {
-                        // Search bar
-                        HStack {
-                            TextField("Search recipes...", text: $searchText)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .autocapitalization(.none)
-                            
-                            Button(action: {
-                                if !searchText.isEmpty {
-                                    isSearching = true
-                                    viewModel.fetchData(query: searchText)
-                                }
-                            }) {
-                                Image(systemName: "magnifyingglass")
-                                    .foregroundColor(.blue)
-                            }
-                        }
-                        .padding()
+            ScrollView {  // Added ScrollView here
+                VStack {
+                    // Search bar
+                    HStack {
+                        TextField("Search recipes...", text: $searchText)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .autocapitalization(.none)
                         
-                        // Results list
-                        if isSearching {
-                            if viewModel.recipes.isEmpty {
-                                ProgressView()
-                                    .padding()
-                            } else {
-                                LazyVStack(spacing: 15) {  // Using LazyVStack for better performance
-                                    ForEach(viewModel.recipes, id: \.self) { recipe in
-                                        NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
-                                            RecipeCard(recipe: recipe)  // Extracted card view
-                                        }
-                                    }
-                                }
-                                .padding(.horizontal)
+                        Button(action: {
+                            if !searchText.isEmpty {
+                                isSearching = true
+                                viewModel.fetchData(query: searchText)
                             }
-                        } else {
-                            // Initial state
-                            VStack {
-                                Image(systemName: "fork.knife.circle.fill")
-                                    .font(.system(size: 64))
-                                    .foregroundColor(.black)
-                                    .padding()
-                                Text("Search for recipes")
-                                    .font(.title2)
-                                    .foregroundColor(.black)
-                            }
-                            .padding()
+                        }) {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(.black)
                         }
                     }
+                    .padding()
+                    
+                    // Results list
+                    if isSearching {
+                        if viewModel.recipes.isEmpty {
+                            ProgressView()
+                                .padding()
+                        } else {
+                            LazyVStack(spacing: 16) {  // Using LazyVStack for better performance
+                                ForEach(viewModel.recipes, id: \.self) { recipe in
+                                    NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
+                                        RecipeCard(recipe: recipe)  // Extracted card view
+                                    }
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                    } else {
+                        // Initial state
+                        VStack {
+                            Image(systemName: "fork.knife.circle.fill")
+                                .font(.system(size: 64))
+                                .foregroundColor(.black)
+                                .padding()
+                            Text("Search for recipes")
+                                .font(.title2)
+                                .foregroundColor(.black)
+                        }
+                        .padding(.top, 40)
+                    }
                 }
-                .navigationTitle("Recipe Search")
             }
+            .navigationTitle("Recipe Search")
+            .background(Color(.systemBackground))
         }
     }
 }
@@ -184,32 +175,33 @@ struct RecipeCard: View {
     let recipe: RecipeObject
     
     var body: some View {
-        
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 12) {
             AsyncImage(url: URL(string: recipe.image)) { image in
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
             } placeholder: {
                 Rectangle()
-                    .fill(Color.gray.opacity(0.3))
+                    .fill(Color(.systemGray5))
             }
             .frame(height: 200)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
             
-            Text(recipe.label)
-                .font(.headline)
-                .lineLimit(2)
-            
-            Text("\(Int(recipe.calories)) calories • \(Int(recipe.yield)) servings")
-                .font(.subheadline)
-                .foregroundColor(.gray)
+            VStack(alignment: .leading, spacing: 8) {
+                Text(recipe.label)
+                    .font(.headline)
+                    .lineLimit(2)
+                
+                Text("\(Int(recipe.calories)) calories • \(Int(recipe.yield)) servings")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
+            .padding(.horizontal, 4)
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(15)
-        .shadow(radius: 5)
-        
+        .padding(12)
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
     }
 }
 
