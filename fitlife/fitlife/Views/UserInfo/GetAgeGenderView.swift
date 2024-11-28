@@ -89,7 +89,6 @@ struct GetAgeGenderView: View {
                     if let validAge = Int(ageInput) {
                         userGoals.userProfile.gender = selectedGender
                         userGoals.userProfile.age = validAge
-                        // modelContext.save() or any other action
                     }
                 }
             }

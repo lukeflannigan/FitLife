@@ -21,16 +21,15 @@ class UserProfile {
     var heightInCm: Double
     var age: Int
     var gender: String
-    var isMetric: Bool // Tracks if the user prefers metric or imperial
     var userGoals: UserGoals?
 
-    init(name: String, age: Int , heightInCm: Double, gender: String, localeIdentifier: String = Locale.autoupdatingCurrent.identifier, isMetric: Bool) {
+
+    init(name: String, age: Int , heightInCm: Double, gender: String, localeIdentifier: String = Locale.autoupdatingCurrent.identifier) {
         self.name = name
         self.age = age
         self.heightInCm = heightInCm
         self.gender = gender
         self.localeIdentifier = localeIdentifier
-        self.isMetric = isMetric
     }
     
     

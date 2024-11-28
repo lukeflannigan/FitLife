@@ -51,8 +51,7 @@ class UserGoals {
          userProfile: UserProfile = UserProfile(name: "",
                                                 age: 0,
                                                 heightInCm: 160,
-                                                gender: "male",
-                                                isMetric: false),
+                                                gender: "male"),
          bodyMetrics: BodyMetrics = BodyMetrics(),
          currentDailyIntake: [DailyIntake] = [],
          weeklySummaries: [WeeklySummary] = []) {
@@ -75,7 +74,7 @@ class UserGoals {
         self.weeklySummaries = weeklySummaries
     }
     
-    func calculateTDEE(isMetric: Bool = false) -> Double {
+    func calculateTDEE() -> Double {
         let bmr = bodyMetrics.calculateBMR()
         let tdee = bmr * activityLevel.calorieMultiplier()
         
