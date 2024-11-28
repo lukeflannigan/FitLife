@@ -14,6 +14,7 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
     @Published var errorMessage: String? = nil
     @Published var isSignedIn = false
     @Published var isNewUser = false  // Track if the user is new
+    @Published var skippedSignIn = false  // Track if the user skipped sign-in
     
     override init() {
         super.init()
@@ -51,7 +52,9 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
     func skipSignIn() {
         UserDefaults.standard.set(true, forKey: "skippedSignIn")
         DispatchQueue.main.async {
+            self.skippedSignIn = true
             self.isSignedIn = true
+            self.isNewUser = true  // Skipped sign-in always routes to WelcomeView
         }
     }
     

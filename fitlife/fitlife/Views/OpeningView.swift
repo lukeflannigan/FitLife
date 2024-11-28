@@ -3,6 +3,7 @@
 // Created by Luke Flannigan on 9/26/24.
 //
 
+
 import SwiftUI
 import SwiftData
 import AuthenticationServices
@@ -13,11 +14,11 @@ struct OpeningView: View {
     @State private var isNavigatingToMainView = false
     @State private var isNavigatingToWelcomeView = false
     @State private var userGoals = UserGoals()
-    
+
     var body: some View {
         NavigationView {
             ZStack {
-                GradientBackground()
+                GradientBackground()  // Custom background
                 
                 VStack(spacing: 30) {
                     Text("FitLife")
@@ -31,6 +32,7 @@ struct OpeningView: View {
                     
                     Spacer()
                     
+                    // Sign in with Apple button
                     SignInWithAppleButton(
                         onRequest: { request in
                             viewModel.signInWithApple()
@@ -44,9 +46,9 @@ struct OpeningView: View {
                     .cornerRadius(16)
                     .padding(.horizontal, 40)
                     
+                    // Continue without sign-in Button
                     Button(action: {
                         viewModel.skipSignIn()
-                        isNavigatingToMainView = true
                     }) {
                         Text("Continue without sign in")
                             .font(.system(size: 14, weight: .regular))
@@ -59,15 +61,17 @@ struct OpeningView: View {
                     .padding(.horizontal, 60)
                     .padding(.bottom, 160)
                     
-                    NavigationLink(destination: WelcomeView(userGoals: $userGoals)
-                        .environment(\.modelContext, modelContext),
-                                   isActive: $isNavigatingToWelcomeView) {
-                        EmptyView()
-                    }
-                    
+                    // NavigationLink to MainView
                     NavigationLink(destination: MainView()
                         .environment(\.modelContext, modelContext),
                                    isActive: $isNavigatingToMainView) {
+                        EmptyView()
+                    }
+                    
+                    // NavigationLink to WelcomeView
+                    NavigationLink(destination: WelcomeView(userGoals: $userGoals)
+                        .environment(\.modelContext, modelContext),
+                                   isActive: $isNavigatingToWelcomeView) {
                         EmptyView()
                     }
                 }
@@ -75,7 +79,7 @@ struct OpeningView: View {
             .navigationBarHidden(true)
             .onChange(of: viewModel.isSignedIn) { isSignedIn in
                 if isSignedIn {
-                    if viewModel.isNewUser {
+                    if viewModel.skippedSignIn || viewModel.isNewUser {
                         isNavigatingToWelcomeView = true
                     } else {
                         isNavigatingToMainView = true
@@ -84,7 +88,7 @@ struct OpeningView: View {
             }
         }
     }
-    
+
     private func handleSignInResult(_ result: Result<ASAuthorization, Error>) {
         switch result {
         case .success(let auth):
@@ -92,11 +96,5 @@ struct OpeningView: View {
         case .failure(let error):
             print("Error: \(error.localizedDescription)")
         }
-    }
-}
-
-struct OpeningView_Previews: PreviewProvider {
-    static var previews: some View {
-        OpeningView()
     }
 }
