@@ -6,21 +6,31 @@
 import SwiftUI
 import SwiftData
 
+extension ModelContext {
+    func fetchExercise(with uuid: UUID) -> Exercise? {
+        let request = FetchDescriptor<Exercise>(predicate: #Predicate { $0.uuid == uuid })
+        return try? fetch(request).first
+    }
+}
+
 struct WorkoutTemplateView: View {
     @Environment(\.modelContext) var modelContext
     @State private var templates: [WorkoutTemplate] = [] // Local array for templates
     @State private var newWorkoutClicked: Bool = false
     @State private var currWorkout: Workout? = nil // Add a state for current workout
     @State private var exercises: Set<UUID> = [] // Add a state for selected exercises
+    @State private var isSelectingExercises: Bool = false // Track exercise selection
 
     var body: some View {
         NavigationView {
             VStack {
+                // Title
                 Text("Workout Templates")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.top)
 
+                // Templates List
                 ScrollView {
                     VStack(spacing: 16) {
                         if !templates.isEmpty {
@@ -39,6 +49,7 @@ struct WorkoutTemplateView: View {
 
                 Spacer()
 
+                // Add New Template Button
                 Button(action: { newWorkoutClicked.toggle() }) {
                     Text("Add New Template")
                         .font(.headline)
@@ -77,6 +88,30 @@ struct WorkoutTemplateView: View {
             print("Error fetching templates: \(error)")
             return []
         }
+    }
+
+    /// Add `saveSelectedExercises` inside `WorkoutTemplateView`
+    private func saveSelectedExercises() {
+        // Map selected UUIDs to WorkoutExercise objects
+        let selectedWorkoutExercises = exercises.compactMap { uuid in
+            if let exercise = modelContext.fetchExercise(with: uuid) {
+                return WorkoutExercise(exercise: exercise)
+            }
+            return nil
+        }
+
+        // Create a new workout template
+        let newTemplate = WorkoutTemplate(name: "New Template", exercises: selectedWorkoutExercises)
+        do {
+            modelContext.insert(newTemplate)
+            try modelContext.save()
+            print("Saved new template with \(newTemplate.exercises.count) exercises.")
+        } catch {
+            print("Error saving template: \(error)")
+        }
+
+        // Clear selected exercises after saving
+        exercises.removeAll()
     }
 
     private func startNewWorkout(with template: WorkoutTemplate) {
@@ -177,7 +212,7 @@ struct NewWorkoutTemplateSheet: View {
             .sheet(isPresented: $showExerciseLibrary) {
                 ExerciseSelectionView(
                     selectedExercises: $exercises,
-                    currentWorkout: $currWorkout
+                    currentWorkout: .constant(nil)
                 )
             }
         }
@@ -185,15 +220,18 @@ struct NewWorkoutTemplateSheet: View {
 
     /// Saves the template and dismisses the sheet
     private func saveTemplateAndDismiss() {
-        // Map exercises to WorkoutExercise, handle empty case
-        let workoutExercises = selectedExercises.map { exercise in
-            WorkoutExercise(exercise: exercise)
+        // Map selected exercises (UUIDs) to WorkoutExercise objects
+        let selectedWorkoutExercises = exercises.compactMap { uuid in
+            if let exercise = modelContext.fetchExercise(with: uuid) {
+                return WorkoutExercise(exercise: exercise)
+            }
+            return nil
         }
 
-        // Create a new WorkoutTemplate
-        let newTemplate = WorkoutTemplate(name: name, exercises: workoutExercises)
+        // Create a new WorkoutTemplate with the name and selected exercises
+        let newTemplate = WorkoutTemplate(name: name, exercises: selectedWorkoutExercises)
 
-        // Persist the WorkoutTemplate in the SwiftData context
+        // Persist the WorkoutTemplate in the model context
         do {
             modelContext.insert(newTemplate)
             try modelContext.save()
@@ -202,7 +240,7 @@ struct NewWorkoutTemplateSheet: View {
             // Notify parent view about the new template
             onTemplateSaved?(newTemplate)
             
-            // Dismiss the sheet after saving
+            // Dismiss the sheet
             dismiss()
         } catch {
             print("Error saving template: \(error)")
