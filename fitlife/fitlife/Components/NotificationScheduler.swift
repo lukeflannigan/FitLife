@@ -23,25 +23,23 @@ class NotificationScheduler {
         let percentage = progress.calorieProgressPercentage
         content.title = "Keep Going!"
         content.body = "You are currently \(percentage)% done with your daily calorie goal. Eat!"
+//        content.body = "You are currently 60% done with your daily calorie goal. Eat!"
+
         content.sound = .default
 
-        // Schedule notifications at specific times
-        let notificationTimes = [9, 12, 15, 18, 21] // Notify at 9 AM, 12 PM, etc.
+        // Uncomment the following for immediate testing
+        /*
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false) // Trigger after 5 seconds
 
-        for time in notificationTimes {
-            var dateComponents = DateComponents()
-            dateComponents.hour = time
-            dateComponents.minute = 0
-
-            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-
-            let request = UNNotificationRequest(identifier: "dailyProgressNotification_\(time)", content: content, trigger: trigger)
-
-            center.add(request) { error in
-                if let error = error {
-                    print("Error scheduling notification for \(time): \(error)")
-                }
+        // Schedule the notification
+        let request = UNNotificationRequest(identifier: "dailyProgressNotification_test", content: content, trigger: trigger)
+        center.add(request) { error in
+            if let error = error {
+                print("Error scheduling notification: \(error)")
+            } else {
+                print("Test notification scheduled successfully.")
             }
         }
+        */
     }
 }
