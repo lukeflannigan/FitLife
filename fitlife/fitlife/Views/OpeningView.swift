@@ -10,12 +10,14 @@ import AuthenticationServices
 struct OpeningView: View {
     @Environment(\.modelContext) var modelContext
     @StateObject private var viewModel = AuthenticationViewModel()
-    @State private var isNavigatingToMainView = false  // State for navigation
-    @State private var userGoals = UserGoals()  // Define userGoals
+    @State private var isNavigatingToMainView = false
+    @State private var isNavigatingToWelcomeView = false
+    @State private var userGoals = UserGoals()
+    
     var body: some View {
         NavigationView {
             ZStack {
-                GradientBackground()  // Custom background
+                GradientBackground()
                 
                 VStack(spacing: 30) {
                     Text("FitLife")
@@ -42,7 +44,6 @@ struct OpeningView: View {
                     .cornerRadius(16)
                     .padding(.horizontal, 40)
                     
-                    // Continue without sign-in Button
                     Button(action: {
                         viewModel.skipSignIn()
                         isNavigatingToMainView = true
@@ -58,8 +59,13 @@ struct OpeningView: View {
                     .padding(.horizontal, 60)
                     .padding(.bottom, 160)
                     
-                    // NavigationLink to WelcomeView
                     NavigationLink(destination: WelcomeView(userGoals: $userGoals)
+                        .environment(\.modelContext, modelContext),
+                                   isActive: $isNavigatingToWelcomeView) {
+                        EmptyView()
+                    }
+                    
+                    NavigationLink(destination: MainView()
                         .environment(\.modelContext, modelContext),
                                    isActive: $isNavigatingToMainView) {
                         EmptyView()
@@ -69,7 +75,11 @@ struct OpeningView: View {
             .navigationBarHidden(true)
             .onChange(of: viewModel.isSignedIn) { isSignedIn in
                 if isSignedIn {
-                    isNavigatingToMainView = true
+                    if viewModel.isNewUser {
+                        isNavigatingToWelcomeView = true
+                    } else {
+                        isNavigatingToMainView = true
+                    }
                 }
             }
         }

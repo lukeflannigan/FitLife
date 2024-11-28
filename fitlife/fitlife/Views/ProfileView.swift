@@ -9,29 +9,27 @@ struct ProfileView: View {
     @Query private var userGoals: [UserGoals]
     var userGoal: UserGoals? { userGoals.first }
     
-    // Will need to connect this to real data later
-    // Just using this to test view works
     @State private var userEmail: String = "email@email.com"
     @State private var userPhone: String = "+1 (123) 456-7890"
-    
     @State private var showEditProfile: Bool = false
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                headerSection
-                personalInfoSection
-                settingsSection
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 20) {
+                    headerSection
+                    personalInfoSection
+                    settingsSection
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+                .padding(.bottom, 80) // To account for tab bar.
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 20)
-            .padding(.bottom, 80) // To account for tab bar.
+            .background(Color(UIColor.systemBackground))
+            .edgesIgnoringSafeArea(.bottom)
         }
-        .background(Color(UIColor.systemBackground))
-        .edgesIgnoringSafeArea(.bottom)
     }
     
-    // Header Section
     private var headerSection: some View {
         VStack(spacing: 15) {
             if let profilePicture = userGoal?.profilePicture,
@@ -71,12 +69,10 @@ struct ProfileView: View {
                     .shadow(radius: 10)
             }
             
-            // Username
             Text(userGoal?.userProfile.name ?? "")
                 .font(.custom("Poppins-Bold", size: 28))
                 .foregroundColor(.primary)
             
-            // Edit Profile Button
             Button(action: {
                 showEditProfile.toggle()
             }) {
@@ -92,7 +88,6 @@ struct ProfileView: View {
         }
     }
     
-    // Personal Info Section
     private var personalInfoSection: some View {
         VStack(spacing: 15) {
             HStack {
@@ -109,7 +104,6 @@ struct ProfileView: View {
         }
     }
     
-    // Settings Section
     private var settingsSection: some View {
         VStack(spacing: 15) {
             HStack {
@@ -120,16 +114,65 @@ struct ProfileView: View {
             }
             
             VStack(spacing: 10) {
-                SettingsRow(iconName: "lock.fill", title: "Change Password") {
-                    // Change password
+                // Direct NavigationLink for User Preferences
+                NavigationLink(destination: UserPreferencesView()) {
+                    HStack {
+                        Image(systemName: "gearshape.fill")
+                            .foregroundColor(Color("GradientStart"))
+                            .frame(width: 24, height: 24)
+                        Text("User Preferences")
+                            .font(.custom("Poppins-Medium", size: 16))
+                            .foregroundColor(.primary)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color(UIColor.secondarySystemBackground))
+                    .cornerRadius(8)
                 }
-                SettingsRow(iconName: "bell.fill", title: "Notifications") {
-                    // Manage notifications
+                
+                // Placeholder for Notifications
+                NavigationLink(destination: NotificationSettingsView()) {
+                    HStack {
+                        Image(systemName: "bell.fill")
+                            .foregroundColor(Color("GradientStart"))
+                            .frame(width: 24, height: 24)
+                        Text("Notifications")
+                            .font(.custom("Poppins-Medium", size: 16))
+                            .foregroundColor(.primary)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color(UIColor.secondarySystemBackground))
+                    .cornerRadius(8)
                 }
-                SettingsRow(iconName: "hand.raised.fill", title: "Privacy Settings") {
-                    // Manage privacy
+                
+                // Log Out Button
+                Button(action: logOut) {
+                    HStack {
+                        Image(systemName: "rectangle.portrait.and.arrow.right.fill")
+                            .foregroundColor(Color("GradientStart"))
+                            .frame(width: 24, height: 24)
+                        Text("Log Out")
+                            .font(.custom("Poppins-Medium", size: 16))
+                            .foregroundColor(.primary)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color(UIColor.secondarySystemBackground))
+                    .cornerRadius(8)
                 }
             }
+        }
+    }
+    
+    private func logOut() {
+        print("Log Out tapped!")
+        UserDefaults.standard.removeObject(forKey: "userSession")
+        UserDefaults.standard.set(false, forKey: "skippedSignIn")
+        
+        if let window = UIApplication.shared.windows.first {
+            window.rootViewController = UIHostingController(rootView: OpeningView())
+            window.makeKeyAndVisible()
         }
     }
     

@@ -25,6 +25,11 @@ class DailyIntake: Identifiable {
         self.protein = protein
         self.carbs = carbs
         self.fats = fats
-        self.name = name   //Modified this to match the change above. 
+        self.name = name   //Modified this to match the change above.
+    }
+    
+    // Convenience description for debugging or displaying intake
+    var description: String {
+        return "\(name): \(calories) kcal, \(protein)g protein, \(carbs)g carbs, \(fats)g fats"
     }
 }

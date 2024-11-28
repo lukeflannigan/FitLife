@@ -12,7 +12,8 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
     
     @Published var userSession: String? = nil
     @Published var errorMessage: String? = nil
-    @Published var isSignedIn = false  // Track sign-in status
+    @Published var isSignedIn = false
+    @Published var isNewUser = false  // Track if the user is new
     
     override init() {
         super.init()
@@ -31,12 +32,16 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
     func processAppleSignIn(_ authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             let userIdentifier = appleIDCredential.user
-            self.userSession = userIdentifier  // Save user session
+            self.userSession = userIdentifier
             
-            // Store session in UserDefaults for future use
+            // Check if the user is new
+            if isNewUser(userIdentifier) {
+                self.isNewUser = true
+            } else {
+                self.isNewUser = false
+            }
+            
             UserDefaults.standard.set(userIdentifier, forKey: "userSession")
-            
-            // Set isSignedIn to true to trigger navigation
             DispatchQueue.main.async {
                 self.isSignedIn = true
             }
@@ -44,16 +49,25 @@ class AuthenticationViewModel: NSObject, ObservableObject, ASAuthorizationContro
     }
     
     func skipSignIn() {
-        // Mark user as having skipped sign-in
         UserDefaults.standard.set(true, forKey: "skippedSignIn")
-        
-        // Directly set isSignedIn to true to trigger navigation to MainView
         DispatchQueue.main.async {
             self.isSignedIn = true
         }
     }
     
-    // Apple Sign In Delegate methods
+    private func isNewUser(_ userIdentifier: String) -> Bool {
+        // Simulated database check. Replace this with a real database query.
+        if let existingUsers = UserDefaults.standard.array(forKey: "existingUsers") as? [String] {
+            return !existingUsers.contains(userIdentifier)
+        } else {
+            // First time running the app, no users exist yet
+            var users = [String]()
+            users.append(userIdentifier)  // Add this user as the first entry
+            UserDefaults.standard.set(users, forKey: "existingUsers")
+            return true
+        }
+    }
+    
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         processAppleSignIn(authorization)
     }
