@@ -210,12 +210,35 @@ struct NewWorkoutTemplateSheet: View {
             .navigationTitle("New Template")
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showExerciseLibrary) {
-                ExerciseSelectionView(
-                    selectedExercises: $exercises,
-                    currentWorkout: .constant(nil)
-                )
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button("Done") {
+                            saveSelectedExercises() // Save exercises
+                            showExerciseLibrary = false // Dismiss the ExerciseSelectionView
+                        }
+                        .font(.headline)
+                        .foregroundColor(.blue)
+                        .padding(.top)
+                        .padding(.trailing)
+                    }
+
+                    ExerciseSelectionView(
+                        selectedExercises: $exercises,
+                        currentWorkout: .constant(nil)
+                    )
+                }
             }
         }
+    }
+    
+    private func saveSelectedExercises() {
+        // Convert the UUIDs to Exercise objects
+        let selectedExercisesList = exercises.compactMap { uuid in
+            modelContext.fetchExercise(with: uuid)
+        }
+        selectedExercises = selectedExercisesList // Update the list of selected exercises
+        print("Saved \(selectedExercises.count) exercises for the template.")
     }
 
     /// Saves the template and dismisses the sheet
