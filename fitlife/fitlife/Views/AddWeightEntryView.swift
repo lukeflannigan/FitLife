@@ -12,20 +12,20 @@ struct AddWeightEntryView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     var userGoal: UserGoals?
-    
+
     @State private var weight: String = ""
     @State private var date = Date()
-    
+
     var body: some View {
         NavigationView {
             Form {
                 Section(header: Text("New Weight Entry")) {
-                    TextField("Weight", text: $weight)
+                    TextField(weightPlaceholder(), text: $weight)
                         .keyboardType(.decimalPad)
-                    
+
                     DatePicker("Date", selection: $date, displayedComponents: .date)
                 }
-                
+
                 Section {
                     Button(action: addWeightEntry) {
                         Text("Save")
@@ -44,12 +44,18 @@ struct AddWeightEntryView: View {
             }
         }
     }
-    
+
     private func addWeightEntry() {
         guard let weightValue = Double(weight), let bodyMetrics = userGoal?.bodyMetrics else { return }
-        
-        userGoal?.bodyMetrics.logWeight(weightValue, modelContext: modelContext)
+
+        // Convert to metric (kg) if necessary
+        let weightInKg = userGoal?.isMetric == true ? weightValue : weightValue * 0.453592
+        bodyMetrics.logWeight(weightInKg, modelContext: modelContext)
         userGoal?.setMacroGoals()
         dismiss()
+    }
+
+    private func weightPlaceholder() -> String {
+        return userGoal?.isMetric == true ? "Weight (kg)" : "Weight (lbs)"
     }
 }

@@ -11,42 +11,42 @@ import SwiftData
 
 struct WeightChartView: View {
     @Query var userGoals: [UserGoals]
-    
+
     // Access sorted body weight entries
     var bodyWeightEntries: [BodyWeightEntry] {
         (userGoals.first?.bodyMetrics.bodyWeightLog ?? []).sorted { $0.date < $1.date }
     }
-    
-    // Access the goal weight from UserGoals or BodyMetrics
+
+    // Access goal weight
     var goalWeight: Double {
-        userGoals.first?.bodyMetrics.goalWeightInPounds() ?? 200
+        let bodyMetrics = userGoals.first?.bodyMetrics
+        return isMetric ? (bodyMetrics?.goalWeightInKg ?? 0) : (bodyMetrics?.goalWeightInPounds() ?? 0)
     }
-    
-    // Calculate the minimum and maximum weight in the log to determine Y-axis range
-    var minWeight: Double {
-        bodyWeightEntries.map { $0.weight }.min() ?? 0
+
+    // Determine units
+    var isMetric: Bool {
+        userGoals.first?.isMetric ?? true
     }
-    
-    var maxWeight: Double {
-        bodyWeightEntries.map { $0.weight }.max() ?? goalWeight
+
+    // Calculate weights for display
+    var displayedEntries: [(date: Date, weight: Double)] {
+        bodyWeightEntries.map { entry in
+            let weight = isMetric ? entry.weight : entry.weight * 2.20462
+            return (date: entry.date, weight: weight)
+        }
     }
-    
-    // Determine the upper bound for the Y-axis: the greater of the max recorded weight or the goal weight
-    var yAxisUpperBound: Double {
-        max(maxWeight, goalWeight)
-    }
-    
+
     @State private var isAddingWeight = false
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text("Weight")
+                Text("Weight (\(isMetric ? "kg" : "lbs"))")
                     .font(.custom("Poppins-SemiBold", size: 18))
                     .foregroundColor(.primary)
-                
+
                 Spacer()
-                
+
                 Button(action: {
                     isAddingWeight = true
                 }) {
@@ -56,9 +56,9 @@ struct WeightChartView: View {
                 }
                 .buttonStyle(.plain)
             }
-            
+
             Chart {
-                ForEach(bodyWeightEntries) { entry in
+                ForEach(displayedEntries, id: \.date) { entry in
                     // LineMark for the weight entries
                     LineMark(
                         x: .value("Date", entry.date),
@@ -66,7 +66,7 @@ struct WeightChartView: View {
                     )
                     .interpolationMethod(.monotone)
                     .foregroundStyle(Color.blue)
-                    
+
                     // PointMark to add a small circle at each entry
                     PointMark(
                         x: .value("Date", entry.date),
@@ -77,7 +77,7 @@ struct WeightChartView: View {
                 }
             }
             .frame(height: 150)
-            .chartYScale(domain: minWeight...yAxisUpperBound)  // Dynamic Y-axis range
+            .chartYScale(domain: minWeight...yAxisUpperBound) // Dynamic Y-axis range
             .chartYAxis {
                 AxisMarks(position: .leading) {
                     AxisGridLine()
@@ -98,5 +98,18 @@ struct WeightChartView: View {
         .sheet(isPresented: $isAddingWeight) {
             AddWeightEntryView(userGoal: userGoals.first)
         }
+    }
+
+    // Calculate the minimum and maximum weight for Y-axis range
+    private var minWeight: Double {
+        displayedEntries.map { $0.weight }.min() ?? 0
+    }
+
+    private var maxWeight: Double {
+        displayedEntries.map { $0.weight }.max() ?? goalWeight
+    }
+
+    private var yAxisUpperBound: Double {
+        max(maxWeight, goalWeight)
     }
 }
