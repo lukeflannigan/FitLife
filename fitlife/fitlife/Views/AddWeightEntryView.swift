@@ -48,7 +48,8 @@ struct AddWeightEntryView: View {
     private func addWeightEntry() {
         guard let weightValue = Double(weight), let bodyMetrics = userGoal?.bodyMetrics else { return }
         
-        bodyMetrics.logWeight(weightValue, modelContext: modelContext)
+        userGoal?.bodyMetrics.logWeight(weightValue, modelContext: modelContext)
+        userGoal?.setMacroGoals()
         dismiss()
     }
 }

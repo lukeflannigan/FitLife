@@ -16,7 +16,7 @@ struct GetHeightWeightView: View {
     @State private var heightFeet: Int = 5
     @State private var heightInches: Int = 7
     @State private var heightCentimeters: Int = 170
-    @State private var useMetric: Bool = false // Toggle between Feet/Inches and Centimeters
+    @State private var useMetric: Bool = false // Toggle between Metric and Imperial units
     @State private var currentWeight: String = ""
     @State private var goalWeight: String = ""
     
@@ -26,6 +26,31 @@ struct GetHeightWeightView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .center, spacing: 20) {
+                
+                // Unit System Picker
+                Picker("Unit System", selection: $useMetric) {
+                    Text("Imperial (ft, lbs)").tag(false)
+                    Text("Metric (cm, kg)").tag(true)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding(.horizontal)
+                .padding(.top)
+                .onChange(of: useMetric) { newValue in
+                    // Convert height when unit system changes
+                    if newValue {
+                        // Switched to Metric
+                        let totalInches = Double(heightFeet * 12 + heightInches)
+                        let heightCm = totalInches * 2.54
+                        heightCentimeters = Int(heightCm)
+                    } else {
+                        // Switched to Imperial
+                        let totalInches = Double(heightCentimeters) / 2.54
+                        let feet = Int(totalInches / 12)
+                        let inches = Int(totalInches.truncatingRemainder(dividingBy: 12))
+                        heightFeet = feet
+                        heightInches = inches
+                    }
+                }
                 
                 // Title
                 Text("How tall are you?")
@@ -70,14 +95,7 @@ struct GetHeightWeightView: View {
                         }
                         .padding()
                         
-                        // Picker for Feet/Inches or Centimeters
-                        Picker("", selection: $useMetric) {
-                            Text("Feet/Inches").tag(false)
-                            Text("Centimeters").tag(true)
-                        }
-                        .pickerStyle(SegmentedPickerStyle())
-                        .padding()
-                        
+                        // Height Picker based on selected unit system
                         if useMetric {
                             Picker("Height (cm)", selection: $heightCentimeters) {
                                 ForEach(100...250, id: \.self) { cm in
@@ -117,8 +135,8 @@ struct GetHeightWeightView: View {
                     .font(.headline)
                     .bold()
                 
-                TextField("0 lbs", text: $currentWeight)
-                    .keyboardType(.numberPad)
+                TextField(useMetric ? "0 kg" : "0 lbs", text: $currentWeight)
+                    .keyboardType(.decimalPad)
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(Color(.systemGray5))
@@ -134,8 +152,8 @@ struct GetHeightWeightView: View {
                     .font(.headline)
                     .bold()
                 
-                TextField("0 lbs", text: $goalWeight)
-                    .keyboardType(.numberPad)
+                TextField(useMetric ? "0 kg" : "0 lbs", text: $goalWeight)
+                    .keyboardType(.decimalPad)
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(Color(.systemGray5))
@@ -162,6 +180,9 @@ struct GetHeightWeightView: View {
                         .cornerRadius(12)
                 }
                 .simultaneousGesture(TapGesture().onEnded {
+                    // Save isMetric preference
+                    userGoals.isMetric = useMetric
+                    
                     // Save height based on metric/imperial system
                     if useMetric {
                         userGoals.userProfile.heightInCm = Double(heightCentimeters)
@@ -178,7 +199,7 @@ struct GetHeightWeightView: View {
                     // Save weight based on metric/imperial system
                     if let currentWeightValue = Double(currentWeight) {
                         if useMetric {
-                            userGoals.bodyMetrics.currentWeightInKg = currentWeightValue
+                            userGoals.bodyMetrics.currentWeightInKg = currentWeightValue // Already in kg
                             userGoals.bodyMetrics.logWeight(currentWeightValue, modelContext: modelContext)
                         } else {
                             let weightInKg = currentWeightValue * 0.453592

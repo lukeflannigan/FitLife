@@ -23,7 +23,8 @@ class UserProfile {
     var gender: String
     var userGoals: UserGoals?
 
-    init(name: String, age: Int , heightInCm: Double, gender: String, localeIdentifier: String = Locale.autoupdatingCurrent.identifier, isMetric: Bool) {
+
+    init(name: String, age: Int , heightInCm: Double, gender: String, localeIdentifier: String = Locale.autoupdatingCurrent.identifier) {
         self.name = name
         self.age = age
         self.heightInCm = heightInCm
