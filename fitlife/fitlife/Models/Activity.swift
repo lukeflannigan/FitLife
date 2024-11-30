@@ -24,4 +24,25 @@ enum Activity: Identifiable {
         case .food(let food): return food.date
         }
     }
+
+    var title: String {
+        switch self {
+        case .workout(let workout): return workout.name
+        case .food(let food): return food.name
+        }
+    }
+
+    var subtitle: String {
+        switch self {
+        case .workout(let workout): return "Completed on \(workout.date.formatted(date: .abbreviated, time: .omitted))"
+        case .food(let food): return food.activityDescription
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .workout: return "figure.walk"
+        case .food: return "fork.knife"
+        }
+    }
 }

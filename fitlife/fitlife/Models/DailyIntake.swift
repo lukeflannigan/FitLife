@@ -32,4 +32,7 @@ class DailyIntake: Identifiable {
     var description: String {
         return "\(name): \(calories) kcal, \(protein)g protein, \(carbs)g carbs, \(fats)g fats"
     }
+    var activityDescription: String {
+        return "\(name): \(calories) kcal, \(protein)g protein"
+    }
 }
