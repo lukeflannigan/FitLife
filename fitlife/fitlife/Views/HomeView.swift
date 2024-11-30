@@ -71,26 +71,7 @@ struct HomeView: View {
     }
     
     private var recentActivitySection: some View {
-        VStack(spacing: 15) {
-            HStack {
-                Text("Recent Activity")
-                    .font(.custom("Poppins-SemiBold", size: 18))
-                    .foregroundColor(.primary)
-                Spacer()
-                Button(action: {
-                    // Handle "See all" action
-                }) {
-                    Text("See All")
-                        .font(.custom("Poppins-Medium", size: 14))
-                        .foregroundColor(Color("GradientStart"))
-                }
-            }
-            
-            VStack(spacing: 10) {
-                ActivityRow(icon: "dumbbell.fill", title: "Upper Body Workout", subtitle: "45 minutes • 250 calories", time: "2h ago")
-                ActivityRow(icon: "fork.knife", title: "Lunch", subtitle: "Grilled Chicken Salad", time: "5h ago")
-            }
-        }
+        RecentActivityView()
     }
     
     private var goalProgressSection: some View {
@@ -105,14 +86,18 @@ struct HomeView: View {
             GoalProgressView(progress: (1 / Double(userGoal?.workoutGoal ?? 0)), goal: "Weekly Workout Goal", current: "4", target: "\(userGoal?.workoutGoal ?? 0)")
         }
     }
-}
+    
+    struct HomeView_Previews: PreviewProvider {
+        static var previews: some View {
+            HomeView()
+        }
+    }
 
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
+    private var weightChartSection: some View {
+        NavigationLink(destination: BodyWeightProgressView(userGoals: userGoals)) {
+            WeightChartView(userGoals: userGoals)
+        }
     }
 }
 
-private var weightChartSection: some View {
-    WeightChartView()
-}
+

@@ -10,7 +10,7 @@ import Charts
 import SwiftData
 
 struct WeightChartView: View {
-    @Query var userGoals: [UserGoals]
+    let userGoals: [UserGoals]
 
     // Access sorted body weight entries
     var bodyWeightEntries: [BodyWeightEntry] {

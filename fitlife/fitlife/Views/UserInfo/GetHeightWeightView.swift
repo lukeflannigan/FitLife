@@ -195,16 +195,16 @@ struct GetHeightWeightView: View {
 
                     // Ensure bodyMetrics has a reference to userGoals
                     userGoals.bodyMetrics.userGoals = userGoals
-
+                    let date = Date()
                     // Save weight based on metric/imperial system
                     if let currentWeightValue = Double(currentWeight) {
                         if useMetric {
                             userGoals.bodyMetrics.currentWeightInKg = currentWeightValue // Already in kg
-                            userGoals.bodyMetrics.logWeight(currentWeightValue, modelContext: modelContext)
+                            userGoals.bodyMetrics.logWeight(currentWeightValue, date: date, modelContext: modelContext)
                         } else {
                             let weightInKg = currentWeightValue * 0.453592
                             userGoals.bodyMetrics.currentWeightInKg = weightInKg
-                            userGoals.bodyMetrics.logWeight(weightInKg, modelContext: modelContext)
+                            userGoals.bodyMetrics.logWeight(weightInKg, date: date, modelContext: modelContext)
                         }
                     }
 

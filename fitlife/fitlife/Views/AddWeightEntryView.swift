@@ -12,9 +12,11 @@ struct AddWeightEntryView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     var userGoal: UserGoals?
+    
+    
 
     @State private var weight: String = ""
-    @State private var date = Date()
+    @State private var date: Date = Date()
 
     var body: some View {
         NavigationView {
@@ -50,7 +52,7 @@ struct AddWeightEntryView: View {
 
         // Convert to metric (kg) if necessary
         let weightInKg = userGoal?.isMetric == true ? weightValue : weightValue * 0.453592
-        bodyMetrics.logWeight(weightInKg, modelContext: modelContext)
+        bodyMetrics.logWeight(weightInKg, date: date, modelContext: modelContext)
         userGoal?.setMacroGoals()
         dismiss()
     }
