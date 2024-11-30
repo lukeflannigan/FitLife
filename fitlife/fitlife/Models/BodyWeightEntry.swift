@@ -14,7 +14,7 @@ class BodyWeightEntry: Identifiable {
     var date: Date
     var weight: Double
     
-    init(id: UUID = UUID(), date: Date = Date(), weight: Double) {
+    init(id: UUID = UUID(), date: Date, weight: Double) {
         self.id = id
         self.date = date
         self.weight = weight

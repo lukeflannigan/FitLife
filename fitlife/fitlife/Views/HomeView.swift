@@ -105,14 +105,18 @@ struct HomeView: View {
             GoalProgressView(progress: (1 / Double(userGoal?.workoutGoal ?? 0)), goal: "Weekly Workout Goal", current: "4", target: "\(userGoal?.workoutGoal ?? 0)")
         }
     }
-}
+    
+    struct HomeView_Previews: PreviewProvider {
+        static var previews: some View {
+            HomeView()
+        }
+    }
 
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
+    private var weightChartSection: some View {
+        NavigationLink(destination: BodyWeightProgressView(userGoals: userGoals)) {
+            WeightChartView(userGoals: userGoals)
+        }
     }
 }
 
-private var weightChartSection: some View {
-    WeightChartView()
-}
+
