@@ -6,8 +6,26 @@ import SwiftData
 
 struct HomeView: View {
     @Environment(\.modelContext) var modelContext
+    @Query(sort: \Workout.date, order: .reverse) var workouts: [Workout]
+    @Environment(\.calendar) var calendar
+    @Query(sort: \DailyIntake.date, order: .reverse) private var dailyIntakes: [DailyIntake]
+
     @Query var userGoals: [UserGoals]
     var userGoal: UserGoals? { userGoals.first }
+    
+    private var todaysMacros: (calories: Double, protein: Double, carbs: Double, fats: Double) {
+           let today = calendar.startOfDay(for: Date())
+           let todaysIntake = dailyIntakes.filter { calendar.isDate($0.date, inSameDayAs: today) }
+           
+           return todaysIntake.reduce((calories: 0.0, protein: 0.0, carbs: 0.0, fats: 0.0)) { result, intake in
+               (
+                   calories: result.calories + intake.calories,
+                   protein: result.protein + intake.protein,
+                   carbs: result.carbs + intake.carbs,
+                   fats: result.fats + intake.fats
+               )
+           }
+       }
     
     var body: some View {
         ScrollView {
@@ -53,22 +71,42 @@ struct HomeView: View {
     }
     
     private var quickStatsSection: some View {
-        VStack(spacing: 15) {
-            HStack {
-                Text("Today's Overview")
-                    .font(.custom("Poppins-SemiBold", size: 18))
-                    .foregroundColor(.primary)
-                Spacer()
-            }
-            
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
-                StatCardCalories(title: "Calories", value: "1,200", goal: userGoal?.caloriesGoal ?? 0, color: Color("GradientStart"))
-                StatCard(title: "Protein", value: "75g", goal: userGoal?.proteinGoal ?? 0, color: Color("GradientEnd"))
-                StatCard(title: "Carbs", value: "150g", goal: userGoal?.carbsGoal ?? 0, color: Color("GradientStart"))
-                StatCard(title: "Fats", value: "40g", goal: userGoal?.fatsGoal ?? 0, color: Color("GradientEnd"))
+            VStack(spacing: 15) {
+                HStack {
+                    Text("Today's Overview")
+                        .font(.custom("Poppins-SemiBold", size: 18))
+                        .foregroundColor(.primary)
+                    Spacer()
+                }
+
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
+                    StatCardCalories(
+                        title: "Calories",
+                        value: "\(Int(todaysMacros.calories)) cal",
+                        goal: userGoal?.caloriesGoal ?? 2000,
+                        color: Color("GradientStart")
+                    )
+                    StatCard(
+                        title: "Protein",
+                        value: "\(Int(todaysMacros.protein))g",
+                        goal: userGoal?.proteinGoal ?? 150,
+                        color: Color("GradientEnd")
+                    )
+                    StatCard(
+                        title: "Carbs",
+                        value: "\(Int(todaysMacros.carbs))g",
+                        goal: userGoal?.carbsGoal ?? 250,
+                        color: Color("GradientStart")
+                    )
+                    StatCard(
+                        title: "Fats",
+                        value: "\(Int(todaysMacros.fats))g",
+                        goal: userGoal?.fatsGoal ?? 65,
+                        color: Color("GradientEnd")
+                    )
+                }
             }
         }
-    }
     
     private var recentActivitySection: some View {
         RecentActivityView()
@@ -83,7 +121,29 @@ struct HomeView: View {
                 Spacer()
             }
 
-            GoalProgressView(progress: (1 / Double(userGoal?.workoutGoal ?? 0)), goal: "Weekly Workout Goal", current: "4", target: "\(userGoal?.workoutGoal ?? 0)")
+            if let workoutGoal = userGoal?.workoutGoal, workoutGoal > 0 {
+                // Filter workouts completed within the current week
+                let completedWorkouts = workouts.filter { workout in
+                    let isCompleted = workout.completed
+                    let isInCurrentWeek = isDateInCurrentWeek(workout.date)
+                    return isCompleted && isInCurrentWeek
+                }.count
+
+                // Avoid division by zero and calculate progress
+                let progress = workoutGoal > 0 ? Double(completedWorkouts) / Double(workoutGoal) : 0.75
+
+
+                GoalProgressView(
+                    progress: progress,
+                    goal: "Weekly Workout Goal",
+                    current: "\(completedWorkouts)",
+                    target: "\(workoutGoal)"
+                )
+            } else {
+                Text("No workout goal set.")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
         }
     }
     
@@ -100,4 +160,14 @@ struct HomeView: View {
     }
 }
 
+private func isDateInCurrentWeek(_ date: Date) -> Bool {
+    let calendar = Calendar.current
 
+    // Get the start and end of the current week
+    guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: Date()) else {
+        return false
+    }
+
+    // Check if the given date is within the week interval
+    return weekInterval.contains(date)
+}
