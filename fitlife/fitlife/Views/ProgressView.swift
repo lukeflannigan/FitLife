@@ -8,6 +8,9 @@ struct ProgressView: View {
     @Query(sort: \Workout.date, order: .reverse) private var workouts: [Workout]
     @Environment(\.calendar) var calendar
     @Query private var dailyIntakes: [DailyIntake]
+    @Query var userGoals: [UserGoals]
+    var userGoal: UserGoals? { userGoals.first }
+
     
     private var workoutDates: Set<Date> {
         Set(workouts.filter { $0.completed }.map { calendar.startOfDay(for: $0.date) })
@@ -27,10 +30,25 @@ struct ProgressView: View {
         }
     }
     
-    private let calorieGoal: Double = 2000
-    private let proteinGoal: Double = 150
-    private let carbsGoal: Double = 250
-    private let fatsGoal: Double = 65
+    private var calorieGoal: Double {
+            userGoal?.caloriesGoal ?? 2000
+        }
+
+        private var proteinGoal: Double {
+            userGoal?.proteinGoal ?? 150
+        }
+
+        private var carbsGoal: Double {
+            userGoal?.carbsGoal ?? 250
+        }
+
+        private var fatsGoal: Double {
+            userGoal?.fatsGoal ?? 65
+        }
+
+        private var weeklyWorkoutGoal: Int {
+            userGoal?.workoutGoal ?? 5
+        }
     
     private var weeklyWorkoutProgress: Double {
         guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: Date()) else { return 0 }
@@ -43,9 +61,7 @@ struct ProgressView: View {
         
         return Double(weekWorkouts) / Double(weeklyWorkoutGoal)
     }
-    
-    private let weeklyWorkoutGoal: Int = 5 // Later connect to UserGoals
-    
+        
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 24) {
@@ -299,7 +315,7 @@ struct ProgressView: View {
     
     private var weeklyGoalsCard: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Weekly Goals")
+            Text("Goals")
                 .font(.system(size: 20, weight: .semibold))
             
             VStack(spacing: 20) {
