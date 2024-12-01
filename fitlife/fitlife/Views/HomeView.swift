@@ -6,6 +6,8 @@ import SwiftData
 
 struct HomeView: View {
     @Environment(\.modelContext) var modelContext
+    @Query(sort: \Workout.date, order: .reverse) var workouts: [Workout]
+
     @Query var userGoals: [UserGoals]
     var userGoal: UserGoals? { userGoals.first }
     
@@ -83,7 +85,29 @@ struct HomeView: View {
                 Spacer()
             }
 
-            GoalProgressView(progress: (1 / Double(userGoal?.workoutGoal ?? 0)), goal: "Weekly Workout Goal", current: "4", target: "\(userGoal?.workoutGoal ?? 0)")
+            if let workoutGoal = userGoal?.workoutGoal, workoutGoal > 0 {
+                // Filter workouts completed within the current week
+                let completedWorkouts = workouts.filter { workout in
+                    let isCompleted = workout.completed
+                    let isInCurrentWeek = isDateInCurrentWeek(workout.date)
+                    return isCompleted && isInCurrentWeek
+                }.count
+
+                // Avoid division by zero and calculate progress
+                let progress = workoutGoal > 0 ? Double(completedWorkouts) / Double(workoutGoal) : 0.75
+
+
+                GoalProgressView(
+                    progress: progress,
+                    goal: "Weekly Workout Goal",
+                    current: "\(completedWorkouts)",
+                    target: "\(workoutGoal)"
+                )
+            } else {
+                Text("No workout goal set.")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
         }
     }
     
@@ -100,4 +124,14 @@ struct HomeView: View {
     }
 }
 
+private func isDateInCurrentWeek(_ date: Date) -> Bool {
+    let calendar = Calendar.current
 
+    // Get the start and end of the current week
+    guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: Date()) else {
+        return false
+    }
+
+    // Check if the given date is within the week interval
+    return weekInterval.contains(date)
+}
