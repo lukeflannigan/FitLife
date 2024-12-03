@@ -181,7 +181,7 @@ struct SearchView: View {
                     if isSearching {
                         if viewModel.recipes.isEmpty {
                             VStack(spacing: 16) {
-                                ProgressView()
+                                LoadingSpinner()
                                 Text("Searching recipes...")
                                     .foregroundColor(.gray)
                             }
@@ -238,7 +238,7 @@ struct RecipeCard: View {
                 Rectangle()
                     .fill(Color(.systemGray6))
                     .overlay(
-                        ProgressView()
+                        LoadingSpinner()
                             .tint(.gray)
                     )
             }
@@ -312,8 +312,7 @@ struct RecipeDetailView: View {
                             .frame(maxWidth: .infinity, maxHeight: 300)
                             .clipped()
                     } placeholder: {
-                        ProgressView()
-                            .frame(maxWidth: .infinity, maxHeight: 300)
+                        LoadingSpinner()
                     }
                     
                     // Back button
@@ -462,4 +461,16 @@ struct MacroRow: View {
 }
 
 
-//–––––––––––––––––––––––––––––––––––––––––FIN–––––––––––––––––––––––––––––––––––––––––––––––
+//–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+struct LoadingSpinner: View {
+    var body: some View {
+        Circle()
+            .trim(from: 0, to: 0.7)
+            .stroke(Color.gray, lineWidth: 2)
+            .frame(width: 30, height: 30)
+            .rotationEffect(Angle(degrees: 270))
+            .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false), value: UUID())
+    }
+}
+

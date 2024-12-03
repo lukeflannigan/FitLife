@@ -9,6 +9,7 @@ struct NutritionView: View {
     @Query private var dailyLogs: [DailyNutritionLog]
     @State private var selectedDate = Date()
     @State private var showFoodSearch = false
+    @State private var showRecipeSearch = false
     
     private var selectedLog: DailyNutritionLog? {
         dailyLogs.first { Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }
@@ -32,6 +33,13 @@ struct NutritionView: View {
                         Text("Nutrition")
                             .font(.title2.bold())
                     }
+                    
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: { showRecipeSearch = true }) {
+                            Image(systemName: "book.closed.fill")
+                                .foregroundColor(.black)
+                        }
+                    }
                 }
                 
                 addFoodButton
@@ -45,6 +53,11 @@ struct NutritionView: View {
             .sheet(isPresented: $showFoodSearch) {
                 NavigationStack {
                     FoodSearchView(selectedDate: selectedDate, mealType: .breakfast)
+                }
+            }
+            .sheet(isPresented: $showRecipeSearch) {
+                NavigationStack {
+                    SearchView()
                 }
             }
         }
