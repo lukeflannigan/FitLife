@@ -12,6 +12,27 @@ struct FatSecretFood: Codable {
     
     struct ServingContainer: Codable {
         let serving: [Serving]
+        
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            
+            // Try to decode as array first
+            if let servingsArray = try? container.decode([Serving].self, forKey: .serving) {
+                self.serving = servingsArray
+            }
+            // If that fails, try to decode as single serving
+            else if let singleServing = try? container.decode(Serving.self, forKey: .serving) {
+                self.serving = [singleServing]
+            }
+            // If both fail, return empty array
+            else {
+                self.serving = []
+            }
+        }
+        
+        private enum CodingKeys: String, CodingKey {
+            case serving
+        }
     }
     
     struct Serving: Codable, Hashable {
