@@ -368,7 +368,7 @@ struct MacroBar: View {
                 
                 RoundedRectangle(cornerRadius: 4)
                     .fill(barColor)
-                    .frame(width: 30, height: min(100 * value / goal, 100))
+                    .frame(width: 30, height: min(100 * (min(value / goal, 1.0)), 100))
             }
             
             VStack(spacing: 4) {
@@ -427,7 +427,7 @@ struct GoalProgressRow: View {
                     
                     RoundedRectangle(cornerRadius: 4)
                         .fill(progressBarColor)
-                        .frame(width: geometry.size.width * CGFloat(progress), height: 8)
+                        .frame(width: min(geometry.size.width * CGFloat(progress), geometry.size.width), height: 8)
                 }
             }
             .frame(height: 8)

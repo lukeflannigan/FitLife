@@ -134,7 +134,7 @@ struct HomeView: View {
 
 
                 GoalProgressView(
-                    progress: progress,
+                    progress: min(progress, 1.0),
                     goal: "Weekly Workout Goal",
                     current: "\(completedWorkouts)",
                     target: "\(workoutGoal)"
