@@ -7,7 +7,7 @@ import SwiftData
 struct ProgressView: View {
     @Query(sort: \Workout.date, order: .reverse) private var workouts: [Workout]
     @Environment(\.calendar) var calendar
-    @Query private var dailyIntakes: [DailyIntake]
+    @Query(sort: \DailyNutritionLog.date, order: .reverse) private var dailyLogs: [DailyNutritionLog]
     @Query var userGoals: [UserGoals]
     var userGoal: UserGoals? { userGoals.first }
 
@@ -18,16 +18,16 @@ struct ProgressView: View {
     
     private var todaysMacros: (calories: Double, protein: Double, carbs: Double, fats: Double) {
         let today = calendar.startOfDay(for: Date())
-        let todaysIntake = dailyIntakes.filter { calendar.isDate($0.date, inSameDayAs: today) }
-        
-        return todaysIntake.reduce((calories: 0.0, protein: 0.0, carbs: 0.0, fats: 0.0)) { result, intake in
-            (
-                calories: result.calories + intake.calories,
-                protein: result.protein + intake.protein,
-                carbs: result.carbs + intake.carbs,
-                fats: result.fats + intake.fats
-            )
+        guard let todaysLog = dailyLogs.first(where: { calendar.isDate($0.date, inSameDayAs: today) }) else {
+            return (calories: 0, protein: 0, carbs: 0, fats: 0)
         }
+        
+        return (
+            calories: Double(todaysLog.totalCalories),
+            protein: todaysLog.totalProtein,
+            carbs: todaysLog.totalCarbs,
+            fats: todaysLog.totalFat
+        )
     }
     
     private var calorieGoal: Double {
