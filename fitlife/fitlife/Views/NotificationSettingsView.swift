@@ -6,10 +6,9 @@
 //
 
 import SwiftUI
-import UserNotifications
 
 struct NotificationSettingsView: View {
-    // Persisted key for the toggle state
+    // Persisted toggle state
     @AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
 
     var body: some View {
@@ -18,20 +17,19 @@ struct NotificationSettingsView: View {
                 .font(.custom("Poppins-SemiBold", size: 16))
                 .foregroundColor(.secondary)) {
                 
-                Toggle("Enable Daily Progress Notification", isOn: $notificationsEnabled)
-                    .onChange(of: notificationsEnabled) { isEnabled in
-                        handleNotificationToggle(isEnabled: isEnabled)
-                    }
+                Toggle("Daily Progress Notification", isOn: $notificationsEnabled)
+                /*
+                .onChange(of: notificationsEnabled) { isEnabled in
+                    handleNotificationToggle(isEnabled: isEnabled)
+                }
+                */
             }
         }
         .navigationTitle("Notification Settings")
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
-            // Ensure the toggle reflects the stored state on app launch
-            handleNotificationToggle(isEnabled: notificationsEnabled)
-        }
     }
 
+    /*
     private func handleNotificationToggle(isEnabled: Bool) {
         let center = UNUserNotificationCenter.current()
         if isEnabled {
@@ -54,6 +52,7 @@ struct NotificationSettingsView: View {
             print("Notifications disabled.")
         }
     }
+    */
 }
 
 struct NotificationSettingsView_Preview: PreviewProvider {
