@@ -435,7 +435,7 @@ private struct EditServingSizeView: View {
                 onComplete: { dismiss() }
             )
         } else {
-            ProgressView()
+            LoadingSpinner()
                 .task {
                     do {
                         detailedFood = try await FatSecretService.shared.getFoodDetails(id: foodId)
