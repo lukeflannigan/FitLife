@@ -9,8 +9,6 @@ struct ProfileView: View {
     @Query private var userGoals: [UserGoals]
     var userGoal: UserGoals? { userGoals.first }
     
-    @State private var userEmail: String = "email@email.com"
-    @State private var userPhone: String = "+1 (123) 456-7890"
     @State private var showEditProfile: Bool = false
     
     var body: some View {
@@ -18,7 +16,6 @@ struct ProfileView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     headerSection
-                    personalInfoSection
                     settingsSection
                 }
                 .padding(.horizontal, 20)
@@ -88,22 +85,6 @@ struct ProfileView: View {
         }
     }
     
-    private var personalInfoSection: some View {
-        VStack(spacing: 15) {
-            HStack {
-                Text("Personal Information")
-                    .font(.custom("Poppins-SemiBold", size: 18))
-                    .foregroundColor(.primary)
-                Spacer()
-            }
-            
-            VStack(spacing: 10) {
-                InfoRow(iconName: "envelope.fill", title: "Email", value: userEmail)
-                InfoRow(iconName: "phone.fill", title: "Phone", value: userPhone)
-            }
-        }
-    }
-    
     private var settingsSection: some View {
         VStack(spacing: 15) {
             HStack {
@@ -114,22 +95,6 @@ struct ProfileView: View {
             }
             
             VStack(spacing: 10) {
-                // Direct NavigationLink for User Preferences
-                NavigationLink(destination: UserPreferencesView()) {
-                    HStack {
-                        Image(systemName: "gearshape.fill")
-                            .foregroundColor(Color("GradientStart"))
-                            .frame(width: 24, height: 24)
-                        Text("User Preferences")
-                            .font(.custom("Poppins-Medium", size: 16))
-                            .foregroundColor(.primary)
-                        Spacer()
-                    }
-                    .padding()
-                    .background(Color(UIColor.secondarySystemBackground))
-                    .cornerRadius(8)
-                }
-                
                 // Placeholder for Notifications
                 NavigationLink(destination: NotificationSettingsView()) {
                     HStack {
