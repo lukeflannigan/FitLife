@@ -8,24 +8,24 @@ struct HomeView: View {
     @Environment(\.modelContext) var modelContext
     @Query(sort: \Workout.date, order: .reverse) var workouts: [Workout]
     @Environment(\.calendar) var calendar
-    @Query(sort: \DailyIntake.date, order: .reverse) private var dailyIntakes: [DailyIntake]
+    @Query(sort: \DailyNutritionLog.date, order: .reverse) private var dailyLogs: [DailyNutritionLog]
 
     @Query var userGoals: [UserGoals]
     var userGoal: UserGoals? { userGoals.first }
     
-    private var todaysMacros: (calories: Double, protein: Double, carbs: Double, fats: Double) {
-           let today = calendar.startOfDay(for: Date())
-           let todaysIntake = dailyIntakes.filter { calendar.isDate($0.date, inSameDayAs: today) }
-           
-           return todaysIntake.reduce((calories: 0.0, protein: 0.0, carbs: 0.0, fats: 0.0)) { result, intake in
-               (
-                   calories: result.calories + intake.calories,
-                   protein: result.protein + intake.protein,
-                   carbs: result.carbs + intake.carbs,
-                   fats: result.fats + intake.fats
-               )
-           }
-       }
+    private var todaysMacros: (calories: Int, protein: Double, carbs: Double, fats: Double) {
+        let today = calendar.startOfDay(for: Date())
+        guard let todaysLog = dailyLogs.first(where: { calendar.isDate($0.date, inSameDayAs: today) }) else {
+            return (calories: 0, protein: 0, carbs: 0, fats: 0)
+        }
+        
+        return (
+            calories: todaysLog.totalCalories,
+            protein: todaysLog.totalProtein,
+            carbs: todaysLog.totalCarbs,
+            fats: todaysLog.totalFat
+        )
+    }
     
     var body: some View {
         ScrollView {
@@ -82,7 +82,7 @@ struct HomeView: View {
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
                     StatCardCalories(
                         title: "Calories",
-                        value: "\(Int(todaysMacros.calories)) cal",
+                        value: "\(todaysMacros.calories) cal",
                         goal: userGoal?.caloriesGoal ?? 2000,
                         color: Color("GradientStart")
                     )
@@ -134,7 +134,7 @@ struct HomeView: View {
 
 
                 GoalProgressView(
-                    progress: progress,
+                    progress: min(progress, 1.0),
                     goal: "Weekly Workout Goal",
                     current: "\(completedWorkouts)",
                     target: "\(workoutGoal)"
