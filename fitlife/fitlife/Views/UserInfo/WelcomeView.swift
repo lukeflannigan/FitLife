@@ -44,12 +44,14 @@ struct WelcomeView: View {
 
             .navigationTitle("Welcome")
             .navigationBarTitleDisplayMode(.inline)
+            
 //            .toolbar {
 //                Button(action: {}) {
 //                    Image(systemName: "arrow.2.circlepath.circle")
 //                }
 //            }
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
