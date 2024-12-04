@@ -324,6 +324,17 @@ With Data Persistence I will be
 - `Jira Task: Clean Up Nutrition UI`
 - [SCRUM-136](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-136), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-136-clean-up-nutritions-ui-as-nece)
 
+**Thomas**: "Designed and implemented workout template views and data models with data persistance. Refacted Workouts library UI to accomodate template implementation, reimplemented Exercise creation to include custom workouts after previous exercise data model redesign."
+
+- `Jira Task: Update Exercise Selection to Include pre-made & Custom Exercises`
+- [SCRUM-50](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-50?atlOrigin=eyJpIjoiNTllZjc2Njc0ZGE4NDE3ZjgxZDE2ZmM4YjI1MjA1MDUiLCJwIjoiaiJ9), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/SCRUM-50-4.-update-exercise-selection-to)
+- `Jira Task: UI + adding & saving functionality for workout templates`
+- [SCRUM-126](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-126?atlOrigin=eyJpIjoiYTQzODBiM2RmNThmNDVmNmEzYzlmNDU3YzBjZGE3ZTQiLCJwIjoiaiJ9), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/SCRUM-126-functionality-for-workout-inpu)
+- `Jira Task: UI for Workout input via Workouts Library`
+- [SCRUM-125](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-125?atlOrigin=eyJpIjoiNmU5MjljYmJkMDY5NDQ2N2IzZTkwNTE2ZWVjY2Q2NzgiLCJwIjoiaiJ9), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/SCRUM-125-ui-for-workout-input-via-worko)
+- `Jira Task: Workout template refactor to be more functional`
+- [SCRUM-127](https://cs3398-not-borgs-again-fall24.atlassian.net/browse/SCRUM-127?atlOrigin=eyJpIjoiMzc4ODllNTI3NTYwNDNjMDk5MzVkMjFiZTZmNGJlMWMiLCJwIjoiaiJ9), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/SCRUM-127-workout-template-refactor-to-b)
+
 ---
 ### Next Steps
 
