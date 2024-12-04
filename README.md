@@ -323,3 +323,11 @@ With Data Persistence I will be
 - [SCRUM-81](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-81), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-81-update-workoutsview-and-activew)
 - `Jira Task: Clean Up Nutrition UI`
 - [SCRUM-136](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-136), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-136-clean-up-nutritions-ui-as-nece)
+
+---
+### Next Steps
+
+**Luke**:
+- Integrate AI workout plan recommendations.
+- Implement additional exercise APIs for more workout options.
+- Improve progress reporting and goal tracking.
