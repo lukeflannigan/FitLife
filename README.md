@@ -295,9 +295,10 @@ With Data Persistence I will be
 
 ## Sprint 3
 
+### Burnup Chart
+![Burnupchart3](./img/Sprint3-burnupchart.png)
+
 ### Contributions
-
-
 
 **Sam**: "I worked on a decent balance of Frontend and backend code this Sprint. On the backend: I worked on building datamodels for the Nutrition segment. On the frontend I created the UI for NutritionIntake and DiaryView forms, gracefully handled API response states by creating a spinning loading animation. Further on the backend: I Implemented and refactored Backened for Nutritional/food Search until we decided to go another route with it. Furhter on the Frontend: I created the preliminary card and food detail views for the search feature, a visual chart for the nutrition dashboard"
 
@@ -307,3 +308,18 @@ With Data Persistence I will be
 - [SCRUM-138: Implement a Loading Animation](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-138), [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/feature/SCRUM-138-implement-a-loading-animation-view)
 - [SCRUM-124: Implement Card Views, Card Details for Nutrition API](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-124), [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/SCRUM-124)
     - This branch would go on to be unused as it was easier to switch to another API/service rather than refactoring the backend. 
+
+**Luke**: "Implemented comprehensive improvements to core app functionality: Redesigned workout tracking user interface, implemented progress view with detailed metrics and historical exercise visualization, and enhanced nutrition logging interface. I also built off of Sam's work to refactor the nutrition logging functionality and associated API setup."
+
+- `Jira Task: Implement Redesigned Exercise Tracking UI`
+- [SCRUM-46](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-46), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-46-implement-redesigned-ui-for-exe)
+- `Jira Task: Implement Progress View UI`
+- [SCRUM-51](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-51), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-51-implement-ui-for-progress-view)
+- `Jira Task: Implement Active Workout View`
+- [SCRUM-53](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-53), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-53-implement-workout-tracking-usin)
+- `Jira Task: Implement UI for Multiple Sets Tracking`
+- [SCRUM-90](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-90), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-90-implement-tracking-of-multiple-sets)
+- `Jira Task: Update Workouts and Active Workouts Views`
+- [SCRUM-81](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-81), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-81-update-workoutsview-and-activew)
+- `Jira Task: Clean Up Nutrition UI`
+- [SCRUM-136](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-136), [Bitbucket Link](https://bitbucket.org/cs3398-borgs-f24/fitlife-healthy-life-happy-life/branch/SCRUM-136-clean-up-nutritions-ui-as-nece)
