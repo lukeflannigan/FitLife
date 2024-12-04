@@ -342,3 +342,8 @@ With Data Persistence I will be
 - Integrate AI workout plan recommendations.
 - Implement additional exercise APIs for more workout options.
 - Improve progress reporting and goal tracking.
+
+**Thomas**:
+- Research Apple Watch companion app creation
+- Update workout tracking to implement with healthkit (for future apple watch app integration)
+- Update notifications to detect when a workout is started via the fitness app and import data to fitlife
