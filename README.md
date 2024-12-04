@@ -291,3 +291,18 @@ With Data Persistence I will be
 - Implement user profile settings
 - Assist team members with data model persistence
 ---
+
+
+## Sprint 3
+
+### Contributions
+
+
+
+**Sam**: "I worked on a decent balance of Frontend and backend code this Sprint. On the backend: I worked on building datamodels for the Nutrition segment. On the frontend I created the UI for NutritionIntake and DiaryView forms, gracefully handled API response states by creating a spinning loading animation. Further on the backend: I Implemented and refactored Backened for Nutritional/food Search until we decided to go another route with it. Furhter on the Frontend: I created the preliminary card and food detail views for the search feature, a visual chart for the nutrition dashboard"
+
+- [SCRUM-106: Create NutritionIntake UI](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-106), [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/SCRUM-106-create-nutritionintake-ui)
+- [SCRUM-103: Implement DiaryView UI](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-103), [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/SCRUM-103--Create-a-dashboard-for-intake)
+- [SCRUM-123](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-123), [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/SCRUM-123-Set-Favorite-Recipes)
+- [SCRUM-138: Implement a Loading Animation](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-138), [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/feature/SCRUM-138-implement-a-loading-animation-view)
+- [SCRUM-124: Implement Card Views, Card Details for Nutrition API](https://cs3398-not-borgs-again-fall24.atlassian.net/jira/software/projects/SCRUM/boards/1?selectedIssue=SCRUM-124), [Bitbucket](https://bitbucket.org/cs3398-borgs-f24/%7B87bd3ba6-e4f4-475c-89d4-674a7f216cd5%7D/branch/SCRUM-124)
