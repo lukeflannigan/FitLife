@@ -29,7 +29,8 @@ struct YourApp: App {
                 DailyProgress.self,
                 FoodItem.self,
                 NutritionEntry.self,
-                DailyNutritionLog.self
+                DailyNutritionLog.self,
+                WorkoutTemplate.self
             )
         } catch {
             fatalError("Could not initialize ModelContainer")

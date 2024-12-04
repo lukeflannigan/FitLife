@@ -84,9 +84,13 @@ struct ExerciseLibraryView: View {
                     ScrollView {
                         LazyVStack(spacing: 20) {
                             ForEach(filteredExercises) { exercise in
-                                Button(action: {
-                                    selectedExercise = exercise
-                                }) {
+//                                Button(action: {
+//                                    selectedExercise = exercise
+//                                }) {
+//                                    ExerciseCardView(exercise: exercise)
+//                                        .contentShape(Rectangle())
+//                                }
+                                NavigationLink(destination: ExerciseDetailView(exercise: exercise)){
                                     ExerciseCardView(exercise: exercise)
                                         .contentShape(Rectangle())
                                 }
