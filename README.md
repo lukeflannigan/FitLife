@@ -347,3 +347,9 @@ With Data Persistence I will be
 - Research Apple Watch companion app creation
 - Update workout tracking to implement with healthkit (for future apple watch app integration)
 - Update notifications to detect when a workout is started via the fitness app and import data to fitlife
+
+**Sam**
+- Be able to create a meal plan. 
+- Integrate AI nutrition meal plan recommendations. 
+- Implement an AI chatbot to assist with nutrition and meals. 
+ 
