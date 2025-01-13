@@ -1,91 +1,69 @@
-# FitLife: Healthy Life, Happy Life
+# FitLife: iOS Fitness Application
 
-> **FitLife is a comprehensive iOS app for gym tracking and nutrition management.**
-
-## Table of Contents
-- [Description](#description)
-- [General Info](#general-info)
-- [Technologies Used](#technologies-used)
-- [Features](#features)
-
-## Description
-
-### Who We're Working With
-Our team consists of:
-- **[Jonas Tuttle](mailto:jonastuttle@txstate.edu)**
-- **[Thomas Mendoza](mailto:tmendoza@txstate.edu)**
-- **[Sam Arshad](mailto:jsb211@txstate.edu)**
-- **[Luke Flannigan](mailto:nym15@txstate.edu)**
-- **[Gabriel Ciaburri](mailto:aff38@txstate.edu)**
-
-### What We're Creating
-We are developing **FitLife: Healthy Life, Happy Life**, an iOS app designed to help users track their gym workouts and nutrition. FitLife aims to be an all-in-one fitness companion that simplifies achieving health and fitness goals by providing tools for logging exercises, tracking nutritional intake, setting goals, and monitoring progress.
-
-### Who We're Doing It For
-Our target audience includes fitness enthusiasts, gym-goers, and anyone interested in improving their health and wellness. FitLife is designed to support both beginners starting their fitness journey and experienced athletes aiming to optimize their regimen.
-
-### Why We're Doing This
-We believe that maintaining a healthy lifestyle should be accessible and straightforward. By creating FitLife, we hope to empower users to take control of their fitness journeys, make informed decisions, and achieve their personal health goals. Our mission is to have a positive impact on users' lives by promoting wellness and providing a supportive platform for their fitness endeavors.
-
-## General Info
-
-![FitLife Image](./img/fitlife_readme_image.png)
-
-### What's Missing
-We would benefit from:
-- **User Feedback**: Early adopters willing to test the app and provide valuable feedback.
-- **Additional Expertise**: Specialists in AI and machine learning for future feature integrations.
-- **Funding**: Financial support to enhance development and expand functionalities.
+## Project Overview
+FitLife is an iOS fitness application built with SwiftUI that helps users track workouts and nutrition. Developed in a collaborative team environment, FitLife provides comprehensive fitness tracking capabilities with an intuitive user interface.
 
 ## Technologies Used
-- **[Swift](https://developer.apple.com/swift/)** - Programming language for iOS development.
-- **[SwiftUI](https://developer.apple.com/xcode/swiftui/)** - A modern framework for building user interfaces across all Apple platforms.
-- **[Xcode](https://developer.apple.com/xcode/)** - An integrated development environment (IDE) for macOS containing a suite of software development tools.
-- **[Firebase](https://firebase.google.com/)** - A platform developed by Google for creating mobile and web applications, providing backend services like authentication and data storage.
-- **[Firestore](https://firebase.google.com/products/firestore)** - A scalable NoSQL cloud database to store and sync data for client- and server-side development.
-- **[Figma](https://www.figma.com/)** - A collaborative interface design tool used for creating UI designs and prototypes.
-- **[Jira](https://www.atlassian.com/software/jira)** - A project management tool for tracking tasks, bugs, and sprints.
-- **[Bitbucket](https://bitbucket.org/)** - A Git-based source code repository hosting service for collaboration.
+- SwiftUI for UI development
+- Firebase (initial authentication, later migrated to iCloud)
+- Third-party APIs for exercise data
+- Figma for UI design
+- Jira for project management
+- Git/Bitbucket for version control
 
-## Features
+## My Key Contributions
 
-### Initial Features for the First Sprint (MVP)
+### Progress Tracking and Analytics
+- Designed and implemented comprehensive progress tracking system
+- Created interactive charts and visualizations for workout history
+- Built detailed metrics display for exercise performance over time
+- Implemented historical exercise data visualization
+- Developed progress comparison features across different time periods
 
-For our first two-week sprint, we aim to develop a Minimum Viable Product (MVP) that includes the following features:
+### UI Development
+- Designed and implemented core UI components including:
+  - Progress tracking and visualization interface
+  - Nutrition tracking interface
+  - App opening/onboarding screens
+  - Main dashboard for daily summaries
+  - User profile screens
+- Created responsive layouts using SwiftUI
+- Ensured consistent design language across different views
 
-#### 1. Account Creation and Login
+### Feature Implementation
+- Integrated exercise API to provide users with a comprehensive workout library
+- Built favorites functionality allowing users to save preferred workouts
+- Implemented user profile settings and customization options
+- Created daily nutrition calculation and display system
+- Designed exercise detail views with comprehensive workout information
 
-- **Description**: Users can create an account and log in securely to store their data and access it across devices.
-- **Who Uses It**: All users of the app.
-- **Corresponding User Story**:  
-  As a new user, I would like to create an account and log in so that my data is securely stored and accessible across devices.
+### System Integration
+- Collaborated on data model development
+- Worked with team members to integrate UI components with backend services
+- Contributed to the migration from Firebase to iCloud authentication
 
-#### 2. Workout Logging
+## Development Process
+- Developed across 3 sprints using agile methodology
+- Used Jira for task tracking and sprint planning
+- Collaborated through Bitbucket for version control
+- Regular team meetings for progress updates and problem-solving
+- Participated in code reviews and technical discussions
 
-- **Description**: Enables users to log their workouts by adding exercises with sets, reps, and weights, allowing them to track their fitness progress over time.
-- **Who Uses It**: Users who want to track their workout routines and monitor their progress.
-- **Corresponding User Story**:  
-  As a user, I would like to log my workouts by adding exercises with sets and reps so that I can track my fitness progress over time.
+## Technical Highlights
+- Built robust UI components using SwiftUI's latest features
+- Implemented data persistence using iCloud
+- Created reusable components for consistent design
+- Integrated third-party APIs for enhanced functionality
+- Developed responsive layouts for various iOS devices
 
-#### 3. Nutrition Logging
+## Key Features Implemented
+- Progress View with detailed performance metrics
+- Interactive workout history visualization
+- Exercise Library UI with API Integration
+- Detailed Exercise Views
+- User Profile Management System
+- Workout Favorites System
+- Daily Progress Dashboard
 
-- **Description**: Allows users to log their food intake by adding food items with nutritional data, helping them to track daily nutrition and calorie intake.
-- **Who Uses It**: Users looking to monitor their nutritional intake and manage their diet.
-- **Corresponding User Story**:  
-  As a user, I would like to log my food intake by adding food items with nutritional data so that I can track my daily nutrition and calorie intake.
-
-#### 4. View Daily Summaries
-
-- **Description**: Provides users with daily summaries of their workouts and nutrition, including total calories consumed and burned, and visual representations of macro distributions.
-- **Who Uses It**: Users who want to easily assess their daily fitness and dietary activities.
-- **Corresponding User Story**:  
-  As a user, I would like to view summaries of my daily workouts and nutrition so that I can easily assess my daily fitness and dietary activities.
-
-#### 5. Basic Goal Setting
-
-- **Description**: Allows users to set basic fitness goals, such as daily calorie intake and weekly workout frequency, and track their progress towards these goals.
-- **Who Uses It**: Users aiming to achieve specific health objectives and stay motivated.
-- **Corresponding User Story**:  
-  As a user, I would like to set basic fitness goals (e.g., daily calorie intake, workout frequency) so that I have targets to motivate my fitness journey.
-
---- 
+## Results
+The project successfully delivered a fully functional fitness tracking application with a strong emphasis on progress visualization and user experience. The application effectively helps users track their fitness journey through intuitive progress monitoring, workout management, and nutrition tracking features.
